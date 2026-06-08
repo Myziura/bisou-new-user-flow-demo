@@ -28,7 +28,6 @@ const defaultState = () => ({
   connectGender: '',
   connectDatingType: '',
   connectKidsPreference: '',
-  connectDistance: '',
   connectSetupComplete: false,
   onboardingComplete: false,
 })
@@ -279,7 +278,6 @@ const OPTIONAL_FIELDS = [
   { key: 'connectPronouns', label: 'Pronouns', hint: 'Let people know how to refer to you.', weight: 5 },
   { key: 'connectDatingType', label: 'What kind of dating', hint: 'We\'ll prioritize people who want the same thing.', weight: 10, datingOnly: true },
   { key: 'connectKidsPreference', label: 'Kids preference', hint: 'Match with people on the same page.', weight: 5, datingOnly: true },
-  { key: 'connectDistance', label: 'Distance preference', hint: 'Down the street or down to travel?', weight: 5 },
 ]
 
 export function getProfileStrength(state = flowState) {

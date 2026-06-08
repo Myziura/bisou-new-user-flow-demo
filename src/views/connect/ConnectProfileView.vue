@@ -19,13 +19,11 @@ const fieldInputs = ref({
   connectGender: flowState.connectGender,
   connectDatingType: flowState.connectDatingType,
   connectKidsPreference: flowState.connectKidsPreference,
-  connectDistance: flowState.connectDistance,
 })
 
 const choiceOptions = {
   connectDatingType: ['Casual', 'Long-term', 'ENM', 'Marriage-minded'],
   connectKidsPreference: ['Want kids', "Don't want kids", 'Have kids', 'Open to either'],
-  connectDistance: ['5 km', '10 km', '25 km', 'Everywhere'],
 }
 
 const textFields = new Set(['connectBio', 'connectVibePrompt', 'connectPronouns'])
