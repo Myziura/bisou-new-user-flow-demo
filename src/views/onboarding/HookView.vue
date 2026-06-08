@@ -64,18 +64,25 @@ const promises = [
           <div class="drift-visual" aria-hidden="true">
             <div class="drift-card drift-card--old">
               <span class="drift-card__label">Western</span>
-
-              <span class="drift-card__sub">Fixed sky · ~300 AD</span>
+              <span class="drift-card__sub">
+                Fixed sky<br />
+                ~300 AD
+              </span>
             </div>
             <div class="drift-bridge">
               <span class="drift-bridge__line" />
-              <span class="drift-bridge__badge">~23° drift</span>
+              <span class="drift-bridge__badge">
+                ~23°<br />
+                drift
+              </span>
               <span class="drift-bridge__line" />
             </div>
             <div class="drift-card drift-card--new">
               <span class="drift-card__label">Vedic</span>
-
-              <span class="drift-card__sub">Live sky · tonight</span>
+              <span class="drift-card__sub">
+                Live sky<br />
+                tonight
+              </span>
             </div>
           </div>
 
@@ -236,28 +243,31 @@ const promises = [
 
 .drift-visual {
   display: flex;
-  align-items: stretch;
-  gap: 0;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
   margin: 0 auto 24px;
-  max-width: 320px;
+  width: 100%;
   animation: riseIn 0.8s ease 0.15s both;
 }
 
 .drift-card {
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 16px 8px;
+  justify-content: center;
+  gap: 6px;
+  padding: 14px 10px;
   border-radius: var(--radius-lg);
 }
 
 .drift-card__label {
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
 }
 
 .drift-card__icon {
@@ -266,7 +276,7 @@ const promises = [
 }
 
 .drift-card__sub {
-  font-size: 10px;
+  font-size: 11px;
   line-height: 1.3;
   text-align: center;
   opacity: 0.75;
@@ -276,7 +286,6 @@ const promises = [
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: rgba(255, 255, 255, 0.55);
-  transform: scale(0.92);
 }
 
 .drift-card--new {
@@ -284,8 +293,6 @@ const promises = [
   border: 2px solid var(--orange-6);
   color: var(--neutral-0);
   box-shadow: 0 8px 28px rgba(255, 138, 82, 0.35);
-  transform: scale(1.04);
-  z-index: 1;
 }
 
 .drift-card--new .drift-card__sub {
@@ -298,14 +305,15 @@ const promises = [
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 52px;
+  width: 44px;
   flex-shrink: 0;
-  gap: 6px;
+  gap: 4px;
 }
 
 .drift-bridge__line {
   width: 1px;
-  flex: 1;
+  height: 12px;
+  flex-shrink: 0;
   background: linear-gradient(
     180deg,
     transparent,
@@ -322,11 +330,11 @@ const promises = [
   color: var(--orange-5);
   background: rgba(255, 138, 82, 0.2);
   border: 1px solid rgba(255, 138, 82, 0.4);
-  padding: 4px 6px;
+  padding: 5px 6px;
   border-radius: 999px;
-  white-space: nowrap;
   text-align: center;
-  line-height: 1.2;
+  line-height: 1.15;
+  flex-shrink: 0;
 }
 
 .hook-lead {
