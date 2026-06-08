@@ -1,0 +1,106 @@
+:root {
+  /* Blue scale */
+  --blue-1: #e8e9f4;
+  --blue-2: #c7cbe4;
+  --blue-3: #9aa2ce;
+  --blue-4: #6b77b7;
+  --blue-5: #3e4ea2;
+  --blue-6: #101f71;
+  --blue-9: #0b1650;
+
+  /* Orange scale */
+  --orange-2: #ffe3d5;
+  --orange-5: #ff9f71;
+  --orange-6: #ff8a52;
+
+  /* Neutrals */
+  --neutral-0: #ffffff;
+  --neutral-10: #fafafa;
+  --neutral-50: #fcf7f0;
+  --neutral-500: #5a6484;
+  --neutral-700: #202534;
+  --neutral-900: #040a1b;
+
+  --outline: #c7cbe4;
+  --error: #f75555;
+  --success: #12d18e;
+  --info: #9610ff;
+
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-serif: "Instrument Serif", Georgia, serif;
+
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  --gradient-night: linear-gradient(180deg, #09123f 0%, #3e4ea2 100%);
+  --gradient-sky-sun: linear-gradient(180deg, #9cd4f2 0%, #ff8a52 100%);
+  --gradient-sky-sun-light: linear-gradient(180deg, #c1e4f7 0%, #ffcdb5 100%);
+  --gradient-orange: linear-gradient(
+    180deg,
+    #ebbc84 0%,
+    #f4a16b 50%,
+    #ff8a52 100%
+  );
+
+  --shadow-sm: 0 2px 8px rgba(4, 10, 27, 0.06);
+  --shadow-md: 0 8px 24px rgba(4, 10, 27, 0.1);
+  --shadow-lg: 0 16px 48px rgba(4, 10, 27, 0.14);
+
+  /* Screen insets — applied on inner components, not the phone wrapper */
+  --screen-px: 20px;
+  --screen-pt: 52px;
+  --screen-pt-safe: 40px;
+  --screen-pb: 24px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: var(--font-sans);
+  background: #1a1a2e;
+  color: var(--neutral-900);
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+h1,
+h2,
+h3,
+.heading {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+input,
+select {
+  font-family: inherit;
+}
+
+a {
+  color: var(--blue-5);
+}
