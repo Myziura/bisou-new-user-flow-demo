@@ -14,16 +14,13 @@ const routes = [
     component: () => import("../views/onboarding/HookView.vue"),
   },
   {
-    path: "/birth-date",
-    name: "birth-date",
-    component: () => import("../views/onboarding/BirthDateView.vue"),
+    path: "/birth-details",
+    name: "birth-details",
+    component: () => import("../views/onboarding/BirthDetailsView.vue"),
   },
+  { path: "/birth-date", redirect: "/birth-details" },
+  { path: "/birth-place", redirect: "/birth-details" },
   { path: "/micro-reveal", redirect: "/signup" },
-  {
-    path: "/birth-place",
-    name: "birth-place",
-    component: () => import("../views/onboarding/BirthPlaceView.vue"),
-  },
   {
     path: "/scanning",
     name: "scanning",

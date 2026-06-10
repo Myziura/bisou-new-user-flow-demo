@@ -6,116 +6,116 @@ import BisouButton from "../../components/BisouButton.vue";
 const router = useRouter();
 
 const stars = [
-  { left: 8, top: 12, size: 2, delay: 0.3 },
-  { left: 22, top: 28, size: 1.5, delay: 1.1 },
-  { left: 78, top: 8, size: 2, delay: 0.7 },
-  { left: 88, top: 34, size: 1, delay: 1.8 },
-  { left: 45, top: 18, size: 1.5, delay: 2.2 },
-  { left: 62, top: 42, size: 1, delay: 0.5 },
-  { left: 15, top: 52, size: 1, delay: 1.4 },
-  { left: 92, top: 58, size: 1.5, delay: 0.9 },
-  { left: 35, top: 68, size: 1, delay: 2.6 },
-  { left: 70, top: 72, size: 2, delay: 1.6 },
+  { left: 6,  top: 8,  size: 1.5, delay: 0.0 },
+  { left: 18, top: 20, size: 2,   delay: 1.2 },
+  { left: 82, top: 6,  size: 2,   delay: 0.6 },
+  { left: 91, top: 30, size: 1,   delay: 1.9 },
+  { left: 48, top: 14, size: 1.5, delay: 2.3 },
+  { left: 65, top: 38, size: 1,   delay: 0.4 },
+  { left: 12, top: 48, size: 1,   delay: 1.5 },
+  { left: 94, top: 54, size: 1.5, delay: 0.8 },
+  { left: 30, top: 64, size: 1,   delay: 2.7 },
+  { left: 74, top: 70, size: 2,   delay: 1.7 },
+  { left: 55, top: 82, size: 1,   delay: 0.2 },
+  { left: 38, top: 90, size: 1.5, delay: 3.1 },
 ];
 
-const promises = [
-  {
-    emoji: "♈",
-    label: "Your real Vedic sun sign — not the one you grew up with",
-  },
-  { emoji: "☀", label: "Daily readings built on where the stars are tonight" },
-  { emoji: "♡", label: "Compatibility that actually matches your chart" },
+const claims = [
+  { icon: "↑", text: "Your rising sign — who you really are" },
+  { icon: "🌙", text: "Moon sign — your emotional blueprint" },
+  { icon: "✦", text: "Nakshatra — 27× more precise than Western" },
 ];
 </script>
 
 <template>
   <PhoneFrame :show-back="false">
-    <div class="hook-page">
-      <div class="hook-page__sky" aria-hidden="true">
+    <div class="page">
+      <!-- Ambient background -->
+      <div class="page__bg" aria-hidden="true">
         <div class="orb orb--1" />
         <div class="orb orb--2" />
         <div class="orb orb--3" />
         <div
-          v-for="(star, i) in stars"
+          v-for="(s, i) in stars"
           :key="i"
           class="star"
           :style="{
-            left: `${star.left}%`,
-            top: `${star.top}%`,
-            width: `${star.size}px`,
-            height: `${star.size}px`,
-            animationDelay: `${star.delay}s`,
-          }" />
+            left: `${s.left}%`,
+            top: `${s.top}%`,
+            width: `${s.size}px`,
+            height: `${s.size}px`,
+            animationDelay: `${s.delay}s`,
+          }"
+        />
       </div>
 
-      <div class="hook-scroll">
-        <header class="hook-hero">
-          <p class="hook-eyebrow">
-            <span class="hook-spark">✦</span>
-            The sky moved. Your sign didn't.
-            <span class="hook-spark">✦</span>
-          </p>
-
-          <h1 class="hook-title">
-            Your zodiac sign is<br />
-            <span class="hook-title__accent">probably wrong.</span>
-          </h1>
-
-          <div class="drift-visual" aria-hidden="true">
-            <div class="drift-card drift-card--old">
-              <span class="drift-card__label">Western</span>
-              <span class="drift-card__sub">
-                Fixed sky<br />
-                ~300 AD
-              </span>
-            </div>
-            <div class="drift-bridge">
-              <span class="drift-bridge__line" />
-              <span class="drift-bridge__badge">
-                ~23°<br />
-                drift
-              </span>
-              <span class="drift-bridge__line" />
-            </div>
-            <div class="drift-card drift-card--new">
-              <span class="drift-card__label">Vedic</span>
-              <span class="drift-card__sub">
-                Live sky<br />
-                tonight
-              </span>
-            </div>
+      <div class="page__scroll">
+        <!-- Hero -->
+        <header class="hero">
+          <div class="hero__badge">
+            <span class="hero__badge-dot" />
+            Vedic Astrology
           </div>
 
-          <p class="hook-lead">
-            Western astrology still uses a star map that's roughly
-            <strong>1,500 years out of date</strong>. Vedic astrology tracks
-            where the constellations actually sit right now — and for many
-            people, that changes everything.
+          <h1 class="hero__title">
+            Your zodiac sign<br />
+            is <span class="hero__title-accent">probably wrong.</span>
+          </h1>
+
+          <p class="hero__hook">
+            Western astrology is frozen in <strong>300 AD</strong>. The sky has shifted
+            23° since then — and so has your real sign.
           </p>
         </header>
 
-        <section class="promise-block">
-          <p class="promise-headline">
-            In <strong>20 seconds</strong>, we'll find your real sign — and show
-            you what it means for you.
-          </p>
-          <ul class="promise-list">
-            <li v-for="item in promises" :key="item.label">
-              <span class="promise-list__emoji">{{ item.emoji }}</span>
-              <span>{{ item.label }}</span>
+        <!-- Western → Vedic comparison -->
+        <div class="compare">
+          <div class="compare__card compare__card--old">
+            <span class="compare__tag">Western</span>
+            <p class="compare__desc">Fixed star map<br />~300 AD</p>
+          </div>
+
+          <div class="compare__arrow">
+            <div class="compare__arrow-line" />
+            <div class="compare__arrow-badge">23° drift</div>
+            <div class="compare__arrow-line" />
+          </div>
+
+          <div class="compare__card compare__card--new">
+            <span class="compare__tag compare__tag--active">Vedic</span>
+            <p class="compare__desc">Live sky<br />tonight</p>
+            <div class="compare__glow" />
+          </div>
+        </div>
+
+        <!-- What you'll discover -->
+        <div class="discover">
+          <p class="discover__label">What you'll discover</p>
+          <ul class="discover__list">
+            <li v-for="item in claims" :key="item.text" class="discover__item">
+              <span class="discover__icon">{{ item.icon }}</span>
+              <span class="discover__text">{{ item.text }}</span>
             </li>
           </ul>
-        </section>
+        </div>
       </div>
 
-      <footer class="hook-footer">
-        <BisouButton @click="router.push('/birth-date')">
+      <!-- Sticky footer -->
+      <footer class="page__footer">
+        <div class="footer__trust">
+          <div class="footer__trust-dots">
+            <span v-for="n in 5" :key="n" class="footer__dot" />
+          </div>
+          <span class="footer__trust-text">Free · Takes 20 seconds</span>
+        </div>
+        <BisouButton class="cta-btn" @click="router.push('/birth-details')">
           Find my real sign
         </BisouButton>
         <button
           type="button"
-          class="sign-in-link"
-          @click="router.push('/sign-in')">
+          class="signin-link"
+          @click="router.push('/sign-in')"
+        >
           I already have an account
         </button>
       </footer>
@@ -124,7 +124,7 @@ const promises = [
 </template>
 
 <style scoped>
-.hook-page {
+.page {
   flex: 1;
   min-height: 0;
   display: flex;
@@ -132,334 +132,380 @@ const promises = [
   position: relative;
   overflow: hidden;
   background: linear-gradient(
-    180deg,
-    #0b1650 0%,
-    #3e4ea2 38%,
-    #9cd4f2 72%,
-    #ffcdb5 100%
+    175deg,
+    #060d2e 0%,
+    #1a1f6e 30%,
+    #2e3595 55%,
+    #7b5ea7 78%,
+    #c4806a 92%,
+    #f0b490 100%
   );
+  color: var(--neutral-0);
 }
 
-.hook-page__sky {
+/* ── Background ── */
+.page__bg {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  overflow: hidden;
 }
 
 .orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(70px);
-  animation: drift 14s ease-in-out infinite;
+  filter: blur(80px);
+  animation: float 16s ease-in-out infinite;
 }
 
 .orb--1 {
-  width: 260px;
-  height: 260px;
-  top: -80px;
-  left: -40px;
-  background: rgba(150, 16, 255, 0.35);
+  width: 300px;
+  height: 300px;
+  top: -100px;
+  left: -80px;
+  background: rgba(120, 40, 255, 0.4);
 }
 
 .orb--2 {
-  width: 200px;
-  height: 200px;
-  top: 20%;
-  right: -60px;
-  background: rgba(255, 138, 82, 0.3);
-  animation-delay: -5s;
+  width: 240px;
+  height: 240px;
+  top: 25%;
+  right: -70px;
+  background: rgba(255, 120, 60, 0.28);
+  animation-delay: -6s;
 }
 
 .orb--3 {
-  width: 180px;
-  height: 180px;
-  bottom: 30%;
-  left: 20%;
-  background: rgba(62, 78, 162, 0.25);
-  animation-delay: -8s;
+  width: 200px;
+  height: 200px;
+  bottom: 20%;
+  left: 10%;
+  background: rgba(60, 80, 180, 0.3);
+  animation-delay: -10s;
 }
 
 .star {
   position: absolute;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.85);
-  box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
-  animation: twinkle 3s ease infinite;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+  animation: twinkle 3.5s ease-in-out infinite;
 }
 
-.hook-scroll {
+/* ── Scroll content ── */
+.page__scroll {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding: var(--screen-pt-safe) var(--screen-px) 16px;
+  padding: var(--screen-pt-safe) var(--screen-px) 20px;
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-.hook-hero {
-  text-align: center;
-  animation: riseIn 0.8s ease both;
+/* ── Hero ── */
+.hero {
+  animation: riseIn 0.7s ease both;
 }
 
-.hook-eyebrow {
+.hero__badge {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: rgba(255, 255, 255, 0.85);
-  margin-bottom: 16px;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 18px;
+  backdrop-filter: blur(8px);
 }
 
-.hook-spark {
-  color: var(--orange-5);
-  font-size: 10px;
-  animation: twinkle 2s ease infinite;
+.hero__badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--orange-5);
+  box-shadow: 0 0 8px var(--orange-5);
+  animation: pulse-dot 2s ease infinite;
 }
 
-.hook-spark:last-child {
-  animation-delay: 1s;
-}
-
-.hook-title {
+.hero__title {
   font-family: var(--font-serif);
-  font-size: 38px;
-  line-height: 1.08;
+  font-size: 40px;
+  line-height: 1.07;
   color: var(--neutral-0);
-  margin-bottom: 28px;
-  text-shadow: 0 2px 24px rgba(4, 10, 27, 0.25);
+  margin-bottom: 16px;
+  text-shadow: 0 4px 32px rgba(0, 0, 0, 0.3);
 }
 
-.hook-title__accent {
-  background: linear-gradient(135deg, #ffe3d5 0%, #ff9f71 50%, #ff8a52 100%);
+.hero__title-accent {
+  background: linear-gradient(125deg, #ffd4b8 0%, #ff9f71 45%, #ff6b35 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.drift-visual {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-  margin: 0 auto 24px;
-  width: 100%;
-  animation: riseIn 0.8s ease 0.15s both;
-}
-
-.drift-card {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 14px 10px;
-  border-radius: var(--radius-lg);
-}
-
-.drift-card__label {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.drift-card__icon {
-  font-size: 36px;
-  line-height: 1;
-}
-
-.drift-card__sub {
-  font-size: 11px;
-  line-height: 1.3;
-  text-align: center;
-  opacity: 0.75;
-}
-
-.drift-card--old {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.55);
-}
-
-.drift-card--new {
-  background: rgba(255, 255, 255, 0.18);
-  border: 2px solid var(--orange-6);
-  color: var(--neutral-0);
-  box-shadow: 0 8px 28px rgba(255, 138, 82, 0.35);
-}
-
-.drift-card--new .drift-card__sub {
-  color: var(--orange-5);
-  opacity: 1;
-}
-
-.drift-bridge {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  flex-shrink: 0;
-  gap: 4px;
-}
-
-.drift-bridge__line {
-  width: 1px;
-  height: 12px;
-  flex-shrink: 0;
-  background: linear-gradient(
-    180deg,
-    transparent,
-    rgba(255, 138, 82, 0.6),
-    transparent
-  );
-}
-
-.drift-bridge__badge {
-  font-size: 9px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--orange-5);
-  background: rgba(255, 138, 82, 0.2);
-  border: 1px solid rgba(255, 138, 82, 0.4);
-  padding: 5px 6px;
-  border-radius: 999px;
-  text-align: center;
-  line-height: 1.15;
-  flex-shrink: 0;
-}
-
-.hook-lead {
+.hero__hook {
   font-size: 16px;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.88);
-  text-align: left;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: var(--radius-lg);
-  padding: 16px 18px;
-  margin-bottom: 20px;
-  animation: riseIn 0.8s ease 0.25s both;
+  color: rgba(255, 255, 255, 0.72);
 }
 
-.hook-lead strong {
+.hero__hook strong {
   color: var(--orange-5);
   font-weight: 600;
 }
 
-.promise-block {
-  background: rgba(255, 255, 255, 0.92);
+/* ── Compare widget ── */
+.compare {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  animation: riseIn 0.7s ease 0.1s both;
+}
+
+.compare__card {
+  flex: 1;
+  min-width: 0;
+  padding: 16px 12px;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  position: relative;
+}
+
+.compare__card--old {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.compare__card--new {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1.5px solid rgba(255, 138, 82, 0.7);
+  box-shadow:
+    0 0 32px rgba(255, 138, 82, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+}
+
+.compare__glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 100%, rgba(255, 138, 82, 0.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.compare__tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 8px;
+}
+
+.compare__tag--active {
+  color: var(--orange-5);
+}
+
+.compare__desc {
+  font-size: 13px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.compare__card--new .compare__desc {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.compare__arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  flex-shrink: 0;
+  gap: 5px;
+}
+
+.compare__arrow-line {
+  width: 1px;
+  height: 18px;
+  background: linear-gradient(180deg, transparent, rgba(255, 138, 82, 0.7), transparent);
+}
+
+.compare__arrow-badge {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--orange-5);
+  background: rgba(255, 138, 82, 0.15);
+  border: 1px solid rgba(255, 138, 82, 0.4);
+  padding: 5px 7px;
+  border-radius: 999px;
+  text-align: center;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* ── Discover ── */
+.discover {
+  background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: var(--radius-xl);
-  padding: 20px 18px;
-  border: 1px solid rgba(255, 255, 255, 0.95);
-  box-shadow: 0 12px 40px rgba(4, 10, 27, 0.12);
-  animation: riseIn 0.8s ease 0.35s both;
+  padding: 18px 18px 16px;
+  animation: riseIn 0.7s ease 0.2s both;
 }
 
-.promise-headline {
-  font-family: var(--font-serif);
-  font-size: 22px;
-  line-height: 1.3;
-  color: var(--blue-5);
-  margin-bottom: 16px;
+.discover__label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 14px;
 }
 
-.promise-headline strong {
-  color: var(--orange-6);
-  font-weight: 400;
-}
-
-.promise-list {
+.discover__list {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
-.promise-list li {
+.discover__item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
-  font-size: 14px;
-  line-height: 1.45;
-  color: var(--neutral-700);
 }
 
-.promise-list__emoji {
+.discover__icon {
   flex-shrink: 0;
   width: 32px;
   height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
-  background: var(--blue-1);
-  border-radius: 10px;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-.hook-footer {
+.discover__text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.35;
+}
+
+/* ── Footer ── */
+.page__footer {
   flex-shrink: 0;
   position: relative;
   z-index: 2;
-  padding: 12px var(--screen-px) var(--screen-pb);
+  padding: 16px var(--screen-px) var(--screen-pb);
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(255, 205, 181, 0.95) 30%
-  );
+  gap: 12px;
+  background: linear-gradient(180deg, transparent 0%, rgba(10, 16, 58, 0.92) 28%);
 }
 
-.sign-in-link {
+.footer__trust {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.footer__trust-dots {
+  display: flex;
+  gap: 3px;
+}
+
+.footer__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--orange-5);
+  opacity: 0.7;
+}
+
+.footer__dot:nth-child(3) {
+  opacity: 1;
+  box-shadow: 0 0 8px var(--orange-5);
+}
+
+.footer__trust-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.02em;
+}
+
+:deep(.cta-btn) {
+  font-size: 17px;
+  font-weight: 700;
+  padding: 18px 24px;
+  background: linear-gradient(135deg, #ff9f52 0%, #ff6e26 100%);
+  box-shadow:
+    0 8px 32px rgba(255, 110, 38, 0.5),
+    0 0 0 1px rgba(255, 160, 82, 0.3);
+  letter-spacing: 0.01em;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+:deep(.cta-btn:hover) {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 40px rgba(255, 110, 38, 0.6),
+    0 0 0 1px rgba(255, 160, 82, 0.4);
+}
+
+.signin-link {
   font-size: 14px;
   font-weight: 600;
-  color: var(--blue-5);
+  color: rgba(255, 255, 255, 0.45);
   text-align: center;
   padding: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.15s;
 }
 
+.signin-link:hover {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ── Animations ── */
 @keyframes riseIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes twinkle {
-  0%,
-  100% {
-    opacity: 0.35;
-    transform: scale(0.85);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.15);
-  }
+  0%, 100% { opacity: 0.25; transform: scale(0.8); }
+  50%       { opacity: 1;    transform: scale(1.2); }
 }
 
-@keyframes drift {
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(18px, -12px);
-  }
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  33%       { transform: translate(12px, -18px); }
+  66%       { transform: translate(-8px, 10px); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.7; }
+  50%       { opacity: 1; box-shadow: 0 0 14px var(--orange-5); }
 }
 </style>

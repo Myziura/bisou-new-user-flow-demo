@@ -10,20 +10,20 @@ onMounted(() => {
   setTimeout(() => {
     if (flowState.onboardingComplete) {
       router.replace('/today')
-    } else if (flowState.signedUp && flowState.birthPlace && flowState.sunSign) {
-      router.replace('/today')
-    } else if (flowState.signedUp && flowState.birthPlace) {
-      router.replace('/scanning')
     } else if (flowState.signedUp && flowState.preSignupNotificationsAnswered) {
-      router.replace('/birth-place')
+      router.replace('/today')
     } else if (flowState.signedUp && flowState.attribution && flowState.name) {
       router.replace('/notifications')
     } else if (flowState.signedUp && flowState.name) {
       router.replace('/attribution')
     } else if (flowState.signedUp) {
       router.replace('/almost-there')
-    } else if (flowState.vedicSign) {
+    } else if (flowState.sunSign) {
       router.replace('/signup')
+    } else if (flowState.birthPlace && flowState.birthDate) {
+      router.replace('/scanning')
+    } else if (flowState.vedicSign) {
+      router.replace('/birth-details')
     } else {
       router.replace('/hook')
     }

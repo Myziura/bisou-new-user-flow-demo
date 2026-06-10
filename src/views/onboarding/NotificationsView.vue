@@ -14,7 +14,8 @@ function enableNotifications() {
 
 function finish() {
   flowState.preSignupNotificationsAnswered = true
-  router.push('/birth-place')
+  flowState.onboardingComplete = true
+  router.push('/today')
 }
 </script>
 
@@ -26,7 +27,7 @@ function finish() {
         <h2 class="notif-title">Want your reading delivered each morning?</h2>
         <p class="notif-sub">
           Get a personalized horoscope in your pocket every day —
-          framed around the chart you're about to unlock.
+          framed around the chart you just unlocked.
         </p>
       </div>
 

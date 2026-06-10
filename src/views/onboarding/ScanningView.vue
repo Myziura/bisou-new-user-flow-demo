@@ -8,7 +8,7 @@ const router = useRouter()
 
 onMounted(() => {
   if (!flowState.birthPlace || !flowState.birthDate) {
-    router.replace('/birth-place')
+    router.replace('/birth-details')
     return
   }
 
@@ -23,8 +23,7 @@ onMounted(() => {
     vedicEmoji: chart.vedicEmoji,
   })
 
-  flowState.onboardingComplete = true
-  setTimeout(() => router.replace('/today'), 3000)
+  setTimeout(() => router.replace('/signup'), 3000)
 })
 </script>
 
