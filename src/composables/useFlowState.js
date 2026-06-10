@@ -50,8 +50,11 @@ watch(
 )
 
 export function resetFlow() {
-  Object.assign(flowState, defaultState())
   localStorage.removeItem(STORAGE_KEY)
+  for (const key of Object.keys(flowState)) {
+    delete flowState[key]
+  }
+  Object.assign(flowState, defaultState())
 }
 
 const WESTERN_SIGNS = [

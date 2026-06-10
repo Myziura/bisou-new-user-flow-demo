@@ -261,7 +261,7 @@ function continueFlow() {
       <Transition name="footer-rise">
         <footer v-if="canReveal" class="page__footer">
           <BisouButton class="reveal-btn" @click="continueFlow">
-            Reveal my Vedic chart →
+            See my real Vedic sign →
           </BisouButton>
         </footer>
       </Transition>

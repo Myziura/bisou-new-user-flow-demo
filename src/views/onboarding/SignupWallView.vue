@@ -126,31 +126,13 @@ function signup(method) {
           </div>
         </section>
 
-        <!-- ── What's ready for you ── -->
-        <section class="more">
-          <div class="more__header">
-            <p class="more__title">Your complete chart is ready</p>
-            <p class="more__sub">Sign up to unlock everything — it's free.</p>
-          </div>
-          <ul class="more__list">
-            <li v-for="item in unlocks" :key="item.title" class="more__item">
-              <span class="more__item-icon">{{ item.emoji }}</span>
-              <div class="more__item-body">
-                <p class="more__item-title">{{ item.title }}</p>
-                <p class="more__item-desc">{{ item.desc }}</p>
-              </div>
-              <span class="more__item-badge">Free</span>
-            </li>
-          </ul>
-        </section>
-
         <!-- ── CTA ── -->
         <section ref="ctaRef" class="cta">
           <div class="cta__glow" aria-hidden="true" />
           <div class="cta__card">
             <div class="cta__shine" />
-            <p class="cta__headline">See your full chart.</p>
-            <p class="cta__sub">Free forever. No card needed.</p>
+            <p class="cta__headline">Get your full Vedic chart</p>
+            <p class="cta__sub">Sign up free — takes 10 seconds.</p>
 
             <div class="cta__buttons">
               <button type="button" class="btn btn--apple" @click="signup('apple')">
@@ -180,6 +162,21 @@ function signup(method) {
               By continuing you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
             </p>
           </div>
+        </section>
+
+        <!-- ── What else is waiting ── -->
+        <section class="more">
+          <p class="more__eyebrow">Also included in your full chart</p>
+          <ul class="more__list">
+            <li v-for="item in unlocks" :key="item.title" class="more__item">
+              <span class="more__item-icon">{{ item.emoji }}</span>
+              <div class="more__item-body">
+                <p class="more__item-title">{{ item.title }}</p>
+                <p class="more__item-desc">{{ item.desc }}</p>
+              </div>
+              <span class="more__item-badge">Free</span>
+            </li>
+          </ul>
         </section>
 
       </div>
@@ -410,23 +407,16 @@ function signup(method) {
 
 /* ── "More" section ── */
 .more {
-  animation: fadeUp 0.6s ease 0.12s both;
+  animation: fadeUp 0.6s ease 0.18s both;
 }
 
-.more__header {
+.more__eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.35);
   margin-bottom: 10px;
-}
-
-.more__title {
-  font-family: var(--font-serif);
-  font-size: 18px;
-  color: var(--neutral-0);
-  margin-bottom: 2px;
-}
-
-.more__sub {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.45);
 }
 
 .more__list {
@@ -493,7 +483,7 @@ function signup(method) {
 /* ── CTA ── */
 .cta {
   position: relative;
-  animation: fadeUp 0.6s ease 0.16s both;
+  animation: fadeUp 0.6s ease 0.12s both;
 }
 
 .cta__glow {
