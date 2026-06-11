@@ -105,6 +105,16 @@ const stories = [
           </div>
         </section>
 
+        <section class="new-today-teaser" @click="router.push('/new-today')">
+          <div class="teaser-content">
+            <span class="teaser-emoji">🌙</span>
+            <div>
+              <strong>Preview: New Today Page</strong>
+              <p>See the redesigned experience →</p>
+            </div>
+          </div>
+        </section>
+
         <section class="connect-teaser" @click="router.push('/connect')">
           <div class="teaser-content">
             <span class="teaser-emoji">💫</span>
@@ -358,6 +368,20 @@ const stories = [
 .connect-teaser:hover {
   box-shadow: var(--shadow-md);
 }
+
+.new-today-teaser {
+  background: linear-gradient(135deg, #0d1d54, #3e4ea2);
+  border-radius: var(--radius-xl);
+  padding: 20px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: box-shadow 0.15s;
+  color: white;
+}
+.new-today-teaser:hover { box-shadow: var(--shadow-lg); }
+.new-today-teaser .teaser-emoji { font-size: 28px; }
+.new-today-teaser strong { color: white; display: block; font-size: 15px; margin-bottom: 4px; }
+.new-today-teaser p { color: rgba(255,255,255,0.7); font-size: 13px; font-weight: 600; }
 
 .teaser-content {
   display: flex;

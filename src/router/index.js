@@ -64,6 +64,11 @@ const routes = [
     component: () => import("../views/TodayPage.vue"),
   },
   {
+    path: "/new-today",
+    name: "new-today",
+    component: () => import("../views/NewTodayPage.vue"),
+  },
+  {
     path: "/connect",
     name: "connect-intro",
     component: () => import("../views/connect/ConnectIntroView.vue"),
