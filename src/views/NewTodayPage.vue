@@ -248,6 +248,248 @@ const ALL_BADGES = [
 
 const BADGE_CATEGORIES = ['Cosmic Events', 'Streak Milestones', 'Loyalty', 'Social', 'Events']
 
+// ── Power Windows ─────────────────────────────────────────────────────────────
+
+const POWER_WINDOWS = {
+  Sunday: [
+    { icon: '☀️', title: 'High energy start',              time: '7:00 – 8:30 AM',   slot: 'morning',   quality: 'peak',   hint: 'Physical energy and confidence are at their peak — ideal for exercise, important calls, or anything needing momentum' },
+    { icon: '🧠', title: 'Deep focus window',              time: '10:30 AM – 12:00', slot: 'morning',   quality: 'peak',   hint: 'Mental sharpness peaks here — use it for analysis, writing, or any work requiring concentration' },
+    { icon: '✦',  title: 'Best decision window',           time: '11:48 AM – 12:24', slot: 'afternoon', quality: 'golden', hint: 'The most powerful 36-minute window of the day — use it for important choices, agreements, or new starts' },
+    { icon: '⚠️', title: 'Low energy zone',                time: '4:30 – 6:00 PM',   slot: 'evening',   quality: 'avoid',  hint: 'Energy dips here — fine for routine tasks, but avoid starting anything new or making big decisions in this window' },
+    { icon: '💛', title: 'Social & creative hour',         time: '7:00 – 8:30 PM',   slot: 'evening',   quality: 'medium', hint: 'Warm, connecting energy — good for meaningful conversations, creative ideas, or quality time with people you care about' },
+  ],
+  Monday: [
+    { icon: '⚠️', title: 'Low energy zone',                time: '7:30 – 9:00 AM',   slot: 'morning',   quality: 'avoid',  hint: 'Energy dips at the start of the day — ease in with routine tasks and avoid anything important here' },
+    { icon: '✦',  title: 'Growth window',                  time: '9:00 – 10:00 AM',  slot: 'morning',   quality: 'peak',   hint: 'The day opens up here — good for big-picture thinking, planning, and important conversations' },
+    { icon: '✦',  title: 'Best decision window',           time: '11:48 AM – 12:24', slot: 'afternoon', quality: 'golden', hint: 'The most powerful 36-minute window of the day — use it for important choices, agreements, or new starts' },
+    { icon: '🌙', title: 'Gut feeling window',             time: '2:30 – 3:30 PM',   slot: 'afternoon', quality: 'medium', hint: "Intuition is sharper than usual — good for reflection, creative work, or trusting your gut on something you've been weighing" },
+    { icon: '💛', title: 'Evening warmth',                 time: '7:30 – 8:30 PM',   slot: 'evening',   quality: 'medium', hint: 'Relational energy returns — a good time to reconnect with people that matter' },
+  ],
+  Tuesday: [
+    { icon: '🔥', title: 'Peak drive window',              time: '7:00 – 8:00 AM',   slot: 'morning',   quality: 'peak',   hint: 'The highest physical and mental drive of the day — tackle your hardest task now, before the energy settles' },
+    { icon: '💛', title: 'Social window',                  time: '8:00 – 9:30 AM',   slot: 'morning',   quality: 'medium', hint: 'The best time on a high-drive day to reach out, have conversations, or collaborate with others' },
+    { icon: '✦',  title: 'Best decision window',           time: '11:48 AM – 12:24', slot: 'afternoon', quality: 'golden', hint: 'The most powerful 36-minute window of the day — use it for important choices, agreements, or new starts' },
+    { icon: '⚠️', title: 'Low energy zone',                time: '3:00 – 4:30 PM',   slot: 'afternoon', quality: 'avoid',  hint: 'Energy dips here — fine for routine tasks, but avoid starting anything new or making big decisions in this window' },
+    { icon: '🧠', title: 'Evening clarity',                time: '9:00 – 10:00 PM',  slot: 'evening',   quality: 'medium', hint: 'A quiet, clear window — good for reflection, journaling, or light planning for tomorrow' },
+  ],
+  Wednesday: [
+    { icon: '🧠', title: 'Sharpest thinking of the week', time: '7:00 – 8:00 AM',   slot: 'morning',   quality: 'peak',   hint: 'Wednesday mornings carry more mental clarity than any other day this week — use it for strategy, key messages, or complex thinking' },
+    { icon: '🌙', title: 'Gut feeling window',             time: '9:00 – 10:00 AM',  slot: 'morning',   quality: 'medium', hint: 'Intuition briefly takes over from logic — good for creative choices or decisions that need to feel right, not just make sense' },
+    { icon: '✦',  title: 'Best decision window',           time: '11:48 AM – 12:24', slot: 'afternoon', quality: 'golden', hint: 'Make your important move here — the low-energy zone starts right after this window ends' },
+    { icon: '⚠️', title: 'Low energy zone',                time: '12:00 – 1:30 PM',  slot: 'afternoon', quality: 'avoid',  hint: 'Energy dips here — fine for routine tasks, but avoid starting anything new or making big decisions in this window' },
+    { icon: '💛', title: 'Creative evening',               time: '8:00 – 9:30 PM',   slot: 'evening',   quality: 'medium', hint: 'A warm, expressive window — good for art, meaningful conversations, or anything creative' },
+  ],
+  Thursday: [
+    { icon: '✦',  title: 'Best start of the week',         time: '7:00 – 8:30 AM',   slot: 'morning',   quality: 'peak',   hint: 'Thursday mornings carry strong growth energy — ideal for launching something, having a big conversation, or making a meaningful decision early' },
+    { icon: '🧠', title: 'Communication window',           time: '10:30 – 11:30 AM', slot: 'morning',   quality: 'peak',   hint: 'Precision and persuasion both peak here — strong for negotiations, presentations, and any message that needs to land well' },
+    { icon: '✦',  title: 'Best decision window',           time: '11:48 AM – 12:24', slot: 'afternoon', quality: 'golden', hint: 'The most powerful 36-minute window of the day — use it for important choices, agreements, or new starts' },
+    { icon: '⚠️', title: 'Low energy zone',                time: '1:30 – 3:00 PM',   slot: 'afternoon', quality: 'avoid',  hint: 'Energy dips here — fine for routine tasks, but avoid starting anything new or making big decisions in this window' },
+    { icon: '🌙', title: 'Wind-down time',                 time: '9:30 – 10:30 PM',  slot: 'evening',   quality: 'rest',   hint: 'The evening settles into calm — a natural moment for screen-free rest, light reading, or gentle preparation for sleep' },
+  ],
+  Friday: [
+    { icon: '💛', title: 'Love & creativity peak',         time: '7:00 – 8:30 AM',   slot: 'morning',   quality: 'peak',   hint: 'Friday mornings carry the strongest love and creative energy of the week — a special window for anything that needs heart or beauty' },
+    { icon: '🧠', title: 'Sharp thinking',                 time: '8:30 – 9:30 AM',   slot: 'morning',   quality: 'peak',   hint: 'Mental clarity before the day gets social and emotional — use this short window for focused work while it lasts' },
+    { icon: '⚠️', title: 'Low energy zone',                time: '10:30 AM – 12:00', slot: 'morning',   quality: 'avoid',  hint: 'Energy dips here — fine for routine tasks, but avoid starting anything new or making big decisions in this window' },
+    { icon: '✦',  title: 'Best decision window',           time: '11:48 AM – 12:24', slot: 'afternoon', quality: 'golden', hint: 'Right as the low energy lifts — this is your opening. Move on something important here.' },
+    { icon: '💛', title: 'Peak evening energy',            time: '7:30 – 9:30 PM',   slot: 'evening',   quality: 'peak',   hint: 'The best evening of the entire week for love, meaningful connection, and social energy — do not let it pass quietly' },
+  ],
+  Saturday: [
+    { icon: '🪐', title: 'Focused work time',              time: '7:00 – 8:00 AM',   slot: 'morning',   quality: 'peak',   hint: 'Saturday mornings are uniquely suited for structured, long-form, or administrative work — energy is concentrated and distraction-free' },
+    { icon: '⚠️', title: 'Low energy zone',                time: '9:00 – 10:30 AM',  slot: 'morning',   quality: 'avoid',  hint: 'Energy dips here — fine for routine tasks, but avoid starting anything new or making big decisions in this window' },
+    { icon: '✦',  title: 'Good moment to decide',          time: '10:30 – 11:30 AM', slot: 'morning',   quality: 'medium', hint: 'Expanded thinking returns after the slow morning — good for decisions that need a clear head' },
+    { icon: '✦',  title: 'Best decision window',           time: '11:48 AM – 12:24', slot: 'afternoon', quality: 'golden', hint: 'The most powerful 36-minute window of the day — use it for important choices, agreements, or new starts' },
+    { icon: '🌙', title: 'Evening reflection',             time: '9:00 – 10:30 PM',  slot: 'evening',   quality: 'rest',   hint: 'The week closes gently here — good for journaling, emotional processing, or simply letting everything settle' },
+  ],
+}
+
+// ── Ask the Stars ──────────────────────────────────────────────────────────────
+
+const NAKSHATRA_LIST = [
+  'Ashwini','Bharani','Krittika','Rohini','Mrigashira','Ardra','Punarvasu','Pushya',
+  'Ashlesha','Magha','Purva Phalguni','Uttara Phalguni','Hasta','Chitra','Swati',
+  'Vishakha','Anuradha','Jyeshtha','Mula','Purva Ashadha','Uttara Ashadha','Shravana',
+  'Dhanishtha','Shatabhisha','Purva Bhadrapada','Uttara Bhadrapada','Revati',
+]
+
+const STAR_ANSWERS = [
+  "The stars lean toward yes. Trust what you already know.",
+  "Wait three days. The answer will be clearer after the moon shifts.",
+  "A risk worth taking — but only if you've already done the groundwork.",
+  "The path exists. The timing is not quite right.",
+  "Yes. But let others see your enthusiasm only after you've committed.",
+  "This is not a door you open. It opens itself when ready.",
+  "Move forward. The hesitation is fear, not wisdom.",
+  "Not yet. Something better is forming just behind this.",
+  "The answer is already inside you. You're asking the stars to confirm it.",
+  "Proceed with care. The outcome depends entirely on your patience.",
+  "A clear yes — but the version of yes that requires courage.",
+  "The energy around this is scattered right now. Give it a week.",
+  "Strong yes on the surface. Look deeper before committing.",
+  "Your instinct was right the first time. Stop second-guessing.",
+  "The stars say nothing is blocked. The block is internal.",
+  "This is a door worth knocking on. Whether it opens is not yet written.",
+  "The timing is unusual — but unusual timing often marks the right moment.",
+  "Not this path. A parallel one will become visible soon.",
+  "Yes. The nakshatra agrees. Act before the moon shifts.",
+  "The energy is neutral. This one is truly yours to decide.",
+  "A slow yes. Not dramatic, not instant. But real.",
+  "Release the need to know in advance. Take the step.",
+  "Something about this isn't ready yet. It will be. Watch for the signal.",
+  "The stars show a beginning, not a conclusion. Start.",
+  "Hold the question a little longer. Clarity is one sleep away.",
+  "This is smaller than it feels. The answer is yes.",
+  "This is larger than it looks. Slow down before deciding.",
+  "What you're really asking about is trust. Start there.",
+  "The obstacle you see is temporary. The opportunity is not.",
+  "The outcome already leans in your direction. Keep moving.",
+  "Act, but quietly. No announcement before the work is done.",
+  "The fear of regret is louder than the actual risk. Proceed.",
+  "Yes — if you've already told someone about it. No — if you haven't.",
+  "The stars see two paths. Both lead somewhere real. Choose the one you can fully commit to.",
+  "A rare window is open right now. The answer lives in the action, not the waiting.",
+  "The moon phase supports completion, not new beginnings. Revisit in two weeks.",
+  "Something is ending so this can begin. Trust the transition.",
+  "The energy today strongly favours this. Tomorrow it will feel different.",
+  "This matters less than you think it does right now. Breathe.",
+  "The question is good. The timing is perfect. Move.",
+  "Not a no. A not-yet — with a specific date attached to it.",
+  "The stars are quiet on this one. The choice is purely yours.",
+  "Something adjacent to what you're asking is actually the real opportunity.",
+  "Your body already knows the answer. Ask it instead.",
+  "The path you want and the path that's right for you are the same today.",
+  "A yes — that will require you to let go of something first.",
+  "The pattern you're in needs breaking. This question is the break.",
+  "Trust the person who gave you this question to think about. They see something you don't.",
+  "The stars have been waiting for you to ask this. Yes.",
+  "Still. For now. Not because the answer is no — because it's still becoming.",
+]
+
+// ── Cosmic Body Map ──────────────────────────────────────────────────────────
+
+const BODY_MAP = [
+  { nakshatra: 'Ashwini',          icon: '🧠', area: 'head & brain',              tip: 'Sharp starts today — protect against headaches from over-exertion' },
+  { nakshatra: 'Bharani',          icon: '🧠', area: 'head & forehead',            tip: 'Mental load is heavy today — step outside and breathe' },
+  { nakshatra: 'Krittika',         icon: '👁️', area: 'eyes, neck & shoulders',     tip: 'Screen fatigue hits harder — take visual breaks every 45 min' },
+  { nakshatra: 'Rohini',           icon: '🗣️', area: 'throat, mouth & face',       tip: 'Communication energy is high — use your voice deliberately' },
+  { nakshatra: 'Mrigashira',       icon: '💪', area: 'throat & upper arms',         tip: 'Shoulders carry today\'s tension — stretch before bed' },
+  { nakshatra: 'Ardra',            icon: '🫁', area: 'shoulders & chest',           tip: 'Emotional weight sits in the upper body today — notice tightness' },
+  { nakshatra: 'Punarvasu',        icon: '🫁', area: 'fingers, lungs & ears',       tip: 'Breathing is shallower today — slow inhales help' },
+  { nakshatra: 'Pushya',           icon: '🫁', area: 'chest, stomach & lungs',      tip: 'Digestive energy is sensitive — eat lighter and avoid skipping meals' },
+  { nakshatra: 'Ashlesha',         icon: '🦵', area: 'lungs, joints & knees',       tip: 'Joints need movement — sitting for long periods will slow you down' },
+  { nakshatra: 'Magha',            icon: '❤️', area: 'spine & heart',               tip: 'Heart energy is amplified — check in with what you\'re carrying emotionally' },
+  { nakshatra: 'Purva Phalguni',   icon: '🔙', area: 'heart, back & spine',         tip: 'Posture affects your mood today more than usual — stand tall' },
+  { nakshatra: 'Uttara Phalguni',  icon: '🤲', area: 'hands & intestines',          tip: 'Gut feelings are literally physical today — trust abdominal signals' },
+  { nakshatra: 'Hasta',            icon: '🤲', area: 'hands & bowels',              tip: 'Detail work with hands is energised — good for crafting, writing, or cooking' },
+  { nakshatra: 'Chitra',           icon: '💧', area: 'forehead & kidneys',          tip: 'Kidney energy benefits from hydration — drink more water than usual' },
+  { nakshatra: 'Swati',            icon: '🫁', area: 'skin, chest & kidneys',       tip: 'Skin is more reactive today — avoid irritants and get fresh air' },
+  { nakshatra: 'Vishakha',         icon: '🦵', area: 'lower abdomen & thighs',      tip: 'Lower body needs movement — walk, stretch legs, avoid sitting still' },
+  { nakshatra: 'Anuradha',         icon: '🔙', area: 'lower back, hips & thighs',   tip: 'Lower back tension accumulates — notice and release before evening' },
+  { nakshatra: 'Jyeshtha',         icon: '🗣️', area: 'neck & tongue',              tip: 'Speaking clearly matters more today — slow down before you respond' },
+  { nakshatra: 'Mula',             icon: '🦶', area: 'feet & lower back',           tip: 'Grounding energy sits in the feet — walk barefoot or get outside' },
+  { nakshatra: 'Purva Ashadha',    icon: '🦵', area: 'thighs & hips',              tip: 'Hip flexibility and movement ease the day\'s energy' },
+  { nakshatra: 'Uttara Ashadha',   icon: '🦵', area: 'thighs, knees & skin',        tip: 'Knees and thighs carry today\'s drive — move them to feel the flow' },
+  { nakshatra: 'Shravana',         icon: '👂', area: 'ears & legs',                 tip: 'Listening is your strongest sense today — hear before speaking' },
+  { nakshatra: 'Dhanishtha',       icon: '🦵', area: 'ankles & back',               tip: 'Ankles and calves need gentle movement — stretch before long walks' },
+  { nakshatra: 'Shatabhisha',      icon: '🩸', area: 'ankles, calves & circulation', tip: 'Circulation benefits from movement — avoid sitting for more than 1 hour' },
+  { nakshatra: 'Purva Bhadrapada', icon: '🦶', area: 'feet & calves',               tip: 'A short walk resets your state on this nakshatra' },
+  { nakshatra: 'Uttara Bhadrapada',icon: '🦶', area: 'feet & immune system',         tip: 'Rest supports your immune energy today — don\'t push through tiredness' },
+  { nakshatra: 'Revati',           icon: '🦶', area: 'feet & digestive system',      tip: 'A gentle walk and a lighter evening meal serve you well today' },
+]
+
+// ── Vedic Dice ───────────────────────────────────────────────────────────────
+
+const VEDIC_NUMBERS = [
+  { number: 1, quality: 'New Beginnings', symbol: '🌱', interpretation: 'One is the number of first steps. An action taken today carries more force than one taken later — the energy favours starting.' },
+  { number: 2, quality: 'Balance',        symbol: '⚖️', interpretation: 'Two is the number of partnership. What needs to be weighed or aligned? Today responds well to cooperation over solo effort.' },
+  { number: 3, quality: 'Expression',     symbol: '✨', interpretation: 'Three is the number of creativity and communication. Say what needs saying. Today amplifies your voice and creative energy.' },
+  { number: 4, quality: 'Foundation',     symbol: '🏛️', interpretation: 'Four is the number of structure and stability. Build something that will last — plans made today have real staying power.' },
+  { number: 5, quality: 'Movement',       symbol: '⚡', interpretation: 'Five is the number of change and momentum. Expect movement in situations that felt stuck. Stay adaptable — the shift is real.' },
+  { number: 6, quality: 'Harmony',        symbol: '💛', interpretation: 'Six is the number of beauty and care. Relationships and your environment respond to attention today. Small acts of kindness carry.' },
+  { number: 7, quality: 'Wisdom',         symbol: '🔮', interpretation: 'Seven is the number of deep knowing. Trust what you already understand, even if you can\'t fully explain it yet.' },
+  { number: 8, quality: 'Power',          symbol: '🔥', interpretation: 'Eight is the number of authority and results. Today is for decisions, leadership, and completing what you started.' },
+  { number: 9, quality: 'Completion',     symbol: '🌊', interpretation: 'Nine is the number of endings that clear the path. Something finishing today is making space. Let it go cleanly.' },
+]
+
+// ── Daily Cosmic Pull ────────────────────────────────────────────────────────
+
+const PULL_QUALITIES = [
+  { quality: 'Clarity',    symbol: '🔷', color: '#3b82f6' },
+  { quality: 'Action',     symbol: '⚡', color: '#f59e0b' },
+  { quality: 'Patience',   symbol: '🌿', color: '#10b981' },
+  { quality: 'Connection', symbol: '💛', color: '#f97316' },
+  { quality: 'Rest',       symbol: '🌙', color: '#8b5cf6' },
+  { quality: 'Courage',    symbol: '🔥', color: '#ef4444' },
+  { quality: 'Gratitude',  symbol: '✦',  color: '#d4af37' },
+  { quality: 'Boundaries', symbol: '🛡️', color: '#6b7280' },
+  { quality: 'Trust',      symbol: '🌊', color: '#0ea5e9' },
+]
+
+const PULL_BANK = [
+  // Clarity (0–5)
+  { q: 0, msg: 'This morning asks you to cut through the noise. The clearest path forward is the one you already sense — trust that signal before the day adds complexity.' },
+  { q: 0, msg: 'What feels murky will sharpen by midday. Don\'t force decisions yet — wait for the moment when the answer arrives simply.' },
+  { q: 0, msg: 'The situation is clearer than it appears. Step back from the details and look at the whole picture. The answer is already visible.' },
+  { q: 0, msg: 'Clarity today comes from simplifying, not from gathering more information. Reduce before you decide.' },
+  { q: 0, msg: 'A moment of quiet this afternoon will produce more insight than an hour of active thinking. Give your mind space.' },
+  { q: 0, msg: 'You already know. The hesitation is not confusion — it\'s resistance. The answer is clear.' },
+  // Action (6–11)
+  { q: 1, msg: 'The window for decisive action is open right now. Move on something you\'ve been considering — momentum is available and waiting.' },
+  { q: 1, msg: 'Don\'t wait for perfect conditions. A good move made today with incomplete information is more valuable than a perfect move made too late.' },
+  { q: 1, msg: 'The energy today supports bold first steps. Start the thing. The path will become clearer once you\'re moving.' },
+  { q: 1, msg: 'Act before overthinking sets in. The first impulse you had this morning about the situation — that one. Follow it.' },
+  { q: 1, msg: 'Something you\'ve been circling is ready to be decided. The indecision costs more than either choice. Choose and move.' },
+  { q: 1, msg: 'This is a making day, not a planning day. Do the work. The results will come.' },
+  // Patience (12–17)
+  { q: 2, msg: 'Hold steady today. The right timing hasn\'t arrived yet — what feels urgent is actually asking for patience, not action.' },
+  { q: 2, msg: 'Not yet. The seeds are still below ground. Tending quietly now is exactly what this moment requires.' },
+  { q: 2, msg: 'The situation needs time, not intervention. Resist the urge to force movement. What\'s growing beneath the surface is real.' },
+  { q: 2, msg: 'Patience today is an active choice, not a passive one. You\'re choosing to let things develop rather than rush them.' },
+  { q: 2, msg: 'What you\'re waiting for is coming. The timing is not in your hands right now, and that\'s exactly as it should be.' },
+  { q: 2, msg: 'Slow down in a way that feels almost uncomfortable. That\'s the pace today is calling for.' },
+  // Connection (18–23)
+  { q: 3, msg: 'Reach out to someone you\'ve been meaning to contact. The connection is wanted on both sides — you just need to make the first move.' },
+  { q: 3, msg: 'The relationships around you are amplified today. A small gesture of care will land deeper than usual.' },
+  { q: 3, msg: 'Someone in your circle needs to be seen right now. Not helped — just acknowledged. You know who.' },
+  { q: 3, msg: 'Today favours deep conversation over surface-level interaction. Go beneath the usual topics with someone you trust.' },
+  { q: 3, msg: 'The loneliness or disconnection you\'ve been feeling is temporary. Reaching out — even briefly — will shift it.' },
+  { q: 3, msg: 'Love and friendship return what you put into them today with interest. Give first.' },
+  // Rest (24–29)
+  { q: 4, msg: 'Doing less achieves more today. The most powerful move is to stop pushing and let the situation breathe.' },
+  { q: 4, msg: 'Your energy is a resource. What you protect today compounds tomorrow. Rest is not stopping — it\'s preparing.' },
+  { q: 4, msg: 'The body is speaking today. Listen before it has to repeat itself louder.' },
+  { q: 4, msg: 'A quieter evening than planned will leave you more equipped for what comes next. Honour the pull toward stillness.' },
+  { q: 4, msg: 'Stop performing productivity. The real work today happens in the spaces between doing.' },
+  { q: 4, msg: 'Sleep and restoration carry as much weight as action in a life well-lived. Tonight belongs to recovery.' },
+  // Courage (30–35)
+  { q: 5, msg: 'There\'s something you\'ve been avoiding. Today the energy is behind you — face it.' },
+  { q: 5, msg: 'The fear is real. Go anyway. Courage is not the absence of fear; it\'s the decision that something matters more than the fear.' },
+  { q: 5, msg: 'Say the thing you\'ve been holding back. The right moment is now, and the words will come when you start.' },
+  { q: 5, msg: 'One conversation you\'ve been postponing is overdue. Courage today means starting it, not finishing it perfectly.' },
+  { q: 5, msg: 'What looks like a wall is actually a door. You won\'t see the handle until you walk toward it.' },
+  { q: 5, msg: 'Trust yourself enough to try. The outcome matters less than the act of showing up fully.' },
+  // Gratitude (36–41)
+  { q: 6, msg: 'Before you focus on what\'s missing, notice what\'s here. Appreciation today doesn\'t mean ignoring the hard parts — it means holding both at once.' },
+  { q: 6, msg: 'Something that felt ordinary yesterday is actually remarkable. It\'s worth looking at again.' },
+  { q: 6, msg: 'The good things in your life didn\'t have to be there. They arrived through many small decisions, none of which were guaranteed.' },
+  { q: 6, msg: 'Tell someone today that they matter. Gratitude expressed is twice as powerful as gratitude felt.' },
+  { q: 6, msg: 'The hardest chapter you survived is also part of what you\'re grateful for now, even if you can\'t say it fully yet.' },
+  { q: 6, msg: 'Count three things that worked this week before the day ends. Specifics only.' },
+  // Boundaries (42–47)
+  { q: 7, msg: 'Your energy belongs to you first. Protect it today without guilt — the people who matter will understand.' },
+  { q: 7, msg: 'Something you agreed to is asking more than you have. It\'s okay to renegotiate.' },
+  { q: 7, msg: 'A clear no, given kindly, does more for a relationship than a reluctant yes.' },
+  { q: 7, msg: 'You\'ve been absorbing more than you\'re releasing. Something needs to be set down today.' },
+  { q: 7, msg: 'The boundary you\'re hesitating to set is being felt whether you say it or not. Stating it cleanly is the kindest option.' },
+  { q: 7, msg: 'Protecting your time and attention is not selfishness. It\'s the foundation everything else stands on.' },
+  // Trust (48–53)
+  { q: 8, msg: 'Release the need to control the outcome. The situation is unfolding in a direction you can\'t fully see yet — trust the process.' },
+  { q: 8, msg: 'The thing that doesn\'t make sense right now will make sense later. You don\'t need to understand it to move forward.' },
+  { q: 8, msg: 'What\'s being taken away is making space. Not all endings are losses.' },
+  { q: 8, msg: 'You\'ve done the work. Now let it work. Stop checking, stop adjusting. Trust what you\'ve set in motion.' },
+  { q: 8, msg: 'The path forward is clearer than your anxiety is willing to admit. Trust what you know.' },
+  { q: 8, msg: 'Something is being arranged on your behalf right now. You can\'t see it yet. That\'s fine.' },
+]
+
 // ── Interactive block data ────────────────────────────────────────────────────
 
 const MOODS = [
@@ -621,6 +863,14 @@ const intentionSaved = ref(false)
 const oraclePickedIdx = ref(null)
 const checkinMood     = ref(null)
 const matchExpanded   = ref(null)
+const expandedWindow  = ref(null)
+const starQuestion    = ref('')
+const starAnswering   = ref(false)
+const starAnswerShown = ref(false)
+const diceRolled      = ref(false)
+const diceRolling     = ref(false)
+const diceDisplayNum  = ref(null)
+const pullRevealed    = ref({ morning: false, afternoon: false, evening: false })
 
 const s = computed(() => SCENARIOS[scenarioIdx.value])
 const bgKey = computed(() => resolveBackground(s.value))
@@ -640,6 +890,40 @@ const socialProofText = computed(() => {
   const n = base.toLocaleString('en')
   const lbl = avg >= 75 ? 'High Energy' : avg >= 50 ? 'flowing' : 'quiet'
   return `🌍 ${n} people are having a ${lbl} day today`
+})
+
+const powerWindows = computed(() => POWER_WINDOWS[s.value.vaara] || POWER_WINDOWS.Sunday)
+
+const starAnswerIdx = computed(() => {
+  const nIdx = Math.max(0, NAKSHATRA_LIST.indexOf(s.value.nakshatra))
+  return (nIdx * 3 + s.value.tithi) % STAR_ANSWERS.length
+})
+
+const bodyMapEntry = computed(() => {
+  const found = BODY_MAP.find(e => e.nakshatra === s.value.nakshatra)
+  return found || BODY_MAP[7] // default Pushya
+})
+
+const cosmicNumber = computed(() => {
+  const nIdx = Math.max(0, NAKSHATRA_LIST.indexOf(s.value.nakshatra))
+  return ((nIdx + s.value.tithi - 1) % 9) + 1
+})
+
+const cosmicNumberData = computed(() => VEDIC_NUMBERS[cosmicNumber.value - 1])
+
+const pullCardFor = computed(() => (slot) => {
+  const nIdx = Math.max(0, NAKSHATRA_LIST.indexOf(s.value.nakshatra))
+  const slotIdx = { morning: 0, afternoon: 1, evening: 2 }[slot] || 0
+  const cardIdx = (nIdx * 3 + slotIdx) % PULL_BANK.length
+  const card = PULL_BANK[cardIdx]
+  return { ...card, ...PULL_QUALITIES[card.q] }
+})
+
+const availablePullSlots = computed(() => {
+  const t = s.value.timeOfDay
+  if (t === 'morning')   return ['morning']
+  if (t === 'afternoon') return ['morning', 'afternoon']
+  return ['morning', 'afternoon', 'evening']
 })
 
 const lunarPct = computed(() => Math.min((s.value.tithi / 29) * 100, 100))
@@ -725,14 +1009,55 @@ const modalBadges = computed(() =>
 )
 
 function resetInteractive() {
-  expandedCat.value   = null
-  reflection.value    = ''
-  intention.value     = ''
+  expandedCat.value    = null
+  reflection.value     = ''
+  intention.value      = ''
   reflectionSaved.value = false
   intentionSaved.value  = false
   oraclePickedIdx.value = null
   checkinMood.value     = null
   matchExpanded.value   = null
+  expandedWindow.value  = null
+  starQuestion.value    = ''
+  starAnswering.value   = false
+  starAnswerShown.value = false
+  diceRolled.value      = false
+  diceRolling.value     = false
+  diceDisplayNum.value  = null
+  pullRevealed.value    = { morning: false, afternoon: false, evening: false }
+}
+
+function rollDice() {
+  if (diceRolled.value || diceRolling.value) return
+  diceRolling.value = true
+  diceDisplayNum.value = 1
+  let frame = 0
+  const frames = 12
+  const interval = setInterval(() => {
+    diceDisplayNum.value = (frame % 9) + 1
+    frame++
+    if (frame >= frames) {
+      clearInterval(interval)
+      setTimeout(() => {
+        diceDisplayNum.value = cosmicNumber.value
+        diceRolling.value = false
+        diceRolled.value  = true
+      }, 200)
+    }
+  }, 60)
+}
+
+function revealPull(slot) {
+  pullRevealed.value = { ...pullRevealed.value, [slot]: true }
+}
+
+function submitStarQuestion() {
+  if (!starQuestion.value.trim() || starAnswering.value || starAnswerShown.value) return
+  starAnswering.value = true
+  setTimeout(() => {
+    starAnswering.value   = false
+    starAnswerShown.value = true
+  }, 1700)
 }
 
 function step(dir) {
@@ -866,7 +1191,6 @@ function saveIntention() {
             <div class="info-pill">{{ infoLine }}</div>
             <p class="social-proof">{{ socialProofText }}</p>
           </div>
-
           <!-- ── Block 2: Energy ── -->
           <section class="section">
             <p class="sec-label">TODAY'S ENERGY</p>
@@ -971,6 +1295,43 @@ function saveIntention() {
             <button class="share-btn">📲  Share card · #Bisou</button>
           </section>
 
+          <!-- ── Block VIII: Daily Cosmic Pull ── -->
+          <section class="section">
+            <p class="sec-label">DAILY COSMIC PULL</p>
+            <p class="pull-sub">{{ availablePullSlots.length }} of 3 pulls available today</p>
+            <div class="pull-slots">
+              <div
+                v-for="slot in ['morning','afternoon','evening']"
+                :key="slot"
+                class="pull-slot"
+                :class="{ 'pull-slot--locked': !availablePullSlots.includes(slot), 'pull-slot--revealed': pullRevealed[slot] }"
+              >
+                <template v-if="pullRevealed[slot]">
+                  <div class="pull-card-face" :style="{ borderColor: pullCardFor(slot).color }">
+                    <span class="pull-quality-symbol">{{ pullCardFor(slot).symbol }}</span>
+                    <p class="pull-quality-name" :style="{ color: pullCardFor(slot).color }">{{ pullCardFor(slot).quality.toUpperCase() }}</p>
+                    <p class="pull-msg">{{ pullCardFor(slot).msg }}</p>
+                    <p class="pull-attr">{{ s.nakshatra }} · {{ slot.charAt(0).toUpperCase() + slot.slice(1) }}</p>
+                  </div>
+                </template>
+                <template v-else-if="availablePullSlots.includes(slot)">
+                  <div class="pull-card-back" @click="revealPull(slot)">
+                    <span class="pull-back-symbol">✦</span>
+                    <p class="pull-back-label">{{ slot.charAt(0).toUpperCase() + slot.slice(1) }} pull</p>
+                    <p class="pull-back-hint">Tap to reveal</p>
+                  </div>
+                </template>
+                <template v-else>
+                  <div class="pull-card-locked">
+                    <span class="pull-lock-icon">🔒</span>
+                    <p class="pull-lock-label">{{ slot.charAt(0).toUpperCase() + slot.slice(1) }}</p>
+                    <p class="pull-lock-time">{{ slot === 'afternoon' ? 'Opens at noon' : 'Opens at 6 PM' }}</p>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </section>
+
           <!-- ── Block 4: Today's Vibe ── -->
           <section class="section">
             <p class="sec-label">TODAY'S VIBE</p>
@@ -999,6 +1360,52 @@ function saveIntention() {
                   <span v-if="slot.active" class="slot-now-tag">Now</span>
                 </div>
                 <p class="slot-text">{{ slot.text }}</p>
+              </div>
+            </div>
+          </section>
+
+
+          <!-- ── Block IV: Power Windows ── -->
+          <section class="section">
+            <p class="sec-label">POWER WINDOWS</p>
+            <p class="pw-sub">{{ s.vaara }}'s key windows · tap any to see why</p>
+            <div class="pw-list">
+              <div
+                v-for="(w, i) in powerWindows"
+                :key="i"
+                class="pw-row"
+                :class="[`pw-${w.quality}`, { 'pw-now': w.slot === s.timeOfDay, 'pw-open': expandedWindow === i }]"
+                @click="expandedWindow = expandedWindow === i ? null : i"
+              >
+                <div class="pw-head">
+                  <span class="pw-icon">{{ w.icon }}</span>
+                  <div class="pw-center">
+                    <p class="pw-title">{{ w.title }}</p>
+                    <p class="pw-time">{{ w.time }}</p>
+                  </div>
+                  <div class="pw-badge-wrap">
+                    <span v-if="w.slot === s.timeOfDay" class="pw-now-tag">Now</span>
+                    <span class="pw-quality-dot" :class="`dot-${w.quality}`" />
+                  </div>
+                </div>
+                <transition name="expand">
+                  <p v-if="expandedWindow === i" class="pw-hint">{{ w.hint }}</p>
+                </transition>
+              </div>
+            </div>
+          </section>
+
+          <!-- ── Block VI: Cosmic Body Map ── -->
+          <section class="section">
+            <p class="sec-label">TODAY'S BODY FOCUS</p>
+            <div class="body-map-card glass">
+              <div class="body-map-icon-wrap">
+                <span class="body-map-big-icon">{{ bodyMapEntry.icon }}</span>
+                <span class="body-map-nakshatra">{{ s.nakshatra }}</span>
+              </div>
+              <div class="body-map-content">
+                <p class="body-map-area">{{ bodyMapEntry.area }}</p>
+                <p class="body-map-tip">{{ bodyMapEntry.tip }}</p>
               </div>
             </div>
           </section>
@@ -1173,6 +1580,78 @@ function saveIntention() {
                 :disabled="!reflection.trim()"
                 @click="saveReflection"
               >Save reflection</button>
+            </div>
+          </section>
+
+          <!-- ── Block V: Ask the Stars ── -->
+          <section class="section">
+            <p class="sec-label">ASK THE STARS</p>
+            <div class="stars-card glass">
+              <template v-if="!starAnswerShown && !starAnswering">
+                <p class="stars-prompt">What's on your mind today?</p>
+                <p class="stars-hint-text">Type your question — the stars will answer based on today's sky</p>
+                <textarea
+                  v-model="starQuestion"
+                  class="journal-input stars-input"
+                  placeholder="Should I take this opportunity? Is now the right time? What do I need to know?"
+                  rows="2"
+                  @keydown.enter.prevent="submitStarQuestion"
+                />
+                <button
+                  class="stars-btn"
+                  :disabled="!starQuestion.trim()"
+                  @click="submitStarQuestion"
+                >Ask the stars →</button>
+              </template>
+
+              <!-- Asking animation -->
+              <div v-else-if="starAnswering" class="stars-asking">
+                <div class="stars-orb">
+                  <span class="stars-orb-icon">✦</span>
+                </div>
+                <p class="stars-reading">Reading {{ s.nakshatra }} nakshatra…</p>
+              </div>
+
+              <!-- Answer revealed -->
+              <div v-else class="stars-answer">
+                <div class="stars-answer-header">
+                  <span class="stars-answer-icon">✦</span>
+                  <div class="stars-answer-meta">
+                    <p class="stars-answer-question">"{{ starQuestion }}"</p>
+                    <p class="stars-answer-source">{{ s.nakshatra }} · Tithi {{ s.tithi }}</p>
+                  </div>
+                </div>
+                <p class="stars-answer-text">{{ STAR_ANSWERS[starAnswerIdx] }}</p>
+                <p class="stars-answer-note">This answer is set by today's sky. It won't change until tomorrow.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- ── Block VII: Vedic Dice ── -->
+          <section class="section">
+            <p class="sec-label">COSMIC NUMBER</p>
+            <p class="dice-sub">Your number for today · resets at midnight</p>
+            <div class="dice-card glass">
+              <div class="dice-face" :class="{ 'dice-rolling': diceRolling, 'dice-revealed': diceRolled }">
+                <span class="dice-number">{{ diceDisplayNum ?? '?' }}</span>
+              </div>
+              <div class="dice-info" v-if="diceRolled">
+                <div class="dice-quality-row">
+                  <span class="dice-symbol">{{ cosmicNumberData.symbol }}</span>
+                  <span class="dice-quality">{{ cosmicNumberData.quality.toUpperCase() }}</span>
+                </div>
+                <p class="dice-interpretation">{{ cosmicNumberData.interpretation }}</p>
+                <p class="dice-footer">{{ s.nakshatra }} · Tithi {{ s.tithi }}</p>
+              </div>
+              <div class="dice-prompt" v-else>
+                <p class="dice-prompt-text">Roll to reveal your cosmic number</p>
+              </div>
+              <button
+                class="dice-btn"
+                :class="{ 'dice-btn--rolled': diceRolled }"
+                :disabled="diceRolled || diceRolling"
+                @click="rollDice"
+              >{{ diceRolled ? 'Rolled ✓' : diceRolling ? 'Rolling…' : 'Roll' }}</button>
             </div>
           </section>
 
@@ -2393,4 +2872,488 @@ function saveIntention() {
 
 .expand-enter-active, .expand-leave-active { transition: opacity 0.2s; }
 .expand-enter-from, .expand-leave-to       { opacity: 0; }
+
+/* ── Block IV: Power Windows ──────────────────────────────────────────────── */
+.pw-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  font-weight: 600;
+  margin-bottom: 10px;
+  letter-spacing: 0.03em;
+}
+
+.pw-list { display: flex; flex-direction: column; gap: 6px; }
+
+.pw-row {
+  padding: 11px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.06);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.pw-row:hover { background: rgba(255,255,255,0.1); }
+.pw-open { background: rgba(255,255,255,0.11) !important; border-color: rgba(255,255,255,0.18) !important; }
+
+/* Quality variants */
+.pw-golden {
+  background: rgba(255,210,60,0.08) !important;
+  border-color: rgba(255,210,60,0.25) !important;
+}
+.pw-golden:hover { background: rgba(255,210,60,0.13) !important; }
+
+.pw-avoid {
+  background: rgba(248,113,113,0.07) !important;
+  border-color: rgba(248,113,113,0.2) !important;
+}
+.pw-avoid:hover { background: rgba(248,113,113,0.12) !important; }
+
+.pw-rest {
+  background: rgba(100,160,255,0.07) !important;
+  border-color: rgba(100,160,255,0.18) !important;
+}
+
+/* Current slot highlight */
+.pw-now {
+  border-color: rgba(255,255,255,0.28) !important;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.1);
+}
+
+.pw-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pw-icon { font-size: 18px; flex-shrink: 0; line-height: 1; width: 22px; text-align: center; }
+
+.pw-center { flex: 1; min-width: 0; }
+.pw-title { font-size: 13px; font-weight: 700; color: white; line-height: 1.3; }
+.pw-time  { font-size: 11px; color: rgba(255,255,255,0.45); font-weight: 600; margin-top: 1px; font-variant-numeric: tabular-nums; }
+
+.pw-badge-wrap { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+
+.pw-now-tag {
+  font-size: 9px;
+  font-weight: 800;
+  color: rgba(74,222,128,0.9);
+  background: rgba(74,222,128,0.12);
+  border: 1px solid rgba(74,222,128,0.25);
+  padding: 2px 7px;
+  border-radius: 100px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pw-quality-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-peak   { background: rgba(74,222,128,0.8); box-shadow: 0 0 5px rgba(74,222,128,0.4); }
+.dot-golden { background: rgba(255,210,60,0.9); box-shadow: 0 0 6px rgba(255,210,60,0.5); }
+.dot-medium { background: rgba(251,191,36,0.7); }
+.dot-avoid  { background: rgba(248,113,113,0.8); }
+.dot-rest   { background: rgba(100,160,255,0.7); }
+
+.pw-hint {
+  font-size: 11px;
+  line-height: 1.55;
+  color: rgba(255,255,255,0.55);
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+/* ── Block V: Ask the Stars ───────────────────────────────────────────────── */
+.stars-card { padding: 18px; }
+
+.stars-prompt {
+  font-size: 15px;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 4px;
+}
+.stars-hint-text {
+  font-size: 11px;
+  color: rgba(255,255,255,0.38);
+  font-weight: 600;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.stars-input { margin-bottom: 12px; }
+
+.stars-btn {
+  width: 100%;
+  padding: 10px;
+  background: linear-gradient(135deg, rgba(120,80,255,0.22), rgba(60,80,200,0.18));
+  border: 1px solid rgba(140,100,255,0.35);
+  color: rgba(200,180,255,0.95);
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 12px;
+  transition: background 0.15s, transform 0.1s, opacity 0.15s;
+  letter-spacing: 0.03em;
+}
+.stars-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, rgba(120,80,255,0.34), rgba(60,80,200,0.28));
+  transform: translateY(-1px);
+}
+.stars-btn:disabled { opacity: 0.3; cursor: default; }
+
+/* Asking animation */
+.stars-asking {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 0;
+}
+
+.stars-orb {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(120,80,255,0.4) 0%, rgba(40,20,100,0.3) 100%);
+  border: 1px solid rgba(140,100,255,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse-orb 1.2s ease-in-out infinite;
+}
+.stars-orb-icon {
+  font-size: 22px;
+  color: rgba(200,180,255,0.8);
+  animation: spin-slow 3s linear infinite;
+  display: inline-block;
+}
+
+@keyframes pulse-orb {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(140,100,255,0.3); transform: scale(1); }
+  50%       { box-shadow: 0 0 0 10px rgba(140,100,255,0); transform: scale(1.05); }
+}
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.stars-reading {
+  font-size: 12px;
+  color: rgba(200,180,255,0.6);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* Answer */
+.stars-answer { display: flex; flex-direction: column; gap: 12px; }
+
+.stars-answer-header {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.stars-answer-icon {
+  font-size: 20px;
+  color: rgba(255,210,60,0.8);
+  flex-shrink: 0;
+  margin-top: 1px;
+  filter: drop-shadow(0 0 4px rgba(255,210,60,0.4));
+}
+.stars-answer-question {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  font-style: italic;
+  margin-bottom: 2px;
+  line-height: 1.4;
+}
+.stars-answer-source {
+  font-size: 10px;
+  color: rgba(200,180,255,0.45);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.stars-answer-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  line-height: 1.65;
+  font-family: var(--font-serif);
+  padding: 12px 14px;
+  background: rgba(120,80,255,0.1);
+  border: 1px solid rgba(140,100,255,0.2);
+  border-radius: 12px;
+}
+
+.stars-answer-note {
+  font-size: 10px;
+  color: rgba(255,255,255,0.22);
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+/* ── Block VI: Cosmic Body Map ────────────────────────────────────────────── */
+
+.body-map-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 16px;
+}
+.body-map-icon-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.body-map-big-icon {
+  font-size: 40px;
+  line-height: 1;
+}
+.body-map-nakshatra {
+  font-size: 9px;
+  color: rgba(255,255,255,0.45);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.body-map-content {
+  flex: 1;
+}
+.body-map-area {
+  font-size: 15px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.92);
+  margin-bottom: 6px;
+  text-transform: capitalize;
+}
+.body-map-tip {
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.55;
+}
+
+/* ── Block VII: Vedic Dice ────────────────────────────────────────────────── */
+
+.dice-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  text-align: center;
+  margin: -6px 0 12px;
+  letter-spacing: 0.04em;
+}
+.dice-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 16px;
+  border-radius: 20px;
+}
+.dice-face {
+  width: 80px;
+  height: 80px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.07);
+  border: 2px solid rgba(255,255,255,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s;
+}
+.dice-face.dice-rolling {
+  animation: diceShake 0.06s infinite alternate;
+}
+.dice-face.dice-revealed {
+  border-color: rgba(212, 175, 55, 0.6);
+  background: rgba(212, 175, 55, 0.08);
+  box-shadow: 0 0 20px rgba(212,175,55,0.2);
+}
+@keyframes diceShake {
+  from { transform: rotate(-4deg) scale(1.02); }
+  to   { transform: rotate(4deg)  scale(0.98); }
+}
+.dice-number {
+  font-size: 36px;
+  font-weight: 800;
+  color: rgba(255,255,255,0.9);
+  line-height: 1;
+}
+.dice-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  animation: fadeUp 0.4s ease;
+}
+.dice-quality-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dice-symbol { font-size: 20px; }
+.dice-quality {
+  font-size: 14px;
+  font-weight: 800;
+  color: #d4af37;
+  letter-spacing: 0.1em;
+}
+.dice-interpretation {
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.6;
+  text-align: center;
+}
+.dice-footer {
+  font-size: 10px;
+  color: rgba(255,255,255,0.3);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+.dice-prompt-text {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+}
+.dice-btn {
+  padding: 10px 32px;
+  border-radius: 50px;
+  border: 1.5px solid rgba(212,175,55,0.5);
+  background: rgba(212,175,55,0.12);
+  color: #d4af37;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.dice-btn:hover:not(:disabled) {
+  background: rgba(212,175,55,0.22);
+  transform: scale(1.04);
+}
+.dice-btn:disabled { opacity: 0.5; cursor: default; }
+.dice-btn--rolled {
+  border-color: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.4);
+}
+
+/* ── Block VIII: Daily Cosmic Pull ───────────────────────────────────────── */
+
+.pull-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  text-align: center;
+  margin: -6px 0 14px;
+  letter-spacing: 0.04em;
+}
+.pull-slots {
+  display: flex;
+  gap: 10px;
+}
+.pull-slot {
+  flex: 1;
+  min-height: 160px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.pull-card-back {
+  height: 100%;
+  min-height: 160px;
+  background: rgba(255,255,255,0.06);
+  border: 1.5px dashed rgba(255,255,255,0.2);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.pull-card-back:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.35);
+  transform: scale(1.02);
+}
+.pull-back-symbol {
+  font-size: 24px;
+  color: rgba(255,255,255,0.3);
+}
+.pull-back-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.55);
+  text-transform: capitalize;
+  letter-spacing: 0.05em;
+}
+.pull-back-hint {
+  font-size: 9px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.pull-card-locked {
+  height: 100%;
+  min-height: 160px;
+  background: rgba(0,0,0,0.2);
+  border: 1.5px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.pull-lock-icon { font-size: 20px; opacity: 0.3; }
+.pull-lock-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.2);
+  text-transform: capitalize;
+  letter-spacing: 0.06em;
+}
+.pull-lock-time {
+  font-size: 9px;
+  color: rgba(255,255,255,0.15);
+}
+.pull-card-face {
+  height: 100%;
+  min-height: 160px;
+  background: rgba(255,255,255,0.05);
+  border: 1.5px solid rgba(255,255,255,0.2);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 14px 10px;
+  animation: cardFlip 0.4s ease;
+}
+@keyframes cardFlip {
+  from { transform: rotateY(90deg); opacity: 0; }
+  to   { transform: rotateY(0deg);  opacity: 1; }
+}
+.pull-quality-symbol { font-size: 22px; }
+.pull-quality-name {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+.pull-msg {
+  font-size: 10px;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.5;
+  text-align: center;
+  flex: 1;
+}
+.pull-attr {
+  font-size: 9px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 0.05em;
+}
 </style>

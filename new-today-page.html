@@ -1,0 +1,3801 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>new-today-page.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="bisou--new-today-page-full-product--technical-spec">Bisou — New Today Page: Full Product &amp; Technical Spec</h1>
+<blockquote>
+<p><strong>Version:</strong> 1.5<br>
+<strong>Language:</strong> English<br>
+<strong>Audience:</strong> Product, Design, Engineering</p>
+</blockquote>
+<hr>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol start="0">
+<li><a href="#quick-reference--all-blocks-at-a-glance">Quick Reference — All Blocks at a Glance</a></li>
+<li><a href="#1-user-data-we-have">User Data We Have</a></li>
+<li><a href="#2-today-page-layout">Today Page Layout</a></li>
+<li><a href="#3-dynamic-background">Dynamic Background</a></li>
+<li><a href="#4-block-by-block-technical-spec">Block-by-Block Technical Spec</a>
+<ul>
+<li><a href="#block-0-header--streak-badge">Block 0: Header &amp; Streak Badge</a></li>
+<li><a href="#block-1-day-headline">Block 1: Day Headline</a></li>
+<li><a href="#block-2-todays-energy-6-categories">Block 2: Today's Energy</a></li>
+<li><a href="#block-3-energy-check-in">Block 3: Energy Check-In</a></li>
+<li><a href="#block-4-do--avoid">Block 4: Do / Avoid</a></li>
+<li><a href="#block-5-daily-cosmic-pull">Block 5: Daily Cosmic Pull</a></li>
+<li><a href="#block-6-todays-vibe">Block 6: Today's Vibe</a></li>
+<li><a href="#block-7-your-day-morning--afternoon--evening">Block 7: Your Day (Morning / Afternoon / Evening)</a></li>
+<li><a href="#block-8-power-windows">Block 8: Power Windows</a></li>
+<li><a href="#block-9-cosmic-body-map">Block 9: Cosmic Body Map</a></li>
+<li><a href="#block-10-daily-oracle">Block 10: Daily Oracle</a></li>
+<li><a href="#block-11-moon-streak--progress-ring">Block 11: Moon Streak + Progress Ring</a></li>
+<li><a href="#block-12-achievements">Block 12: Achievements</a></li>
+<li><a href="#block-13-compatibility-pulse">Block 13: Compatibility Pulse</a></li>
+<li><a href="#block-14-reflect-on-today">Block 14: Reflect on Today</a></li>
+<li><a href="#block-15-ask-the-stars">Block 15: Ask the Stars</a></li>
+<li><a href="#block-16-vedic-dice">Block 16: Vedic Dice</a></li>
+<li><a href="#block-17-tomorrows-preview--tomorrows-intention">Block 17: Tomorrow's Preview + Tomorrow's Intention</a></li>
+<li><a href="#block-18-stories-carousel">Block 18: Stories Carousel</a></li>
+</ul>
+</li>
+<li><a href="#5-achievement-system--full-spec">Achievement System — Full Spec</a></li>
+<li><a href="#6-dynamic-background-system">Dynamic Background System</a> <em>(see Section 3)</em></li>
+<li><a href="#7-caching--performance">Caching &amp; Performance</a></li>
+<li><a href="#8-ai-usage-summary">AI Usage Summary</a></li>
+</ol>
+<hr>
+<h2 id="quick-reference--all-blocks-at-a-glance">Quick Reference — All Blocks at a Glance</h2>
+<p>19 blocks total (0–18 + 17i) + dynamic background covering the full page.</p>
+<table>
+<thead>
+<tr>
+<th>Block</th>
+<th>Name</th>
+<th>How calculated</th>
+<th>AI</th>
+<th>Options / Variants</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BG</td>
+<td>Dynamic Background</td>
+<td>Priority rules + panchang + scores</td>
+<td>❌</td>
+<td><strong>20</strong> base themes × <strong>3</strong> time-of-day tints = up to <strong>60</strong> visual states</td>
+</tr>
+<tr>
+<td>0</td>
+<td>Header</td>
+<td>Date, name, streak, grace day flag</td>
+<td>❌</td>
+<td><strong>3</strong> greetings (Morning / Afternoon / Evening); optional 🛡️ if grace day used</td>
+</tr>
+<tr>
+<td>1</td>
+<td>Day Headline</td>
+<td>panchang + avg score, priority tree</td>
+<td>❌</td>
+<td><strong>8</strong> headline types × <strong>8</strong> moon phase labels + social proof line</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Today's Energy</td>
+<td>Formula: tithi + vaara + nakshatra modifiers</td>
+<td>❌</td>
+<td><strong>6</strong> categories × <strong>0–100</strong> score × <strong>3</strong> labels</td>
+</tr>
+<tr>
+<td>2 <em>(on tap)</em></td>
+<td>Category explanation</td>
+<td>AI (lazy, cached per day)</td>
+<td>✅</td>
+<td>1 fixed text per category per day after cache</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td><strong>Energy Check-In</strong></td>
+<td>User picks mood emoji → compared to predicted energy band</td>
+<td>❌</td>
+<td><strong>5</strong> mood options × <strong>3</strong> predicted levels = <strong>15</strong> outcome messages</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Do / Avoid</td>
+<td>Tag-matching: <strong>60 do</strong> + <strong>60 avoid</strong> tips against today's signals</td>
+<td>❌</td>
+<td>Pool of 120 tips; same signals always return same 3+3</td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td><strong>Daily Cosmic Pull</strong></td>
+<td>(nakshatra_idx × 3 + slot_idx) % 54 → card from 54-entry bank</td>
+<td>❌</td>
+<td><strong>54</strong> cards across <strong>9</strong> qualities; <strong>3 pulls per day</strong> (morning / afternoon / evening); flip animation</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Today's Vibe</td>
+<td>AI (pre-generated nightly, cached)</td>
+<td>✅</td>
+<td>1 fixed text per user per day after cache</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Your Day</td>
+<td>Lookup table: vaara × slot × energy_band</td>
+<td>❌</td>
+<td><strong>63</strong> unique texts (7 vaara × 3 slots × 3 energy bands)</td>
+</tr>
+<tr>
+<td><strong>8</strong></td>
+<td><strong>Power Windows</strong></td>
+<td>Hora cycle (Chaldean order from sunrise) + low-energy window by weekday + midday peak window</td>
+<td>❌</td>
+<td><strong>5</strong> windows per day × <strong>7</strong> weekdays = <strong>35</strong> fixed windows; current slot highlighted</td>
+</tr>
+<tr>
+<td><strong>9</strong></td>
+<td><strong>Cosmic Body Map</strong></td>
+<td>Fixed 27-entry lookup: nakshatra → body area + awareness tip</td>
+<td>❌</td>
+<td><strong>27</strong> unique entries (one per nakshatra); read-only display</td>
+</tr>
+<tr>
+<td><strong>10</strong></td>
+<td><strong>Daily Oracle</strong></td>
+<td>3 face-down cards derived from nakshatra group; user picks one</td>
+<td>❌</td>
+<td><strong>3</strong> cards per day; each nakshatra has a fixed set of 3 messages (deterministic)</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Moon Streak</td>
+<td>Check-in count + panchang tithi for icons + grace day rule</td>
+<td>❌</td>
+<td>Streak <strong>0–∞</strong>; progress ring <strong>1–30</strong> (lunar cycle); max 1 grace/7 days</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Achievements</td>
+<td>Rules evaluated on each check-in</td>
+<td>❌</td>
+<td><strong>~30</strong> badge types; repeatable ones stack; <strong>View All</strong> opens full modal</td>
+</tr>
+<tr>
+<td><strong>13</strong></td>
+<td><strong>Compatibility Pulse</strong></td>
+<td>Connect onboarding check → partner chart comparison (tithi + vaara + nakshatra delta per category)</td>
+<td>❌</td>
+<td>CTA if not onboarded; otherwise <strong>1–3</strong> match cards with daily score</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Reflect on Today</td>
+<td>User-entered text, stored as journal entry</td>
+<td>❌</td>
+<td>Free text input; saved to user_reflections table</td>
+</tr>
+<tr>
+<td><strong>15</strong></td>
+<td><strong>Ask the Stars</strong></td>
+<td>User types question → deterministic answer from <strong>50-entry bank</strong> keyed to nakshatra × tithi</td>
+<td>❌</td>
+<td>(nakshatra_index × 3 + tithi) % 50 — same sky = same answer all day</td>
+</tr>
+<tr>
+<td><strong>16</strong></td>
+<td><strong>Vedic Dice</strong></td>
+<td>(nakshatra_idx + tithi − 1) % 9 + 1 → number 1–9 with fixed meaning</td>
+<td>❌</td>
+<td><strong>9</strong> numbers × <strong>9</strong> meanings; <strong>1 roll per day</strong> (resets midnight); die-roll animation</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Tomorrow's Preview</td>
+<td>panchang tomorrow + fixed templates (after 21:00 only)</td>
+<td>❌</td>
+<td><strong>10</strong> templates</td>
+</tr>
+<tr>
+<td>17i</td>
+<td>Tomorrow's Intention</td>
+<td>User-entered text tied to tomorrow's preview headline</td>
+<td>❌</td>
+<td>Free text input; shown next morning as &quot;Your intention for today&quot;</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Stories</td>
+<td>Scheduled via admin + nakshatra/moon lookup</td>
+<td>❌</td>
+<td><strong>4–6</strong> cards per day (admin-controlled)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>External Vedic API: not used on Today.</strong> All astronomical calculations are local (Swiss Ephemeris).<br>
+<strong>AI calls per user per day: max 7</strong> — 1 vibe text (pre-generated) + up to 6 category explanations (on first tap only, then cached until midnight). Everything else is deterministic: same birth data + same date always returns the same result.<br>
+<strong>Interactive blocks (3, 5, 8–10, 13, 15, 16) are user-initiated</strong> — they require a tap/action and are never auto-shown. Block 13 requires Connect onboarding to be completed; users who haven't done it see a CTA instead. Block 16 allows 1 roll per day. Block 5 allows 3 pulls per day (morning / afternoon / evening), unlocking progressively.</p>
+<hr>
+<h2 id="1-user-data-we-have">1. User Data We Have</h2>
+<pre class="hljs"><code><div>birth_date:     YYYY-MM-DD
+birth_place:    lat, lon, timezone_offset
+birth_time:     HH:MM  (default 12:00 if unknown)
+gender:         string
+pronouns:       string[]
+name:           string
+</div></code></pre>
+<p>Derived once at registration and stored in <code>astro_data</code>:</p>
+<pre class="hljs"><code><div>natal_nakshatra, natal_moon_sign, natal_rising,
+natal_sun_sign, natal_tithi, natal_vaara
+</div></code></pre>
+<hr>
+<h2 id="2-today-page-layout">2. Today Page Layout</h2>
+<pre class="hljs"><code><div>┌─────────────────────────────────────────────────┐
+│  [DYNAMIC BACKGROUND — changes with energy]     │
+│                                                 │
+│  Thu, June 11                 🔔   🔥 14-day   │  ← BLOCK 0
+│  Good Morning, Sofia                            │
+│                                                 │
+│  ┌─────────────────────────────────────────┐    │
+│  │  BLOCK 1: DAY HEADLINE                  │    │
+│  │  ⚡ High Energy Day                     │    │
+│  │  The stars are working for you today    │    │
+│  │  Thursday · Waxing Moon · Full Moon     │    │
+│  │  tomorrow 🌕                            │    │
+│  └─────────────────────────────────────────┘    │
+│                                                 │
+  │  BLOCK 2: TODAY'S ENERGY                        │
+  │  ┌──────────┐ ┌──────────┐ ┌──────────┐        │
+  │  │  Love    │ │ Career   │ │  Health  │        │
+  │  │   84%    │ │   61%    │ │   77%    │        │
+  │  │High Nrgy │ │ Moderate │ │High Nrgy │        │
+  │  └──────────┘ └──────────┘ └──────────┘        │
+  │  ┌──────────┐ ┌──────────┐ ┌──────────┐        │
+  │  │  Money   │ │  Social  │ │  Family  │        │
+  │  │   72%    │ │   90%    │ │   55%    │        │
+  │  │High Nrgy │ │High Nrgy │ │ Moderate │        │
+  │  └──────────┘ └──────────┘ └──────────┘        │
+  │                                                 │
+  │  ★ BLOCK 11: ENERGY CHECK-IN                     │
+  │  The stars say High Energy. How do you feel?   │
+  │  [😴][😐][😊][⚡][🌟]                          │
+  │                                                 │
+  │  BLOCK 11: DO / AVOID + [Share →]               │
+  │                                                 │
+  │  ★ BLOCK 12: DAILY COSMIC PULL                │
+  │  [face-down card]  ↑ Pull your morning card     │
+  │                                                 │
+  │  BLOCK 11: TODAY'S VIBE                          │
+  │                                                 │
+  │  BLOCK 12: YOUR DAY (Morning / Afternoon /       │
+  │           Evening — all shown)                  │
+  │                                                 │
+  │  ★ BLOCK 17: POWER WINDOWS                      │
+  │  ☀️ High energy start  7:00–8:30 AM  ● peak    │
+  │  ✦  Best decision window 11:48–12:24 ✦ golden  │
+  │  ⚠️ Low energy zone    1:30–3:00 PM  ✗ avoid   │
+  │  [tap any row for why]                          │
+  │                                                 │
+  │  ★ BLOCK 18: COSMIC BODY MAP                    │
+  │  🫁  PUSHYA DAY                                 │
+  │  Body focus: chest, lungs, stomach              │
+  │  &quot;Digestive energy is sensitive today…&quot;         │
+  │                                                 │
+  │  ★ BLOCK 10: DAILY ORACLE                       │
+  │  Pushya nakshatra speaks — choose a card        │
+  │  [✦ The Star][✦ The Path][✦ The Mirror]         │
+  │                                                 │
+  │  BLOCK 11: MOON STREAK + PROGRESS RING           │
+  │  🌑🌒🌓🌔🌕  14-day streak                     │
+  │  [────────████████░░░─] Day 14 of 29           │
+  │                                                 │
+  │  BLOCK 12: ACHIEVEMENTS (recent badges)          │
+  │  [View all →]                                   │
+  │                                                 │
+  │  ★ BLOCK 13: TODAY'S COMPATIBILITY             │
+  │  [If not onboarded: Complete Connect →]         │
+  │  [If onboarded: Marcus 91% · Liam 68%]          │
+  │                                                 │
+  │  BLOCK 14: REFLECT ON TODAY                      │
+  │  [How did your day actually go?         ]       │
+  │  [                                      ]       │
+  │                                         ↵ Save  │
+  │                                                 │
+  │  ★ BLOCK 15: ASK THE STARS                       │
+  │  [What's on your mind today?            ]       │
+  │  [Should I take this opportunity?       ]       │
+  │                          [ Ask the stars → ]    │
+  │  → Reading Pushya nakshatra… (animation)        │
+  │  → &quot;The path you want and the path that's...&quot;   │
+  │                                                 │
+  │  ★ BLOCK 16: VEDIC DICE                        │
+  │  ┌───────┐                                      │
+  │  │   7   │  COSMIC NUMBER: WISDOM               │
+  │  └───────┘  [Roll]  (once per day)              │
+  │                                                 │
+  │  BLOCK 17: TOMORROW'S PREVIEW                    │
+  │  (visible only after 21:00 local time)          │
+  │                                                 │
+  │  BLOCK 17i: TOMORROW'S INTENTION                 │
+  │  ✦ Set an intention for tomorrow                │
+  │  [based on tomorrow's preview headline  ]       │
+  │                                     ↵ Set →    │
+  │                                                 │
+  │  BLOCK 18: STORIES CAROUSEL                      │
+└─────────────────────────────────────────────────┘
+</div></code></pre>
+<hr>
+<h2 id="3-dynamic-background">3. Dynamic Background</h2>
+<p>Like weather apps — the entire Today page background changes based on the day's energy and special events. Selected deterministically, no runtime generation. The system picks an asset key; design creates the assets.</p>
+<p><strong>20 distinct themes</strong> × <strong>3 time-of-day tints</strong> = up to <strong>60 visual states</strong> per day. The base theme changes once per day at midnight. The tint layer shifts automatically with local time (morning / afternoon / evening overlay) — no extra design work, just a CSS-style color filter on the existing asset.</p>
+<h3 id="background-selection-priority-order--first-match-wins">Background selection (priority order — first match wins)</h3>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">resolveBackgroundKey</span>(<span class="hljs-params">context</span>) </span>{
+  <span class="hljs-keyword">const</span> {
+    stars_align, is_eclipse, is_purnima, is_amavasya,
+    is_nakshatra_birthday, is_tithi_birthday, is_vaara_birthday,
+    is_solstice, today_vaara, scores, average_score
+  } = context
+
+  <span class="hljs-keyword">const</span> { love, career, health, money, social, family } = scores
+
+  <span class="hljs-comment">// ── Priority 1: Rarest cosmic events ──────────────────────────────</span>
+  <span class="hljs-keyword">if</span> (stars_align)           <span class="hljs-keyword">return</span> <span class="hljs-string">"celestial_event"</span>   <span class="hljs-comment">// nakshatra+tithi+vaara all match natal</span>
+  <span class="hljs-keyword">if</span> (is_eclipse)            <span class="hljs-keyword">return</span> <span class="hljs-string">"eclipse"</span>
+  <span class="hljs-keyword">if</span> (is_purnima)            <span class="hljs-keyword">return</span> <span class="hljs-string">"full_moon"</span>
+  <span class="hljs-keyword">if</span> (is_amavasya)           <span class="hljs-keyword">return</span> <span class="hljs-string">"new_moon"</span>
+
+  <span class="hljs-comment">// ── Priority 2: Personal special days ─────────────────────────────</span>
+  <span class="hljs-keyword">if</span> (is_nakshatra_birthday) <span class="hljs-keyword">return</span> <span class="hljs-string">"star_day"</span>
+  <span class="hljs-keyword">if</span> (is_tithi_birthday)     <span class="hljs-keyword">return</span> <span class="hljs-string">"lunar_birthday"</span>
+  <span class="hljs-keyword">if</span> (is_vaara_birthday)     <span class="hljs-keyword">return</span> <span class="hljs-string">"your_day"</span>
+  <span class="hljs-keyword">if</span> (is_solstice)           <span class="hljs-keyword">return</span> <span class="hljs-string">"solar_gate"</span>
+
+  <span class="hljs-comment">// ── Priority 3: Vaara themes — conditional on ruling category High ─</span>
+  <span class="hljs-comment">// Each vaara only gets its special background when the category</span>
+  <span class="hljs-comment">// it rules is actually High (≥71). Otherwise falls through to score.</span>
+  <span class="hljs-keyword">if</span> (today_vaara === <span class="hljs-string">"Friday"</span>    &amp;&amp; love   &gt;= <span class="hljs-number">71</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">"venus_evening"</span>
+  <span class="hljs-keyword">if</span> (today_vaara === <span class="hljs-string">"Monday"</span>    &amp;&amp; family &gt;= <span class="hljs-number">71</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">"moon_embrace"</span>
+  <span class="hljs-keyword">if</span> (today_vaara === <span class="hljs-string">"Thursday"</span>  &amp;&amp; money  &gt;= <span class="hljs-number">71</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">"jupiter_abundance"</span>
+  <span class="hljs-keyword">if</span> (today_vaara === <span class="hljs-string">"Wednesday"</span> &amp;&amp; (social &gt;= <span class="hljs-number">71</span> || career &gt;= <span class="hljs-number">71</span>)) <span class="hljs-keyword">return</span> <span class="hljs-string">"mercury_mind"</span>
+  <span class="hljs-keyword">if</span> (today_vaara === <span class="hljs-string">"Tuesday"</span>   &amp;&amp; (health &gt;= <span class="hljs-number">71</span> || career &gt;= <span class="hljs-number">71</span>)) <span class="hljs-keyword">return</span> <span class="hljs-string">"mars_fire"</span>
+  <span class="hljs-keyword">if</span> (today_vaara === <span class="hljs-string">"Sunday"</span>    &amp;&amp; health &gt;= <span class="hljs-number">71</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">"sun_radiance"</span>
+  <span class="hljs-keyword">if</span> (today_vaara === <span class="hljs-string">"Saturday"</span>  &amp;&amp; career &gt;= <span class="hljs-number">71</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">"saturn_clarity"</span>
+
+  <span class="hljs-comment">// ── Priority 4: Score-based fallback ──────────────────────────────</span>
+  <span class="hljs-keyword">if</span> (average_score &gt;= <span class="hljs-number">80</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">"golden_hour"</span>
+  <span class="hljs-keyword">if</span> (average_score &gt;= <span class="hljs-number">65</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">"clear_sky"</span>
+  <span class="hljs-keyword">if</span> (average_score &gt;= <span class="hljs-number">50</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">"overcast"</span>
+  <span class="hljs-keyword">if</span> (average_score &gt;= <span class="hljs-number">35</span>) <span class="hljs-keyword">return</span> <span class="hljs-string">"cloudy"</span>
+  <span class="hljs-keyword">return</span>                          <span class="hljs-string">"deep_night"</span>
+}
+</div></code></pre>
+<h3 id="full-asset-list-20-themes--design-creates-these">Full asset list (20 themes — design creates these)</h3>
+<p><strong>Cosmic events (4)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Visual description</th>
+<th>Mood</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>celestial_event</code></td>
+<td>Shimmering aurora — gold, magenta, teal light rays on deep space</td>
+<td>Rare / magical</td>
+</tr>
+<tr>
+<td><code>eclipse</code></td>
+<td>Blood-orange corona ring on black, dramatic shadow gradient</td>
+<td>Intense / rare</td>
+</tr>
+<tr>
+<td><code>full_moon</code></td>
+<td>Silver-white glow bleeding into deep blue-purple</td>
+<td>Luminous / emotional</td>
+</tr>
+<tr>
+<td><code>new_moon</code></td>
+<td>Near-black sky, minimal star scatter, one faint crescent</td>
+<td>Quiet / reset</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Personal days (4)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Visual description</th>
+<th>Mood</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>star_day</code></td>
+<td>Deep cosmic purple, scattered star bursts, one bright star focal point</td>
+<td>Personal peak</td>
+</tr>
+<tr>
+<td><code>lunar_birthday</code></td>
+<td>Moonlit silver-blue gradient, soft glow, intimate</td>
+<td>Reflective</td>
+</tr>
+<tr>
+<td><code>your_day</code></td>
+<td>Warm sunrise gradient, amber-to-rose, gentle rays</td>
+<td>Celebratory</td>
+</tr>
+<tr>
+<td><code>solar_gate</code></td>
+<td>Prismatic white-gold light beams, clean and radiant</td>
+<td>Transformative</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Vaara themes (7 — conditional)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Planet</th>
+<th>Visual description</th>
+<th>Mood</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>venus_evening</code></td>
+<td>Venus ♀</td>
+<td>Rose-pink to warm gold, soft bokeh, romantic</td>
+<td>Warm / romantic</td>
+</tr>
+<tr>
+<td><code>moon_embrace</code></td>
+<td>Moon ☽</td>
+<td>Cool silver mist, blue-white gradient, soft glow</td>
+<td>Nurturing / calm</td>
+</tr>
+<tr>
+<td><code>jupiter_abundance</code></td>
+<td>Jupiter ♃</td>
+<td>Royal deep blue with gold veining, expansive</td>
+<td>Optimistic / grand</td>
+</tr>
+<tr>
+<td><code>mercury_mind</code></td>
+<td>Mercury ☿</td>
+<td>Electric teal and mint green, crisp lines</td>
+<td>Alert / clever</td>
+</tr>
+<tr>
+<td><code>mars_fire</code></td>
+<td>Mars ♂</td>
+<td>Deep red-orange ember glow, dark edges</td>
+<td>Driven / intense</td>
+</tr>
+<tr>
+<td><code>sun_radiance</code></td>
+<td>Sun ☀</td>
+<td>Bright white-gold, radiant sunburst, energizing</td>
+<td>Vital / clear</td>
+</tr>
+<tr>
+<td><code>saturn_clarity</code></td>
+<td>Saturn ♄</td>
+<td>Midnight blue, fine crystalline texture, structured</td>
+<td>Disciplined / cool</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Score-based fallback (5)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Trigger</th>
+<th>Visual description</th>
+<th>Mood</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>golden_hour</code></td>
+<td>avg ≥ 80</td>
+<td>Warm amber and soft orange, sun-glow</td>
+<td>Peak energy</td>
+</tr>
+<tr>
+<td><code>clear_sky</code></td>
+<td>avg 65–79</td>
+<td>Soft blue to lavender, gentle and open</td>
+<td>Positive / flowing</td>
+</tr>
+<tr>
+<td><code>overcast</code></td>
+<td>avg 50–64</td>
+<td>Light grey-blue with soft light diffusion</td>
+<td>Neutral / steady</td>
+</tr>
+<tr>
+<td><code>cloudy</code></td>
+<td>avg 35–49</td>
+<td>Muted cool grey tones, subdued</td>
+<td>Cautious / muted</td>
+</tr>
+<tr>
+<td><code>deep_night</code></td>
+<td>avg &lt; 35</td>
+<td>Dark navy to indigo, minimal</td>
+<td>Low / restful</td>
+</tr>
+</tbody>
+</table>
+<h3 id="time-of-day-tint-layer">Time-of-day tint layer</h3>
+<p>On top of the base background, apply a lightweight color overlay that shifts with local time. This gives continuous visual change through the day at zero design cost.</p>
+<pre class="hljs"><code><div>Morning   (midnight – noon)   → warm amber overlay   opacity 0.12
+Afternoon (noon – sunset)     → neutral / no tint     opacity 0.00
+Evening   (sunset – midnight) → deep indigo overlay   opacity 0.15
+</div></code></pre>
+<h3 id="rules">Rules</h3>
+<ul>
+<li>Base background key determined <strong>once per day</strong> at midnight, stored in <code>today_summary_cache</code>.</li>
+<li>Time-of-day tint is applied client-side based on current local time — no cache needed.</li>
+<li>Transition: 0.8s fade when app opens and background key has changed since last visit.</li>
+<li>Tint shift (morning → afternoon → evening): 1.5s slow fade so the user notices the change gradually.</li>
+</ul>
+<hr>
+<h2 id="4-block-by-block-technical-spec">4. Block-by-Block Technical Spec</h2>
+<hr>
+<h3 id="block-0-header--streak-badge">Block 0: Header &amp; Streak Badge</h3>
+<p><strong>AI: NO</strong> — pure data display.</p>
+<pre class="hljs"><code><div>&quot;{weekday}, {Month} {day}&quot;                   ← from today_date
+&quot;Good {Morning|Afternoon|Evening}, {name}&quot;   ← from local time + user name
+🔔  ← notification bell
+🛡️  ← shown only when grace day was used in the current 7-day period
+🔥 {streak}-day  ← from user_checkins table
+</div></code></pre>
+<p>Check-in is recorded automatically when user opens the Today page. No action required.</p>
+<h4 id="grace-day-rule">Grace Day Rule</h4>
+<p>A user gets <strong>one grace day per 7-day rolling period</strong>. If they miss a single day:</p>
+<pre class="hljs"><code><div>grace_available = (grace_used_count_in_last_7_days == 0)
+
+If grace_available AND days_missed == 1:
+  → streak is NOT reset
+  → grace_used = true for this period
+  → 🛡️ icon appears in header and Moon Streak block
+  → text: &quot;Your streak was protected yesterday. One grace day used this week.&quot;
+
+If grace_not_available OR days_missed &gt; 1:
+  → streak resets to 0 (or 1 on today's check-in)
+</div></code></pre>
+<p>Grace status is stored in <code>user_checkins.grace_used_at</code>. The 7-day window is a rolling window (not calendar week).</p>
+<hr>
+<h3 id="block-1-day-headline">Block 1: Day Headline</h3>
+<p><strong>AI: NO</strong> — fully deterministic.</p>
+<h4 id="algorithm">Algorithm</h4>
+<pre class="hljs"><code><div>1. Compute average_score = mean of 6 category scores (see Block 2)
+
+2. Select headline_type by priority:
+
+   stars_align              → &quot;🌟 Your Special Day&quot;
+   is_purnima               → &quot;🌕 Full Moon Day&quot;
+   is_amavasya              → &quot;🌑 New Moon Day&quot;
+   is_nakshatra_birthday    → &quot;⭐ Your Star Day&quot;
+   is_tithi_birthday        → &quot;🎂 Lunar Birthday&quot;
+   average_score &gt;= 75      → &quot;⚡ High Energy Day&quot;
+   average_score &gt;= 50      → &quot;🌊 Flow With It&quot;
+   else                     → &quot;🌙 Rest &amp; Reflect&quot;
+
+3. Subtitle — fixed template map:
+
+   &quot;High Energy Day&quot;   → &quot;The stars are working for you today&quot;
+   &quot;Flow With It&quot;      → &quot;A steady day — go with the current&quot;
+   &quot;Rest &amp; Reflect&quot;    → &quot;A quiet day. Good for inner work&quot;
+   &quot;Full Moon Day&quot;     → &quot;Peak energy. Emotions run high&quot;
+   &quot;New Moon Day&quot;      → &quot;Time to set new intentions&quot;
+   &quot;Your Star Day&quot;     → &quot;Today's sky matches your birth sky&quot;
+   &quot;Your Special Day&quot;  → &quot;A rare alignment — happens only a few times a year&quot;
+   &quot;Lunar Birthday&quot;    → &quot;The moon returns to your birth phase&quot;
+
+4. Info line — constructed from parts:
+   &quot;{today_vaara} · {moon_phase_label} · {countdown_label}&quot;
+
+5. Social proof line — shown below the info pill:
+   &quot;🌍 {n} people are having a {label} day today&quot;
+
+   n is derived deterministically:
+     average_score &gt;= 75 → base 8400 + (tithi × 187)
+     average_score 50–74 → base 14200 + (tithi × 231)
+     average_score &lt; 50  → base 4100 + (tithi × 93)
+
+   label:
+     average_score &gt;= 75 → &quot;High Energy&quot;
+     average_score 50–74 → &quot;flowing&quot;
+     average_score &lt; 50  → &quot;quiet&quot;
+
+   This number is the same for all users with similar scores on the same day.
+   It creates a sense of community without requiring real-time data.
+
+   moon_phase_label:
+     tithi 1–7   → &quot;Waxing Crescent&quot;
+     tithi 8     → &quot;First Quarter&quot;
+     tithi 9–14  → &quot;Waxing Gibbous&quot;
+     tithi 15    → &quot;Full Moon&quot;
+     tithi 16–22 → &quot;Waning Gibbous&quot;
+     tithi 23    → &quot;Last Quarter&quot;
+     tithi 24–29 → &quot;Waning Crescent&quot;
+     tithi 30    → &quot;New Moon&quot;
+
+   countdown_label (show only when ≤ 3 days away):
+     &quot;Full Moon tomorrow&quot;
+     &quot;Full Moon in 2 days&quot;
+     &quot;New Moon tomorrow&quot;
+     etc.
+</div></code></pre>
+<hr>
+<h3 id="block-2-todays-energy-6-categories">Block 2: Today's Energy (6 categories)</h3>
+<p><strong>AI: NO</strong> — deterministic scoring algorithm.</p>
+<p>Same input → always same output.</p>
+<h4 id="categories-and-their-vedic-house-mapping-shown-only-in-expanded-tap-view">Categories and their Vedic house mapping (shown only in expanded tap view)</h4>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Vedic ruler</th>
+<th>House</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Love</td>
+<td>Venus (Shukra)</td>
+<td>7th</td>
+</tr>
+<tr>
+<td>Career</td>
+<td>Saturn (Shani)</td>
+<td>10th</td>
+</tr>
+<tr>
+<td>Health</td>
+<td>Sun (Surya)</td>
+<td>1st</td>
+</tr>
+<tr>
+<td>Money</td>
+<td>Jupiter (Guru)</td>
+<td>2nd</td>
+</tr>
+<tr>
+<td>Social</td>
+<td>Mercury (Budha)</td>
+<td>11th</td>
+</tr>
+<tr>
+<td>Family</td>
+<td>Moon (Chandra)</td>
+<td>4th</td>
+</tr>
+</tbody>
+</table>
+<h4 id="score-formula">Score formula</h4>
+<pre class="hljs"><code><div>raw_score = 50 + tithi_modifier + vaara_modifier + nakshatra_modifier + birthday_bonus
+final_score = clamp(raw_score, 0, 100)
+</div></code></pre>
+<h4 id="tithi-modifiers-shukla-paksha--waxing-half">Tithi modifiers (Shukla paksha / waxing half)</h4>
+<table>
+<thead>
+<tr>
+<th>Tithi</th>
+<th>Love</th>
+<th>Career</th>
+<th>Health</th>
+<th>Money</th>
+<th>Social</th>
+<th>Family</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pratipada (1)</td>
+<td>0</td>
+<td>+10</td>
+<td>0</td>
+<td>+5</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Dwitiya (2)</td>
+<td>+5</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>+10</td>
+<td>+10</td>
+</tr>
+<tr>
+<td>Tritiya (3)</td>
+<td>0</td>
+<td>+15</td>
+<td>+10</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Chaturthi (4)</td>
+<td>0</td>
+<td>−10</td>
+<td>0</td>
+<td>−10</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Panchami (5)</td>
+<td>0</td>
+<td>+15</td>
+<td>0</td>
+<td>+10</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Shashthi (6)</td>
+<td>+5</td>
+<td>0</td>
+<td>0</td>
+<td>+15</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Saptami (7)</td>
+<td>+10</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>+15</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Ashtami (8)</td>
+<td>−5</td>
+<td>+5</td>
+<td>+10</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Navami (9)</td>
+<td>0</td>
+<td>−10</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Dashami (10)</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>+15</td>
+<td>0</td>
+<td>+10</td>
+</tr>
+<tr>
+<td>Ekadashi (11)</td>
+<td>0</td>
+<td>+10</td>
+<td>+15</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Dwadashi (12)</td>
+<td>+10</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>+5</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Trayodashi (13)</td>
+<td>0</td>
+<td>0</td>
+<td>+5</td>
+<td>0</td>
+<td>0</td>
+<td>+10</td>
+</tr>
+<tr>
+<td>Chaturdashi (14)</td>
+<td>−5</td>
+<td>−5</td>
+<td>−5</td>
+<td>−5</td>
+<td>−5</td>
+<td>−5</td>
+</tr>
+<tr>
+<td>Purnima (15)</td>
+<td>+15</td>
+<td>+15</td>
+<td>+15</td>
+<td>+15</td>
+<td>+15</td>
+<td>+15</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Krishna paksha (waning, tithi 16–30):</strong> use the same tithi name as the Shukla table above, but apply a −5 adjustment to every non-zero modifier. Specifically: a +15 becomes +10, a +10 becomes +5, a +5 becomes 0, a 0 stays 0, and a −5 stays −5 (do not make negatives more negative). Exception — Amavasya (tithi 30): Social −15, Love −5, Health +5 (fixed values, not derived from the Shukla table).</p>
+<p>Example: Saptami (7) in Shukla has Love +10. Saptami in Krishna → Love +10 − 5 = +5.</p>
+<h4 id="vaara-weekday-modifiers">Vaara (weekday) modifiers</h4>
+<table>
+<thead>
+<tr>
+<th>Vaara</th>
+<th>Planet</th>
+<th>Love</th>
+<th>Career</th>
+<th>Health</th>
+<th>Money</th>
+<th>Social</th>
+<th>Family</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sunday</td>
+<td>Sun</td>
+<td>0</td>
+<td>+5</td>
+<td>+10</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Monday</td>
+<td>Moon</td>
+<td>+10</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>+5</td>
+<td>+15</td>
+</tr>
+<tr>
+<td>Tuesday</td>
+<td>Mars</td>
+<td>−5</td>
+<td>+10</td>
+<td>+15</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Wednesday</td>
+<td>Mercury</td>
+<td>0</td>
+<td>+15</td>
+<td>0</td>
+<td>+5</td>
+<td>+10</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Thursday</td>
+<td>Jupiter</td>
+<td>0</td>
+<td>+10</td>
+<td>0</td>
+<td>+15</td>
+<td>0</td>
+<td>+5</td>
+</tr>
+<tr>
+<td>Friday</td>
+<td>Venus</td>
+<td>+20</td>
+<td>0</td>
+<td>0</td>
+<td>+5</td>
+<td>+15</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Saturday</td>
+<td>Saturn</td>
+<td>−10</td>
+<td>+5</td>
+<td>0</td>
+<td>−5</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<h4 id="nakshatra-modifiers-todays-moon-nakshatra">Nakshatra modifiers (today's Moon nakshatra)</h4>
+<table>
+<thead>
+<tr>
+<th>Nakshatra</th>
+<th>Love</th>
+<th>Career</th>
+<th>Health</th>
+<th>Money</th>
+<th>Social</th>
+<th>Family</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ashwini</td>
+<td>0</td>
+<td>0</td>
+<td>+15</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Bharani</td>
+<td>+10</td>
+<td>+10</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Krittika</td>
+<td>0</td>
+<td>+15</td>
+<td>0</td>
+<td>0</td>
+<td>−5</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Rohini</td>
+<td>+15</td>
+<td>0</td>
+<td>0</td>
+<td>+10</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Mrigashira</td>
+<td>0</td>
+<td>+5</td>
+<td>0</td>
+<td>0</td>
+<td>+10</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Ardra</td>
+<td>0</td>
+<td>−5</td>
+<td>−5</td>
+<td>0</td>
+<td>+5</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Punarvasu</td>
+<td>0</td>
+<td>0</td>
+<td>+10</td>
+<td>0</td>
+<td>0</td>
+<td>+15</td>
+</tr>
+<tr>
+<td>Pushya</td>
+<td>+15</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>+10</td>
+<td>+15</td>
+</tr>
+<tr>
+<td>Ashlesha</td>
+<td>−5</td>
+<td>+10</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Magha</td>
+<td>0</td>
+<td>+15</td>
+<td>0</td>
+<td>0</td>
+<td>+5</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Purva Phalguni</td>
+<td>+15</td>
+<td>0</td>
+<td>0</td>
+<td>+5</td>
+<td>+15</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Uttara Phalguni</td>
+<td>0</td>
+<td>+15</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>+10</td>
+</tr>
+<tr>
+<td>Hasta</td>
+<td>0</td>
+<td>+10</td>
+<td>0</td>
+<td>+15</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Chitra</td>
+<td>+10</td>
+<td>+15</td>
+<td>0</td>
+<td>0</td>
+<td>+10</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Swati</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>+15</td>
+<td>+10</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Vishakha</td>
+<td>+10</td>
+<td>+15</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Anuradha</td>
+<td>+15</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>+15</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Jyeshtha</td>
+<td>0</td>
+<td>+10</td>
+<td>0</td>
+<td>0</td>
+<td>−5</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Mula</td>
+<td>0</td>
+<td>−5</td>
+<td>−5</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Purva Ashadha</td>
+<td>+5</td>
+<td>+10</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Uttara Ashadha</td>
+<td>0</td>
+<td>+15</td>
+<td>+10</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Shravana</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>+15</td>
+<td>+10</td>
+</tr>
+<tr>
+<td>Dhanishtha</td>
+<td>0</td>
+<td>+10</td>
+<td>0</td>
+<td>+15</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Shatabhishak</td>
+<td>0</td>
+<td>+5</td>
+<td>+15</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Purva Bhadrapada</td>
+<td>−5</td>
+<td>+5</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Uttara Bhadrapada</td>
+<td>0</td>
+<td>0</td>
+<td>+10</td>
+<td>0</td>
+<td>0</td>
+<td>+15</td>
+</tr>
+<tr>
+<td>Revati</td>
+<td>+15</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>+15</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<h4 id="birthday-bonuses">Birthday bonuses</h4>
+<pre class="hljs"><code><div>is_nakshatra_birthday   → all categories +10
+is_tithi_birthday       → Love +15, Family +10
+is_vaara_birthday       → Career +10, Social +10
+stars_align             → all categories +20
+</div></code></pre>
+<h4 id="score-%E2%86%92-label">Score → Label</h4>
+<pre class="hljs"><code><div>score &gt;= 71  → &quot;High Energy&quot;   (green)
+score 41–70  → &quot;Moderate&quot;      (yellow)
+score &lt;= 40  → &quot;Low Energy&quot;    (red)
+</div></code></pre>
+<h4 id="category-detail-view-on-tap--ai-yes-cached">Category detail view (on tap) — AI: YES, cached</h4>
+<pre class="hljs"><code><div>INPUT:
+  category, score, label, vaara, vaara_planet,
+  tithi_name, nakshatra, birthday_flags, pronouns
+
+SYSTEM PROMPT:
+  &quot;Write 2 sentences explaining why {category} energy
+   is {label} ({score}%) today. Mention the planetary
+   and lunar influences naturally. Warm and practical.
+   No Sanskrit jargon in main text. Use {pronouns}.&quot;
+
+CACHE: per user per day per category (6 calls/day/user).
+       Stored in today_summary_cache until next midnight.
+</div></code></pre>
+<hr>
+<h3 id="block-3-energy-check-in">Block 3: Energy Check-In</h3>
+<p><strong>AI: NO</strong> — fully deterministic comparison between predicted energy band and user-selected mood.<br>
+<strong>Placement:</strong> Directly below Block 2 (Energy).<br>
+<strong>Purpose:</strong> Makes the page interactive immediately after the energy section; builds a personal accuracy log over time; increases daily return motivation.</p>
+<h4 id="behaviour">Behaviour</h4>
+<ol>
+<li>The block shows the predicted energy label (High / Moderate / Low) derived from Block 2's average score.</li>
+<li>Five mood buttons are displayed face-up: 😴 Drained · 😐 Flat · 😊 Okay · ⚡ Energized · 🌟 Electric.</li>
+<li>User taps one mood — the buttons are replaced with a result card.</li>
+<li>The result card shows a match label + one sentence based on the alignment between predicted and actual.</li>
+<li>A small footer shows the running accuracy streak (&quot;Building your accuracy score · N days tracked&quot;).</li>
+<li>User can tap ↩ to reset their pick for the same session (does not affect stored data).</li>
+</ol>
+<h4 id="outcome-matrix">Outcome matrix</h4>
+<table>
+<thead>
+<tr>
+<th>Predicted</th>
+<th>Actual mood</th>
+<th>Label</th>
+<th>Message</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>High</td>
+<td>Energized / Electric</td>
+<td>In sync ⚡</td>
+<td>Your inner state matched the cosmic forecast today.</td>
+</tr>
+<tr>
+<td>High</td>
+<td>Flat / Drained</td>
+<td>Off today</td>
+<td>The stars promised more. Your body had other plans. Noted.</td>
+</tr>
+<tr>
+<td>Low</td>
+<td>Drained / Flat</td>
+<td>Confirmed</td>
+<td>A quiet day — the stars read you right.</td>
+</tr>
+<tr>
+<td>Low</td>
+<td>Energized / Electric</td>
+<td>Surprise 🌟</td>
+<td>Stronger than predicted. Something is shifting in your favour.</td>
+</tr>
+<tr>
+<td>Moderate</td>
+<td>Flat / Okay / Energized</td>
+<td>Right on</td>
+<td>Steady alignment between forecast and reality.</td>
+</tr>
+<tr>
+<td>Any</td>
+<td>Okay (middle)</td>
+<td>Close</td>
+<td>Small gap between forecast and reality — that's normal.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="storage">Storage</h4>
+<pre class="hljs"><code><div>user_checkins table (existing) → add column:
+  mood_key:    ENUM('drained','flat','okay','energized','electric')  nullable
+  mood_picked_at: TIMESTAMP  nullable
+</div></code></pre>
+<p>No separate table needed. If <code>mood_key</code> is null the block shows the picker; if set it shows the result card.</p>
+<hr>
+<h3 id="block-4-do--avoid">Block 4: Do / Avoid</h3>
+<p><strong>AI: NO</strong> — fully deterministic. Same input always returns the same 3 Do and 3 Avoid items.</p>
+<h4 id="how-it-works">How it works</h4>
+<p>Each tip in the content set has a fixed list of <strong>tags</strong> — conditions under which it is relevant. The selection algorithm scores every tip against today's active signals and picks the top 3 by match count. When two tips have the same score, the one that appears earlier in the fixed-order content list wins (stable sort). No randomness is involved at any stage.</p>
+<h4 id="step-1--tag-vocabulary-full-list">Step 1 — Tag vocabulary (full list)</h4>
+<p>All tags used in the content set. No other tag names are allowed.</p>
+<pre class="hljs"><code><div>Vaara tags (7):
+  Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
+
+Paksha tags (2):
+  Shukla       ← waxing moon (tithi 1–14)
+  Krishna      ← waning moon (tithi 16–29)
+
+Special tithi tags (2):
+  Purnima      ← Full Moon (tithi 15)
+  Amavasya     ← New Moon (tithi 30)
+  Chaturdashi  ← 14th tithi (intense, day before Full/New Moon)
+
+Nakshatra quality tags (2 — group the 27 nakshatras, don't tag individually):
+  Nakshatra_Dev      ← benevolent nakshatras: Ashwini, Mrigashira, Punarvasu,
+                        Pushya, Hasta, Swati, Anuradha, Shravana, Revati
+  Nakshatra_Intense  ← demanding nakshatras: Bharani, Krittika, Ardra,
+                        Ashlesha, Magha, Vishakha, Jyeshtha, Mula, Shatabhishak,
+                        Dhanishtha, Chaturdashi-linked ones
+
+Category energy tags (12 — only High and Low; Moderate has no tag):
+  Love_High, Love_Low
+  Career_High, Career_Low
+  Health_High, Health_Low
+  Money_High, Money_Low
+  Social_High, Social_Low
+  Family_High, Family_Low
+
+Personal special day tags (4):
+  NakshatraBirthday  ← today nakshatra == natal nakshatra
+  TithiBirthday      ← today tithi == natal tithi
+  VaaraBirthday      ← today vaara == natal vaara
+  StarsAlign         ← all three match simultaneously
+</div></code></pre>
+<h4 id="step-2--build-todays-active-signals">Step 2 — Build today's active signals</h4>
+<p>Signals are derived entirely from panchang and natal comparison. Same for every user with the same birth data on the same day.</p>
+<pre class="hljs"><code><div>Active signals = union of:
+  → today's vaara tag
+  → paksha tag (Shukla or Krishna)
+  → Purnima and/or Amavasya if applicable
+  → Chaturdashi if tithi is 14 or 29
+  → Nakshatra_Dev or Nakshatra_Intense based on today's moon nakshatra
+  → category tags where score is High (≥71) or Low (≤40) for each of 6 categories
+  → NakshatraBirthday / TithiBirthday / VaaraBirthday / StarsAlign if true
+</div></code></pre>
+<h4 id="step-3--score-and-select">Step 3 — Score and select</h4>
+<p>Every tip carries a <code>tags</code> list. Score = number of active signals that appear in the tip's tags. Select top 3 by score. Ties broken by fixed position in content set (earlier wins).</p>
+<pre class="hljs"><code><div>Example tip:
+  text: &quot;Reach out to someone you've been meaning to reconnect with&quot;
+  type: do
+  tags: [Love_High, Social_High, Friday, Nakshatra_Dev]
+
+  Active signals today: [Friday, Nakshatra_Dev, Love_High, Social_High, ...]
+  Score: 4 matches → ranked high
+</div></code></pre>
+<h4 id="step-4--fallback-hierarchy-coverage-guarantee">Step 4 — Fallback hierarchy (coverage guarantee)</h4>
+<p>If fewer than 3 tips score above 0 after full matching, relax the filter:</p>
+<pre class="hljs"><code><div>1. Full match  — use all active signals as above
+2. Vaara only  — if &lt;3 results, filter to tips tagged with today's vaara alone
+3. Paksha only — if &lt;3 results, filter to tips tagged Shukla or Krishna only
+4. Universal   — if &lt;3 results, fill remaining slots from tips tagged with no
+                 category or special signals (generic always-relevant tips)
+</div></code></pre>
+<p>Every vaara must have at least 3 Do and 3 Avoid tips tagged to it alone (minimum coverage rule). Content team must verify this before publishing.</p>
+<h4 id="step-5--determinism-guarantee">Step 5 — Determinism guarantee</h4>
+<p>Because signals are derived from panchang (no randomness) and tie-breaking is by fixed position (not insertion order or time), the same birth data + same date always produces the same 3 Do and 3 Avoid items.</p>
+<h4 id="step-6--display-tags-under-each-tip-ui">Step 6 — Display tags under each tip (UI)</h4>
+<p>Each tip renders a row of 2–3 small pill-tags that explain <em>why</em> this tip was selected. These are user-friendly translations of the internal tags — not the raw tag names.</p>
+<pre class="hljs"><code><div>Internal tag → Display tag
+─────────────────────────────
+Friday          → &quot;Friday&quot;
+Love_High       → &quot;Love ↑&quot;
+Love_Low        → &quot;Love ↓&quot;
+Career_High     → &quot;Career ↑&quot;
+Purnima         → &quot;Full Moon&quot;
+Amavasya        → &quot;New Moon&quot;
+Chaturdashi     → &quot;Chaturdashi&quot;
+Shukla          → &quot;Waxing Moon&quot;
+Krishna         → &quot;Waning Moon&quot;
+Nakshatra_Dev   → &quot;{nakshatra_name}&quot;  (e.g. &quot;Pushya&quot;)
+Eclipse         → &quot;Eclipse&quot;
+StarsAlign      → &quot;Rare Alignment&quot;
+NakshatraBirthday → &quot;Star Day&quot;
+</div></code></pre>
+<p>Show maximum 2–3 tags per tip. Priority: special event tags &gt; category energy tags &gt; vaara/paksha tags.
+Do tips use green pills; Avoid tips use amber pills.</p>
+<hr>
+<h4 id="full-content-set--do-tips-60-tips">Full content set — DO tips (60 tips)</h4>
+<p>Each tip is shown with its <code>tags</code> array. Tags are from the vocabulary above only.</p>
+<p><strong>Love &amp; Relationships</strong></p>
+<pre class="hljs"><code><div>1.  &quot;Send an unexpected kind message to someone you care about&quot;
+    tags: [Love_High, Friday, Nakshatra_Dev]
+
+2.  &quot;Plan a date or quality time with your partner today&quot;
+    tags: [Love_High, Friday, Shukla]
+
+3.  &quot;Tell someone directly what you appreciate about them&quot;
+    tags: [Love_High, Friday, Social_High]
+
+4.  &quot;Forgive a small tension from the past week — the timing is right&quot;
+    tags: [Love_High, Monday, Family_High]
+
+5.  &quot;Spend quality time with a loved one — no phones&quot;
+    tags: [Love_High, Monday, Family_High, Shukla]
+
+6.  &quot;Start a conversation you've been avoiding — the energy supports honesty&quot;
+    tags: [Love_High, Wednesday, Shukla]
+
+7.  &quot;Reach out to someone you've been meaning to reconnect with&quot;
+    tags: [Love_High, Social_High, Wednesday, Nakshatra_Dev]
+</div></code></pre>
+<p><strong>Career &amp; Productivity</strong></p>
+<pre class="hljs"><code><div>8.  &quot;Start the day with your most important task — energy is with you&quot;
+    tags: [Career_High, Tuesday, Saturday]
+
+9.  &quot;Schedule the meeting or conversation you've been postponing&quot;
+    tags: [Career_High, Wednesday, Thursday]
+
+10. &quot;Write down your top 3 goals and review your progress&quot;
+    tags: [Career_High, Thursday, Saturday, Shukla]
+
+11. &quot;Pitch your idea today — your words carry extra clarity&quot;
+    tags: [Career_High, Wednesday, Social_High]
+
+12. &quot;Block 2 hours of deep, uninterrupted work this morning&quot;
+    tags: [Career_High, Wednesday, Saturday]
+
+13. &quot;Apply for the opportunity you've been researching&quot;
+    tags: [Career_High, Thursday, Money_High, Shukla]
+
+14. &quot;Ask for feedback from someone whose opinion you trust&quot;
+    tags: [Career_High, Wednesday, Thursday]
+
+15. &quot;Update your resume, portfolio, or professional profile&quot;
+    tags: [Career_High, Saturday, Shukla]
+
+16. &quot;Tackle the task you've been avoiding most — today you have the energy&quot;
+    tags: [Career_High, Tuesday, Shukla, Nakshatra_Dev]
+</div></code></pre>
+<p><strong>Health &amp; Wellness</strong></p>
+<pre class="hljs"><code><div>17. &quot;Get outside for at least 30 minutes — sun energy is high&quot;
+    tags: [Health_High, Sunday, Tuesday]
+
+18. &quot;Start a new physical habit today — momentum is on your side&quot;
+    tags: [Health_High, Tuesday, Shukla]
+
+19. &quot;Drink an extra litre of water and notice the difference&quot;
+    tags: [Health_High, Sunday]
+
+20. &quot;Try a new healthy recipe or cook something nourishing&quot;
+    tags: [Health_High, Sunday, Monday]
+
+21. &quot;Book that health appointment you've been postponing&quot;
+    tags: [Health_High, Thursday, Saturday]
+
+22. &quot;Do a breathing or meditation session today — even 10 minutes&quot;
+    tags: [Health_High, Monday, Saturday]
+
+23. &quot;Take a walk after your next meal&quot;
+    tags: [Health_High, Sunday, Wednesday]
+
+24. &quot;Commit to one physical challenge for the next 30 days — start today&quot;
+    tags: [Health_High, Tuesday, Shukla]
+</div></code></pre>
+<p><strong>Money &amp; Finance</strong></p>
+<pre class="hljs"><code><div>25. &quot;Review your monthly budget today — clarity is available&quot;
+    tags: [Money_High, Thursday, Shukla]
+
+26. &quot;Transfer to savings today — small consistent acts build wealth&quot;
+    tags: [Money_High, Thursday, Saturday]
+
+27. &quot;Research an investment or financial opportunity you've been curious about&quot;
+    tags: [Money_High, Thursday, Career_High, Shukla]
+
+28. &quot;Cancel subscriptions you haven't used in 30 days&quot;
+    tags: [Money_High, Saturday, Wednesday]
+
+29. &quot;Negotiate something today — a bill, a deal, a rate&quot;
+    tags: [Money_High, Career_High, Wednesday, Thursday]
+</div></code></pre>
+<p><strong>Social &amp; Community</strong></p>
+<pre class="hljs"><code><div>30. &quot;Host an impromptu gathering or invite someone for coffee&quot;
+    tags: [Social_High, Friday, Monday, Love_High]
+
+31. &quot;Reply to messages you've been sitting on&quot;
+    tags: [Social_High, Wednesday, Friday]
+
+32. &quot;Accept the social invitation you've been debating&quot;
+    tags: [Social_High, Friday, Shukla]
+
+33. &quot;Introduce two people who should know each other&quot;
+    tags: [Social_High, Wednesday, Thursday]
+
+34. &quot;Post something creative or meaningful online today&quot;
+    tags: [Social_High, Friday, Wednesday]
+
+35. &quot;Check in on a friend who might be struggling&quot;
+    tags: [Social_High, Monday, Family_High, Nakshatra_Dev]
+</div></code></pre>
+<p><strong>Family &amp; Home</strong></p>
+<pre class="hljs"><code><div>36. &quot;Call or visit a parent or elder family member today&quot;
+    tags: [Family_High, Monday]
+
+37. &quot;Cook a meal for your family or household&quot;
+    tags: [Family_High, Monday, Thursday]
+
+38. &quot;Share a memory or old photo with a family member&quot;
+    tags: [Family_High, Monday, Shukla]
+
+39. &quot;Create or revive a small family ritual or tradition&quot;
+    tags: [Family_High, Monday, Sunday, Shukla]
+</div></code></pre>
+<p><strong>Special events</strong></p>
+<pre class="hljs"><code><div>40. &quot;Set a powerful new intention during this New Moon — write it down&quot;
+    tags: [Amavasya, Shukla]
+
+41. &quot;Release something that no longer serves you on this Full Moon&quot;
+    tags: [Purnima]
+
+42. &quot;Celebrate your Star Day — do something meaningful for yourself&quot;
+    tags: [NakshatraBirthday]
+
+43. &quot;Journal about your emotional journey on this lunar birthday&quot;
+    tags: [TithiBirthday]
+
+44. &quot;Share this rare alignment with someone close — it won't happen again for months&quot;
+    tags: [StarsAlign, Love_High, Social_High]
+
+45. &quot;Use this rare alignment day for the decision you've been putting off&quot;
+    tags: [StarsAlign, Career_High]
+</div></code></pre>
+<p><strong>Waxing moon (Shukla paksha)</strong></p>
+<pre class="hljs"><code><div>46. &quot;Begin something new today — the waxing moon supports new starts&quot;
+    tags: [Shukla, Career_High, Health_High]
+
+47. &quot;Plant seeds of what you want to grow — literally or metaphorically&quot;
+    tags: [Shukla, Monday]
+
+48. &quot;Expand your network this week — outreach lands well under a waxing moon&quot;
+    tags: [Shukla, Social_High, Wednesday]
+
+49. &quot;Say yes to the first good opportunity that comes your way today&quot;
+    tags: [Shukla, Social_High, Career_High]
+</div></code></pre>
+<p><strong>General high-energy / universal</strong></p>
+<pre class="hljs"><code><div>50. &quot;Invest in learning something new today — curiosity compounds&quot;
+    tags: [Wednesday, Thursday, Career_High, Shukla]
+
+51. &quot;Clean and organize your workspace or home environment&quot;
+    tags: [Saturday, Wednesday, Career_High]
+
+52. &quot;Express gratitude to three people who supported you recently&quot;
+    tags: [Thursday, Monday, Family_High, Social_High]
+
+53. &quot;Treat yourself to something beautiful today&quot;
+    tags: [Friday, Love_High, Health_High]
+
+54. &quot;Prioritize one relationship that matters over work today&quot;
+    tags: [Love_High, Family_High, Friday, Monday]
+
+55. &quot;Take a cold shower or contrast bath for an energy reset&quot;
+    tags: [Tuesday, Health_High, Sunday]
+
+56. &quot;Start the creative project you've been sketching in your head&quot;
+    tags: [Friday, Wednesday, Love_High, Shukla]
+
+57. &quot;Do one thing today that future-you will thank you for&quot;
+    tags: [Career_High, Shukla, Thursday]
+
+58. &quot;Take one meaningful step toward a long-term goal&quot;
+    tags: [Career_High, Thursday, Shukla, Saturday]
+
+59. &quot;Write down three things you're grateful for this morning&quot;
+    tags: [Monday, Sunday, Thursday, Shukla]
+
+60. &quot;Practice saying no to one thing that drains your energy&quot;
+    tags: [Saturday, Krishna, Health_High]
+</div></code></pre>
+<hr>
+<h4 id="full-content-set--avoid-tips-60-tips">Full content set — AVOID tips (60 tips)</h4>
+<p><strong>Love &amp; Relationships</strong></p>
+<pre class="hljs"><code><div>1.  &quot;Avoid bringing up old arguments — energy today amplifies conflict&quot;
+    tags: [Love_Low, Tuesday, Nakshatra_Intense, Krishna]
+
+2.  &quot;Don't make assumptions about others' feelings — ask instead&quot;
+    tags: [Love_Low, Wednesday]
+
+3.  &quot;Skip the passive-aggressive comment you're considering&quot;
+    tags: [Love_Low, Tuesday, Chaturdashi]
+
+4.  &quot;Don't send emotionally charged messages late at night&quot;
+    tags: [Love_Low, Krishna, Saturday]
+
+5.  &quot;Avoid discussing major relationship decisions today&quot;
+    tags: [Love_Low, Amavasya, Saturday, Chaturdashi]
+
+6.  &quot;Don't withdraw emotionally from people who care about you&quot;
+    tags: [Family_Low, Monday, Love_Low]
+
+7.  &quot;Don't ghost someone waiting on your reply — clear the air today&quot;
+    tags: [Love_Low, Social_Low, Wednesday]
+</div></code></pre>
+<p><strong>Career &amp; Work</strong></p>
+<pre class="hljs"><code><div>8.  &quot;Don't launch a new project or send a proposal today&quot;
+    tags: [Career_Low, Amavasya, Chaturdashi, Krishna]
+
+9.  &quot;Avoid aggressive negotiations — conditions don't favour you&quot;
+    tags: [Career_Low, Tuesday, Saturday]
+
+10. &quot;Don't send that critical email before rereading it twice&quot;
+    tags: [Career_Low, Wednesday]
+
+11. &quot;Avoid committing to deadlines you can't realistically meet&quot;
+    tags: [Career_Low, Saturday, Amavasya]
+
+12. &quot;Don't start job applications or sign contracts today&quot;
+    tags: [Career_Low, Chaturdashi, Saturday, Amavasya]
+
+13. &quot;Avoid multitasking — scattered focus will cost you more than it saves&quot;
+    tags: [Career_Low, Wednesday, Nakshatra_Intense]
+
+14. &quot;Avoid long meetings that could have been emails today&quot;
+    tags: [Career_Low, Wednesday]
+
+15. &quot;Don't skip the details on anything financial today&quot;
+    tags: [Money_Low, Saturday, Career_Low]
+
+16. &quot;Avoid second-guessing decisions you've already made well&quot;
+    tags: [Career_High, Wednesday, Monday]
+</div></code></pre>
+<p><strong>Health &amp; Wellness</strong></p>
+<pre class="hljs"><code><div>17. &quot;Avoid overexerting yourself physically — injury risk is elevated&quot;
+    tags: [Health_Low, Tuesday, Nakshatra_Intense, Chaturdashi]
+
+18. &quot;Don't skip your meals to power through work&quot;
+    tags: [Health_Low, Career_High, Saturday]
+
+19. &quot;Avoid alcohol or stimulants today — your system is more sensitive&quot;
+    tags: [Health_Low, Monday, Amavasya, Krishna]
+
+20. &quot;Don't ignore a recurring pain or symptom — act on it today&quot;
+    tags: [Health_Low, Saturday]
+
+21. &quot;Avoid staying up past midnight — your recovery window matters tonight&quot;
+    tags: [Health_Low, Saturday, Krishna, Amavasya]
+
+22. &quot;Skip intense workouts and opt for stretching or walking instead&quot;
+    tags: [Health_Low, Krishna, Chaturdashi]
+
+23. &quot;Avoid heavy or fried meals today — digestion is weakened&quot;
+    tags: [Health_Low, Amavasya, Chaturdashi]
+
+24. &quot;Don't take on someone else's emotional burden as your own&quot;
+    tags: [Family_High, Monday, Health_Low]
+</div></code></pre>
+<p><strong>Money &amp; Finance</strong></p>
+<pre class="hljs"><code><div>25. &quot;Don't make impulsive purchases today — the urge will pass&quot;
+    tags: [Money_Low, Friday, Love_High]
+
+26. &quot;Avoid lending money today — it rarely comes back under this energy&quot;
+    tags: [Money_Low, Saturday, Amavasya]
+
+27. &quot;Don't invest in anything you don't fully understand right now&quot;
+    tags: [Money_Low, Amavasya, Chaturdashi]
+
+28. &quot;Avoid signing contracts without legal review&quot;
+    tags: [Money_Low, Career_Low, Saturday]
+
+29. &quot;Don't make financial decisions based on pressure or urgency&quot;
+    tags: [Money_Low, Saturday, Career_Low]
+
+30. &quot;Skip the retail therapy — fix the root, not the symptom&quot;
+    tags: [Money_Low, Love_Low, Friday, Krishna]
+
+31. &quot;Don't trust overly good-to-be-true opportunities today&quot;
+    tags: [Money_Low, Career_Low, Amavasya]
+</div></code></pre>
+<p><strong>Social &amp; Community</strong></p>
+<pre class="hljs"><code><div>32. &quot;Avoid large social gatherings that drain rather than energize you&quot;
+    tags: [Social_Low, Amavasya, Krishna]
+
+33. &quot;Don't over-explain yourself to people who won't listen&quot;
+    tags: [Social_Low, Saturday, Career_Low]
+
+34. &quot;Avoid gossip — it will reflect back on you under this energy&quot;
+    tags: [Social_Low, Nakshatra_Intense, Chaturdashi]
+
+35. &quot;Skip the confrontation — it's not the right time or place&quot;
+    tags: [Social_Low, Tuesday, Love_Low]
+
+36. &quot;Don't force social plans on yourself — rest is more valuable tonight&quot;
+    tags: [Social_Low, Saturday, Krishna]
+
+37. &quot;Avoid social media arguments or public disputes today&quot;
+    tags: [Social_Low, Chaturdashi, Nakshatra_Intense]
+
+38. &quot;Don't make your problems someone else's emergency&quot;
+    tags: [Social_Low, Family_Low, Saturday]
+</div></code></pre>
+<p><strong>Family &amp; Home</strong></p>
+<pre class="hljs"><code><div>39. &quot;Avoid bringing unsolved family tensions into work today&quot;
+    tags: [Family_Low, Monday, Career_High]
+
+40. &quot;Don't make promises to family you know you can't keep right now&quot;
+    tags: [Family_Low, Thursday, Money_Low]
+
+41. &quot;Avoid comparing your family dynamics to others' — it breeds resentment&quot;
+    tags: [Family_Low, Monday, Love_Low]
+
+42. &quot;Don't skip family commitments for social plans tonight&quot;
+    tags: [Family_Low, Friday, Social_High]
+</div></code></pre>
+<p><strong>Waning moon (Krishna paksha)</strong></p>
+<pre class="hljs"><code><div>43. &quot;Avoid starting anything new today — the waning moon favours completion, not initiation&quot;
+    tags: [Krishna, Amavasya]
+
+44. &quot;Don't hoard or cling to outcomes — let things resolve naturally&quot;
+    tags: [Krishna, Saturday]
+
+45. &quot;Avoid overthinking future plans — the waning phase calls for presence&quot;
+    tags: [Krishna, Monday, Love_Low]
+
+46. &quot;Don't hold grudges today — the moon's pull makes them heavier than they need to be&quot;
+    tags: [Krishna, Family_Low, Love_Low]
+
+47. &quot;Don't start tasks you can't finish today — completion beats initiation&quot;
+    tags: [Krishna, Career_Low, Chaturdashi]
+</div></code></pre>
+<p><strong>Chaturdashi (14th tithi — intense day)</strong></p>
+<pre class="hljs"><code><div>48. &quot;Avoid all major decisions today — tomorrow's energy is significantly clearer&quot;
+    tags: [Chaturdashi]
+
+49. &quot;Don't confront difficult people today — wait for the moon to shift&quot;
+    tags: [Chaturdashi, Nakshatra_Intense]
+
+50. &quot;Skip risky or extreme activities today — this is a high-tension tithi&quot;
+    tags: [Chaturdashi, Health_Low, Tuesday]
+
+51. &quot;Don't make permanent decisions under temporary pressure today&quot;
+    tags: [Chaturdashi, Career_Low, Love_Low]
+</div></code></pre>
+<p><strong>General / universal</strong></p>
+<pre class="hljs"><code><div>52. &quot;Avoid comparing your progress to others — your path moves at its own speed&quot;
+    tags: [Social_Low, Career_Low, Saturday]
+
+53. &quot;Don't suppress what you're feeling — the emotion will demand attention later&quot;
+    tags: [Monday, Love_Low, Family_Low]
+
+54. &quot;Avoid the temptation to take on more than you can finish&quot;
+    tags: [Career_Low, Thursday, Shukla]
+
+55. &quot;Skip the self-criticism spiral — it changes nothing and drains everything&quot;
+    tags: [Health_Low, Saturday]
+
+56. &quot;Avoid rushing important conversations — slow down and listen first&quot;
+    tags: [Love_Low, Wednesday, Tuesday]
+
+57. &quot;Don't suppress a creative idea because it feels too bold — note it down&quot;
+    tags: [Career_Low, Wednesday, Friday]
+
+58. &quot;Avoid mindless scrolling when you should be resting&quot;
+    tags: [Health_Low, Saturday, Krishna]
+
+59. &quot;Don't skip a planned commitment without notice — it affects trust&quot;
+    tags: [Career_Low, Social_Low, Saturday]
+
+60. &quot;Avoid dramatic conversations late at night — mornings are always clearer&quot;
+    tags: [Love_Low, Monday, Krishna]
+</div></code></pre>
+<hr>
+<h4 id="share-card">Share card</h4>
+<pre class="hljs"><code><div>Today, {Date}
+DO:    tip1 · tip2 · tip3
+AVOID: tip1 · tip2 · tip3
+#Bisou
+</div></code></pre>
+<hr>
+<h3 id="block-5-daily-cosmic-pull">Block 5: Daily Cosmic Pull</h3>
+<p><strong>AI: NO</strong> — fully deterministic. Card selected from a fixed bank of 54 entries using nakshatra × time-slot index.<br>
+<strong>Placement:</strong> After Block 4 (Do / Avoid), before Block 6 (Today's Vibe).<br>
+<strong>Purpose:</strong> The highest-frequency interactive block on the page. Users can pull 3 cards per day (morning / afternoon / evening), each revealing a different quality and guidance message for that window. <strong>This is the primary daily return driver</strong> — there is always a new card waiting as the day progresses. The pull gesture (swipe up or tap-to-flip) is the most tactile and shareable interaction in the app.</p>
+<h4 id="what-is-displayed">What is displayed</h4>
+<p>A face-down card with a pull prompt. Once pulled:</p>
+<ul>
+<li>A Vedic symbol/icon (distinct per quality)</li>
+<li>A one-word quality: e.g. &quot;CLARITY&quot;, &quot;ACTION&quot;, &quot;PATIENCE&quot;</li>
+<li>A 2–3 sentence guidance message</li>
+<li>Attribution: <code>{nakshatra} · {time_slot}</code></li>
+</ul>
+<pre class="hljs"><code><div>┌─────────────────────┐     ┌─────────────────────┐
+│                     │     │        ✦            │
+│    [ Pull card ]    │  →  │      CLARITY        │
+│  Morning pull ready │     │  &quot;This morning asks │
+│         ↑           │     │   you to cut through│
+│                     │     │   the noise…&quot;       │
+└─────────────────────┘     │  Pushya · Morning   │
+                            └─────────────────────┘
+</div></code></pre>
+<h4 id="three-pull-per-day-mechanic">Three-pull-per-day mechanic</h4>
+<table>
+<thead>
+<tr>
+<th>Pull</th>
+<th>Available</th>
+<th>Resets</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Morning pull</td>
+<td>From midnight</td>
+<td>N/A (first of day)</td>
+</tr>
+<tr>
+<td>Afternoon pull</td>
+<td>From 12:00 noon</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>Evening pull</td>
+<td>From 18:00</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<p>All three reset at midnight. This means:</p>
+<ul>
+<li>A user who pulls at 9 AM will have 2 more pulls available later</li>
+<li>A user who opens at 8 PM for the first time can pull all 3 at once (all windows have passed — all are available)</li>
+<li>In the demo: all three are always available; the current <code>timeOfDay</code> slot is pre-selected</li>
+</ul>
+<h4 id="card-selection-algorithm">Card selection algorithm</h4>
+<pre class="hljs"><code><div>nakshatra_idx   = canonical nakshatra index (0–26)
+slot_idx        = { morning: 0, afternoon: 1, evening: 2 }
+card_idx        = (nakshatra_idx * 3 + slot_idx) % 54
+card            = PULL_CARD_BANK[card_idx]
+</div></code></pre>
+<p>Each nakshatra × slot combination always returns the same card. The 54-entry bank covers all 27 nakshatras × 2 &quot;cycles&quot; ensuring variety across consecutive days.</p>
+<h4 id="quality-categories-9-qualities-6-cards-each--54-entry-bank">Quality categories (9 qualities, 6 cards each = 54-entry bank)</h4>
+<table>
+<thead>
+<tr>
+<th>Quality</th>
+<th>Symbol</th>
+<th>Archetype</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Clarity</td>
+<td>🔷</td>
+<td>Cut through confusion; see what's true</td>
+</tr>
+<tr>
+<td>Action</td>
+<td>⚡</td>
+<td>Move now; momentum is available</td>
+</tr>
+<tr>
+<td>Patience</td>
+<td>🌿</td>
+<td>Hold steady; this is not the moment to push</td>
+</tr>
+<tr>
+<td>Connection</td>
+<td>💛</td>
+<td>Reach out; relationships are amplified</td>
+</tr>
+<tr>
+<td>Rest</td>
+<td>🌙</td>
+<td>Restore; doing less achieves more today</td>
+</tr>
+<tr>
+<td>Courage</td>
+<td>🔥</td>
+<td>Face what you've been avoiding</td>
+</tr>
+<tr>
+<td>Gratitude</td>
+<td>✦</td>
+<td>Notice what's working; appreciation compounds</td>
+</tr>
+<tr>
+<td>Boundaries</td>
+<td>🛡️</td>
+<td>Protect your energy; it's okay to say no</td>
+</tr>
+<tr>
+<td>Trust</td>
+<td>🌊</td>
+<td>Release control; the outcome is unfolding correctly</td>
+</tr>
+</tbody>
+</table>
+<p>Each quality has 6 unique messages — different framing, same essence. The bank is stored as a constant array in the codebase.</p>
+<h4 id="flip-animation">Flip animation</h4>
+<ol>
+<li>User taps &quot;Pull card&quot; or swipes up on the face-down card</li>
+<li>Card flips on its Y-axis (CSS 3D transform, 400ms)</li>
+<li>Front (dark, ✦ symbol) rotates away; back (coloured by quality) rotates in</li>
+<li>Quality word fades in, then message slides up</li>
+<li>After reveal: card stays face-up for the session; pull button becomes &quot;Pulled ✓&quot; for that slot</li>
+</ol>
+<h4 id="storage">Storage</h4>
+<pre class="hljs"><code><div>user_checkins → add column:
+  pull_morning_idx: SMALLINT nullable    (card index used for morning pull, null = not pulled)
+  pull_afternoon_idx: SMALLINT nullable
+  pull_evening_idx: SMALLINT nullable
+  pull_morning_at: TIMESTAMP nullable
+  pull_afternoon_at: TIMESTAMP nullable
+  pull_evening_at: TIMESTAMP nullable
+</div></code></pre>
+<p>Storing the index (not the text) allows card bank updates without breaking historical data.</p>
+<hr>
+<h3 id="block-6-todays-vibe">Block 6: Today's Vibe</h3>
+<p><strong>AI: YES</strong> — generated once per day, cached until midnight.</p>
+<pre class="hljs"><code><div>INPUT (structured):
+  vaara, vaara_planet, tithi_name, nakshatra,
+  average_score, headline_type, top_category,
+  name, pronouns, birthday_flags
+
+SYSTEM PROMPT:
+  &quot;Write a 2-3 sentence daily energy summary for an astrology
+   app. Base it only on the facts provided. Warm, friendly,
+   practical tone. Mention the weekday and moon phase naturally.
+   Do not use Sanskrit terms in the main text. Use {pronouns}.&quot;
+
+OUTPUT: 2–3 sentences. Cached in today_summary_cache.
+</div></code></pre>
+<hr>
+<h3 id="block-7-your-day-morning--afternoon--evening">Block 7: Your Day (Morning / Afternoon / Evening)</h3>
+<p><strong>AI: NO</strong> — fully deterministic. All three sections are always visible. Same input always returns the same text.</p>
+<h4 id="how-it-works">How it works</h4>
+<p>Each time slot (Morning, Afternoon, Evening) has one text determined by two inputs:</p>
+<ol>
+<li><strong>today_vaara</strong> — the weekday (Sunday through Saturday) — primary key</li>
+<li><strong>energy_band</strong> — derived from average category score: <code>High</code> (≥71) / <code>Moderate</code> (41–70) / <code>Low</code> (≤40)</li>
+</ol>
+<p>The lookup is: <code>text = TEMPLATES[vaara][slot][energy_band]</code></p>
+<p>There is exactly <strong>one text</strong> per combination. No arrays, no random pick. Every day of the week has its own distinct set of texts, so even with the same energy level, Monday reads differently from Friday. A user on High-energy Tuesday always sees the same Tuesday High-energy texts — deterministic and personal.</p>
+<h4 id="full-lookup-table-63-texts">Full lookup table (63 texts)</h4>
+<hr>
+<p><strong>Sunday (Sun)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>High</th>
+<th>Moderate</th>
+<th>Low</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Morning</td>
+<td>Sun's energy is at its peak. Ideal for physical activity, self-care rituals, and setting clear intentions for the week.</td>
+<td>A calm Sunday morning. Good for gentle movement, reflection, and preparing for the week ahead.</td>
+<td>The Sun is gentle today. Rest in the morning and let energy build naturally before noon.</td>
+</tr>
+<tr>
+<td>Afternoon</td>
+<td>Sun's vitality shines through the afternoon. A great time to pursue health goals and express yourself.</td>
+<td>A steady Sunday afternoon. Good for personal projects and anything that nourishes you.</td>
+<td>Keep the afternoon light. Napping or slow walks serve you better than ambitious plans.</td>
+</tr>
+<tr>
+<td>Evening</td>
+<td>Bright Sunday evening — social energy is unexpectedly high. Connect with people who energize you.</td>
+<td>Wind down gently tonight. Prepare mentally for the week ahead.</td>
+<td>Rest is the best use of this evening. Early to bed and tomorrow opens better.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><strong>Monday (Moon)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>High</th>
+<th>Moderate</th>
+<th>Low</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Morning</td>
+<td>Moon energy is at its strongest this morning. Let feeling lead your decisions — your intuition is sharp.</td>
+<td>A reflective Monday morning. Set your emotional tone for the week and don't rush.</td>
+<td>The Moon is waning in strength this morning. Take it slow and avoid confrontations early.</td>
+</tr>
+<tr>
+<td>Afternoon</td>
+<td>Emotional intelligence is your superpower this afternoon. Family and connection conversations go well.</td>
+<td>Moon's midday phase — good for nurturing tasks and checking in with people you care about.</td>
+<td>Low moon energy in the afternoon. Stick to routine; creative or emotional work can wait.</td>
+</tr>
+<tr>
+<td>Evening</td>
+<td>Moon evenings are made for family and close connection. Reach out to someone you love tonight.</td>
+<td>A gentle Monday night. Good for journaling or quiet conversation.</td>
+<td>Rest tonight. The Moon needs to recover, and so do you.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><strong>Tuesday (Mars)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>High</th>
+<th>Moderate</th>
+<th>Low</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Morning</td>
+<td>Mars gives you an early burst of power. Tackle the hardest task on your list before 10 AM.</td>
+<td>Some Mars energy available — good for physical activity and focused work this morning.</td>
+<td>Mars is subdued today. Don't force early intensity — pace yourself.</td>
+</tr>
+<tr>
+<td>Afternoon</td>
+<td>Mars energy stays strong. Good for athletic effort, direct conversations, and getting things done.</td>
+<td>A decent work afternoon. Push through the medium-difficulty tasks on your list.</td>
+<td>Low energy Tuesday afternoon. Avoid confrontation and rest between tasks.</td>
+</tr>
+<tr>
+<td>Evening</td>
+<td>Mars evening — good for assertive decisions you've been postponing. Act on what you already know.</td>
+<td>Wind down well. Light exercise helps process today's drive before sleep.</td>
+<td>Low Mars evening. Rest and let the drive return tomorrow.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><strong>Wednesday (Mercury)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>High</th>
+<th>Moderate</th>
+<th>Low</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Morning</td>
+<td>Mercury sharpens your mind this morning. Write, plan, communicate — ideas flow easily today.</td>
+<td>A decent morning for organized thinking. Handle correspondence and planning before noon.</td>
+<td>Mercury is quiet this morning. Re-read before sending and avoid important negotiations.</td>
+</tr>
+<tr>
+<td>Afternoon</td>
+<td>Mental energy peaks. Best time for strategy sessions, deep writing, or complex problem-solving.</td>
+<td>A steady afternoon for methodical work. Good for following up and tying loose ends.</td>
+<td>Mercury slows this afternoon. Short tasks over deep work.</td>
+</tr>
+<tr>
+<td>Evening</td>
+<td>Mercury evening — excellent for clever conversation, pitching ideas, and social wit.</td>
+<td>A decent evening for casual connection and light reading.</td>
+<td>Mercury is tired tonight. Rest your mind and return to complex topics tomorrow.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><strong>Thursday (Jupiter)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>High</th>
+<th>Moderate</th>
+<th>Low</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Morning</td>
+<td>Jupiter expands everything it touches today. Morning decisions carry long-term weight — think big.</td>
+<td>Jupiter's optimism is available but mild. Good for practical planning and financial decisions.</td>
+<td>Jupiter is restrained this morning. Hold off on large commitments — better timing comes.</td>
+</tr>
+<tr>
+<td>Afternoon</td>
+<td>Jupiter's afternoon energy is excellent for growth conversations, teaching, and financial moves.</td>
+<td>A good Thursday for routine work and steady progress toward larger goals.</td>
+<td>Low Jupiter energy this afternoon. Avoid overcommitting or expanding plans today.</td>
+</tr>
+<tr>
+<td>Evening</td>
+<td>Jupiter evenings are generous. Good for hosting, gifting, and abundant thinking.</td>
+<td>A pleasant Thursday evening. Good for gratitude practice and light social plans.</td>
+<td>Low expansion energy tonight. Keep it simple and rest.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><strong>Friday (Venus)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>High</th>
+<th>Moderate</th>
+<th>Low</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Morning</td>
+<td>Venus day starts beautifully. Good morning for self-care, beauty routines, and sending affectionate messages.</td>
+<td>A pleasant Friday morning. Treat yourself — even a small luxury sets the right tone.</td>
+<td>Venus is subtle this morning. Light self-care over social effort.</td>
+</tr>
+<tr>
+<td>Afternoon</td>
+<td>Venus energy strengthens through the day. Creative work, beauty projects, and relationship effort all go well.</td>
+<td>A decent Friday afternoon for aesthetic and creative tasks.</td>
+<td>Low Venus energy in the afternoon. Quiet your social battery and rest before evening.</td>
+</tr>
+<tr>
+<td>Evening</td>
+<td>Venus evening — the best time of the week for romance, connection, and pleasure. Go out or invite someone in.</td>
+<td>A pleasant Friday night. Good for relaxed social plans and gentle romance.</td>
+<td>Low energy Venus evening. Stay in and create something beautiful for yourself.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><strong>Saturday (Saturn)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Slot</th>
+<th>High</th>
+<th>Moderate</th>
+<th>Low</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Morning</td>
+<td>Saturn rewards discipline today. Start with your hardest, most delayed task — you have the will for it.</td>
+<td>A capable Saturday morning. Good for deep cleaning, long-deferred admin, and structure-building.</td>
+<td>Saturn's heaviness is real this morning. One small, useful task is enough.</td>
+</tr>
+<tr>
+<td>Afternoon</td>
+<td>Saturn afternoon — persistent, focused effort pays off today. Finish what you started this week.</td>
+<td>Steady progress Saturday. Not inspiring, but productive.</td>
+<td>A slow Saturn afternoon. Rest without guilt — this too is part of the cycle.</td>
+</tr>
+<tr>
+<td>Evening</td>
+<td>Saturn evening: good for honest reflection, letting go of what isn't working, and planning the next week.</td>
+<td>A decent Saturday night for journaling and reviewing the week.</td>
+<td>Saturn's evening calls for rest and silence. Tomorrow will be lighter.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h4 id="timing-labels">Timing labels</h4>
+<p>The slot names shown in the UI are time-anchored to the user's local sunrise/sunset from panchang:</p>
+<pre class="hljs"><code><div>Morning   → from local midnight until noon (or sunrise + 6h, whichever is later)
+Afternoon → from noon until sunset
+Evening   → from sunset onward
+</div></code></pre>
+<p>The time boundaries are displayed next to each slot label (e.g., &quot;Morning · until 12:30&quot;) so the user knows when each section applies.</p>
+<hr>
+<h3 id="block-8-power-windows">Block 8: Power Windows</h3>
+<p><strong>AI: NO</strong> — fully deterministic. Calculated from the Vedic hora cycle (60-minute planetary hours from sunrise) + one fixed &quot;avoid&quot; window per weekday + a midday peak window. All derived from weekday and local sunrise time.<br>
+<strong>Placement:</strong> Directly below Block 7 (Your Day in Three Parts).<br>
+<strong>Purpose:</strong> Answers the question &quot;WHEN should I do this today?&quot; — the most actionable question a user can have. Creates a reason to check the app in the morning and reference it throughout the day.</p>
+<h4 id="what-is-displayed">What is displayed</h4>
+<p>Each day shows <strong>4–5 time windows</strong> with plain-English titles:</p>
+<table>
+<thead>
+<tr>
+<th>Window type</th>
+<th>User-facing title</th>
+<th>Source</th>
+<th>Quality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Peak hora (high-energy planet)</td>
+<td>&quot;High energy start&quot;, &quot;Deep focus window&quot;, &quot;Growth window&quot;, etc.</td>
+<td>First hora matching Jupiter, Mercury, Venus, or Sun from sunrise</td>
+<td>✅ peak (green)</td>
+</tr>
+<tr>
+<td>Best decision window</td>
+<td>&quot;Best decision window&quot;</td>
+<td>Fixed calculation: ~11:48 AM – 12:24 PM (adjusts slightly with sunrise)</td>
+<td>✨ golden</td>
+</tr>
+<tr>
+<td>Low energy window</td>
+<td>&quot;Low energy zone&quot;</td>
+<td>Fixed table by weekday (approx. 1.5-hour block)</td>
+<td>⚠️ avoid (red)</td>
+</tr>
+<tr>
+<td>Medium hora</td>
+<td>Context-specific name (&quot;Communication window&quot;, &quot;Gut feeling window&quot;, etc.)</td>
+<td>2nd or 3rd useful hora of the day</td>
+<td>✓ medium (amber)</td>
+</tr>
+<tr>
+<td>Rest / wind-down</td>
+<td>&quot;Wind-down time&quot;, &quot;Evening reflection&quot;</td>
+<td>Moon hora in evening</td>
+<td>🌙 rest (blue)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Naming rule:</strong> Window titles must always be plain English — no planetary terms in titles. Technical source (hora planet, Vedic period name) may appear only in the expanded hint text, and even then should be followed by a simple explanation.</p>
+<p>The window matching the current time of day (morning / afternoon / evening) is highlighted with a <strong>&quot;Now&quot;</strong> tag and a brighter border.</p>
+<p>Tapping a window expands it to show a plain-English explanation of why this window is favorable or unfavorable.</p>
+<h4 id="hora-calculation-algorithm">Hora calculation algorithm</h4>
+<pre class="hljs"><code><div>Chaldean order: Sun → Venus → Mercury → Moon → Saturn → Jupiter → Mars → (repeat)
+
+1. Find the planet ruling today's weekday:
+     Sunday=Sun, Monday=Moon, Tuesday=Mars, Wednesday=Mercury,
+     Thursday=Jupiter, Friday=Venus, Saturday=Saturn
+2. That planet rules Hora 1, starting at local sunrise
+3. Each subsequent hora lasts exactly 60 minutes
+4. Cycle through Chaldean order continuously for all 24 hours
+5. For each pre-defined window time, find which hora is active
+</div></code></pre>
+<h4 id="low-energy-window-table-approximate-sunrise-630-am">Low energy window table (approximate, sunrise ~6:30 AM)</h4>
+<p><em>Internally this is known as &quot;Rahu Kaal&quot; — a standard Vedic calculation for the least favorable daily window. Never shown to users by this name.</em></p>
+<table>
+<thead>
+<tr>
+<th>Weekday</th>
+<th>Low energy window</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sunday</td>
+<td>4:30 – 6:00 PM</td>
+</tr>
+<tr>
+<td>Monday</td>
+<td>7:30 – 9:00 AM</td>
+</tr>
+<tr>
+<td>Tuesday</td>
+<td>3:00 – 4:30 PM</td>
+</tr>
+<tr>
+<td>Wednesday</td>
+<td>12:00 – 1:30 PM</td>
+</tr>
+<tr>
+<td>Thursday</td>
+<td>1:30 – 3:00 PM</td>
+</tr>
+<tr>
+<td>Friday</td>
+<td>10:30 AM – 12:00 PM</td>
+</tr>
+<tr>
+<td>Saturday</td>
+<td>9:00 – 10:30 AM</td>
+</tr>
+</tbody>
+</table>
+<p>In production: the low energy window is calculated as <code>(sunrise_to_sunset / 8) × rahu_kaal_index_by_weekday</code>. This is a standard Vedic formula requiring actual sunrise/sunset times.</p>
+<h4 id="storage">Storage</h4>
+<p>No storage needed. Computed at render time from <code>vaara</code> + local sunrise time. Pre-computed into <code>today_summary_cache</code> alongside other daily data.</p>
+<hr>
+<h3 id="block-9-cosmic-body-map">Block 9: Cosmic Body Map</h3>
+<p><strong>AI: NO</strong> — fully deterministic. Nakshatra-to-body-part mapping is a fixed lookup table (standard Vedic system).<br>
+<strong>Placement:</strong> After Block 8 (Power Windows), before Block 10 (Daily Oracle).<br>
+<strong>Purpose:</strong> Shows users where today's cosmic energy lands in their body. Unique — no competitor has this. Creates a moment of self-awareness that bridges astrology and wellbeing. Read-only block; no interaction required.</p>
+<h4 id="what-is-displayed">What is displayed</h4>
+<p>A two-part block:</p>
+<ol>
+<li><strong>Body focus line:</strong> The nakshatra-governed body area for today, plain English.</li>
+<li><strong>Awareness tip:</strong> A single practical sentence — what to notice, protect, or nurture in that area today.</li>
+</ol>
+<p><strong>Visual:</strong> A simple schematic body outline (SVG) with the governed area highlighted in the day's accent colour. On the right: the text description. Tapping the highlighted zone shows the full tip.</p>
+<pre class="hljs"><code><div>🫁  PUSHYA DAY
+Body focus: chest, lungs, stomach
+&quot;Digestive energy is more sensitive today —
+ eat lighter and avoid skipping meals&quot;
+</div></code></pre>
+<h4 id="nakshatra-%E2%86%92-body-part-mapping-full-27-entry-table">Nakshatra → body part mapping (full 27-entry table)</h4>
+<table>
+<thead>
+<tr>
+<th>Nakshatra</th>
+<th>Body area</th>
+<th>Awareness tip</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ashwini</td>
+<td>head, brain</td>
+<td>Sharp starts today — protect against headaches from over-exertion</td>
+</tr>
+<tr>
+<td>Bharani</td>
+<td>head, forehead</td>
+<td>Mental load is heavy today — step outside and breathe</td>
+</tr>
+<tr>
+<td>Krittika</td>
+<td>eyes, neck, shoulders</td>
+<td>Screen fatigue hits harder — take visual breaks every 45 min</td>
+</tr>
+<tr>
+<td>Rohini</td>
+<td>throat, mouth, face</td>
+<td>Communication energy is high — use your voice deliberately</td>
+</tr>
+<tr>
+<td>Mrigashira</td>
+<td>throat, upper arms</td>
+<td>Shoulders carry today's tension — stretch before bed</td>
+</tr>
+<tr>
+<td>Ardra</td>
+<td>shoulders, chest</td>
+<td>Emotional weight sits in the upper body today — notice tightness</td>
+</tr>
+<tr>
+<td>Punarvasu</td>
+<td>fingers, lungs, ears</td>
+<td>Breathing is shallower on Punarvasu days — slow inhales help</td>
+</tr>
+<tr>
+<td>Pushya</td>
+<td>chest, stomach, lungs</td>
+<td>Digestive energy is sensitive — eat lighter and avoid skipping meals</td>
+</tr>
+<tr>
+<td>Ashlesha</td>
+<td>lungs, joints, knees</td>
+<td>Joints need movement — sitting for long periods will slow you down</td>
+</tr>
+<tr>
+<td>Magha</td>
+<td>spine, heart</td>
+<td>Heart energy is amplified — check in with what you're carrying emotionally</td>
+</tr>
+<tr>
+<td>Purva Phalguni</td>
+<td>heart, back, spine</td>
+<td>Posture affects your mood today more than usual — stand tall</td>
+</tr>
+<tr>
+<td>Uttara Phalguni</td>
+<td>hands, intestines, digestion</td>
+<td>Gut feelings are literally physical today — trust abdominal signals</td>
+</tr>
+<tr>
+<td>Hasta</td>
+<td>hands, bowels</td>
+<td>Detail work with hands is energised — good day for crafting, writing, or cooking</td>
+</tr>
+<tr>
+<td>Chitra</td>
+<td>forehead, kidneys</td>
+<td>Kidney energy benefits from hydration — drink more water than usual</td>
+</tr>
+<tr>
+<td>Swati</td>
+<td>skin, chest, kidneys</td>
+<td>Skin is more reactive today — avoid irritants and get fresh air</td>
+</tr>
+<tr>
+<td>Vishakha</td>
+<td>lower abdomen, thighs</td>
+<td>Lower body needs movement — walk, stretch legs, avoid sitting still</td>
+</tr>
+<tr>
+<td>Anuradha</td>
+<td>lower back, hips, thighs</td>
+<td>Lower back tension accumulates — notice and release before evening</td>
+</tr>
+<tr>
+<td>Jyeshtha</td>
+<td>neck, tongue, right side</td>
+<td>Speaking clearly matters more today — slow down before you respond</td>
+</tr>
+<tr>
+<td>Mula</td>
+<td>feet, lower back</td>
+<td>Grounding energy sits in the feet — walk barefoot or get outside</td>
+</tr>
+<tr>
+<td>Purva Ashadha</td>
+<td>thighs, hips</td>
+<td>Hip flexibility and movement ease the day's energy</td>
+</tr>
+<tr>
+<td>Uttara Ashadha</td>
+<td>thighs, knees, skin</td>
+<td>Knees and thighs carry today's drive — move them to feel the flow</td>
+</tr>
+<tr>
+<td>Shravana</td>
+<td>ears, legs</td>
+<td>Listening is your strongest sense today — hear before speaking</td>
+</tr>
+<tr>
+<td>Dhanishtha</td>
+<td>ankles, back</td>
+<td>Ankles and calves need gentle movement — stretch before long walks</td>
+</tr>
+<tr>
+<td>Shatabhisha</td>
+<td>ankles, calves, circulatory</td>
+<td>Circulation benefits from movement — avoid sitting for more than 1 hr</td>
+</tr>
+<tr>
+<td>Purva Bhadrapada</td>
+<td>feet, calves</td>
+<td>Feet ground you on Purva Bhadrapada — a short walk resets your state</td>
+</tr>
+<tr>
+<td>Uttara Bhadrapada</td>
+<td>feet, immune system</td>
+<td>Rest supports your immune energy today — don't push through tiredness</td>
+</tr>
+<tr>
+<td>Revati</td>
+<td>feet, digestive system</td>
+<td>A gentle walk and a lighter evening meal serve you well today</td>
+</tr>
+</tbody>
+</table>
+<h4 id="storage">Storage</h4>
+<p>No storage needed. Computed from <code>nakshatra</code> (today's value from panchang). Pre-included in <code>today_summary_cache</code> payload alongside other daily data.</p>
+<hr>
+<h3 id="block-10-daily-oracle">Block 10: Daily Oracle</h3>
+<p><strong>AI: NO</strong> — fully deterministic. Three cards are pre-assigned per nakshatra; card content never changes within a day.<br>
+<strong>Placement:</strong> Between Block 7 (Your Day) and Block 11 (Moon Streak).<br>
+<strong>Purpose:</strong> Adds a tactile, ritual-like interaction; gives the user something to think about; increases session dwell time.</p>
+<h4 id="behaviour">Behaviour</h4>
+<ol>
+<li>Three face-down cards are shown. Each has a name visible on the back: <strong>The Star</strong>, <strong>The Path</strong>, <strong>The Mirror</strong>.</li>
+<li>Cards flip with a CSS 3D animation when tapped.</li>
+<li>Once one card is flipped, the other two become faded and non-interactive.</li>
+<li>User cannot un-pick for the day (the picked state persists until midnight reset).</li>
+<li>Below the cards: &quot;Tap a card to reveal today's message&quot; → changes to &quot;✓ Your message for today&quot; after pick.</li>
+</ol>
+<h4 id="card-assignment-deterministic">Card assignment (deterministic)</h4>
+<pre class="hljs"><code><div>nakshatra_index = index of nakshatra in canonical 27-nakshatra list (0–26)
+quality_group   = nakshatra_index % 3  →  0=Deva, 1=Manava, 2=Rakshasa
+
+For each quality group, 3 fixed card messages are stored in a lookup table:
+  oracle_messages[nakshatra_name][card_index]  →  message string
+</div></code></pre>
+<p>The messages are pre-written for all 27 nakshatras × 3 cards = <strong>81 unique messages</strong>.<br>
+All 81 are stored in a <code>ORACLE_CARDS</code> constant on the backend (no DB lookup needed).<br>
+Same nakshatra on the same day always returns the same 3 messages.</p>
+<h4 id="storage">Storage</h4>
+<pre class="hljs"><code><div>user_checkins table → add column:
+  oracle_card_picked: SMALLINT  nullable  (0, 1, or 2 — index of picked card)
+  oracle_picked_at:   TIMESTAMP nullable
+</div></code></pre>
+<hr>
+<h3 id="block-11-moon-streak--progress-ring">Block 11: Moon Streak + Progress Ring</h3>
+<p><strong>AI: NO</strong> — fully deterministic.</p>
+<h4 id="check-in-logic">Check-in logic</h4>
+<p>A check-in is recorded automatically when the user opens the Today page. One check-in per calendar day per user, based on the user's local date (derived from their timezone). No action required from the user.</p>
+<h4 id="streak-calculation">Streak calculation</h4>
+<p>The streak is the number of consecutive calendar days (in the user's local timezone) on which the user opened the app, ending today. If a day is missed, the streak resets to 1 on the next check-in.</p>
+<h4 id="progress-ring">Progress ring</h4>
+<p>The ring shows progress within the <strong>current lunar cycle</strong> (29.5 days, from last Amavasya to next Purnima).</p>
+<pre class="hljs"><code><div>days_in_cycle = 29
+days_elapsed  = today_tithi_number  (1–30)
+progress_pct  = days_elapsed / days_in_cycle
+
+Ring fills up:
+  Amavasya (day 1)  → 0%   🌑
+  Day 7             → 24%  🌒
+  Day 8             → 28%  🌓
+  Day 15 (Purnima)  → 52%  🌔→🌕
+  Day 22            → 76%  🌖
+  Day 29            → 99%  🌘
+  Amavasya again    → 0% (ring resets with animation)
+</div></code></pre>
+<h4 id="moon-phase-icon-strip-last-9-days">Moon phase icon strip (last 9 days)</h4>
+<p>For each of the last 9 check-in days, show the moon phase icon for that date. Icons are real — computed from that day's tithi, not decorative.</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getMoonPhaseIcon</span>(<span class="hljs-params">tithi_number</span>) </span>{
+  <span class="hljs-keyword">if</span> (tithi_number === <span class="hljs-number">30</span>)        <span class="hljs-keyword">return</span> <span class="hljs-string">"🌑"</span>
+  <span class="hljs-keyword">if</span> (tithi_number &lt;= <span class="hljs-number">7</span>)          <span class="hljs-keyword">return</span> <span class="hljs-string">"🌒"</span>
+  <span class="hljs-keyword">if</span> (tithi_number === <span class="hljs-number">8</span>)         <span class="hljs-keyword">return</span> <span class="hljs-string">"🌓"</span>
+  <span class="hljs-keyword">if</span> (tithi_number &lt;= <span class="hljs-number">14</span>)         <span class="hljs-keyword">return</span> <span class="hljs-string">"🌔"</span>
+  <span class="hljs-keyword">if</span> (tithi_number === <span class="hljs-number">15</span>)        <span class="hljs-keyword">return</span> <span class="hljs-string">"🌕"</span>
+  <span class="hljs-keyword">if</span> (tithi_number &lt;= <span class="hljs-number">22</span>)         <span class="hljs-keyword">return</span> <span class="hljs-string">"🌖"</span>
+  <span class="hljs-keyword">if</span> (tithi_number === <span class="hljs-number">23</span>)        <span class="hljs-keyword">return</span> <span class="hljs-string">"🌗"</span>
+  <span class="hljs-keyword">return</span>                                 <span class="hljs-string">"🌘"</span>
+}
+</div></code></pre>
+<h4 id="14-day-progress-incentive">14-day progress incentive</h4>
+<p>After 7 days in a streak, a second goal appears below the ring:</p>
+<pre class="hljs"><code><div>Day 8–13:  &quot;Keep going — reach 14 days to unlock the Moonwalker badge 🌙&quot;
+Day 14:    &quot;🎉 You made it! Moonwalker badge unlocked.&quot;
+Day 15–28: Next goal appears: &quot;Full Lunar Cycle — {n} days to go 🌕&quot;
+</div></code></pre>
+<p>This gives a <strong>visible next milestone</strong> at every stage, so there is always a reason to come back.</p>
+<h4 id="grace-day-display-in-block-6">Grace Day display in Block 6</h4>
+<p>When a grace day was used in the current 7-day rolling period, the Moon Streak block shows:</p>
+<pre class="hljs"><code><div>Grace tag: &quot;🛡️ Protected&quot;   (next to the streak number)
+Note:      &quot;🛡️ Your streak was protected yesterday. One grace day used this week.&quot;
+</div></code></pre>
+<p>See also Block 0 for the grace day algorithm and storage details.</p>
+<hr>
+<h3 id="block-12-achievements">Block 12: Achievements</h3>
+<p><strong>AI: NO</strong></p>
+<p>Shows the 3 most recently earned badges as a horizontal row, plus a <strong>&quot;View all →&quot;</strong> button that opens the full achievements modal.</p>
+<h4 id="view-all-achievements-modal">View All Achievements Modal</h4>
+<p>A full-screen overlay on the Today page showing all badges organised by category. No navigation away from the page required — modal slides up inside the phone frame.</p>
+<p><strong>Structure:</strong></p>
+<pre class="hljs"><code><div>┌──────────────────────────────────────┐
+│  All Achievements          [✕ Close] │
+│  ──────────────────────────────────  │
+│  [Cosmic Events] [Streak] [Loyalty]  │  ← category tabs (scroll)
+│  [Social] [Events]                   │
+│  ──────────────────────────────────  │
+│  🌕  Full Moon Witness               │
+│      Check in on Purnima     ✓ ×3    │  ← earned: ✓ + count if repeatable
+│  ──────────────────────────────────  │
+│  🌑  New Moon Keeper                 │
+│      Check in on Amavasya   🔒       │  ← locked: 40% opacity + lock icon
+│  ...                                 │
+└──────────────────────────────────────┘
+</div></code></pre>
+<p><strong>Badge categories (5 tabs):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Badges</th>
+<th>Repeatable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cosmic Events</td>
+<td>Full Moon Witness, New Moon Keeper, Star Day, Lunar Birthday, Your Day, Rare Alignment, Eclipse Chaser, Solstice Keeper</td>
+<td>Yes (all)</td>
+</tr>
+<tr>
+<td>Streak Milestones</td>
+<td>First Spark (3d), First Week (7d), Moonwalker (14d), Full Cycle (29d), Three Moons (90d), Half Year (180d), Year of Stars (365d)</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Loyalty</td>
+<td>First Steps (3d), One Week (7d), One Month (30d), Three Months (90d), Half Year (180d), One Full Year (365d)</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Social</td>
+<td>First Connection, Rising Star (5 matches), Star Connector (20 matches), Sky Sharer (share card), Cosmic Invite (refer a friend)</td>
+<td>Partial</td>
+</tr>
+<tr>
+<td>Events</td>
+<td>Star Gatherer (event check-in), Event Match, Event Regular (3+ events)</td>
+<td>Partial</td>
+</tr>
+</tbody>
+</table>
+<p><strong>States:</strong></p>
+<ul>
+<li><strong>Earned, repeatable:</strong> ✓ badge on right + &quot;×{count}&quot; if count &gt; 1</li>
+<li><strong>Earned, one-time:</strong> ✓ badge on right</li>
+<li><strong>Locked:</strong> 40% opacity, 🔒 icon on right</li>
+</ul>
+<hr>
+<h3 id="block-13-compatibility-pulse">Block 13: Compatibility Pulse</h3>
+<p><strong>AI: NO</strong> — fully deterministic score based on panchang delta between user and each match.<br>
+<strong>Placement:</strong> Between Block 12 (Achievements) and Block 14 (Reflect on Today).<br>
+<strong>Purpose:</strong> Bridges the Today page with the Connect tab; creates a daily reason to open Connect; gives matched users a shared topic of conversation.</p>
+<h4 id="state-a--connect-onboarding-not-completed">State A — Connect onboarding not completed</h4>
+<p>If <code>user.connect_onboarding_completed = false</code>, the block shows a CTA card:</p>
+<pre class="hljs"><code><div>┌─────────────────────────────────────────┐
+│  💫                                     │
+│  See your energy match with your        │
+│  connections today                      │
+│                                         │
+│  Compatibility changes every day based  │
+│  on your astrological alignment.        │
+│  Complete your Connect profile to       │
+│  unlock it.                             │
+│                                         │
+│  [ Complete Connect profile → ]         │
+└─────────────────────────────────────────┘
+</div></code></pre>
+<p>The CTA button deep-links to the Connect onboarding flow.</p>
+<h4 id="state-b--connect-onboarding-completed">State B — Connect onboarding completed</h4>
+<p>Shows 1–3 match cards (limited to current active matches in the Connect tab).</p>
+<p>Each card displays:</p>
+<ul>
+<li>Avatar emoji + Name + Birth nakshatra</li>
+<li>Compatibility score (0–100) with colour-coded label</li>
+<li>Score label: <strong>Strong match</strong> (≥80) · <strong>Good match</strong> (≥60) · <strong>Different energies</strong> (≥40) · <strong>Rough day for connection</strong> (&lt;40)</li>
+<li>Tap to expand → shows one-sentence insight explaining <em>why</em> today's scores align or differ</li>
+</ul>
+<h4 id="compatibility-score-algorithm">Compatibility score algorithm</h4>
+<pre class="hljs"><code><div>For user A and user B, on date D:
+
+score_A  = average of A's 6 category scores for date D
+score_B  = average of B's 6 category scores for date D
+delta    = |score_A – score_B|
+
+compat_score = 100 – round(delta * 0.8)   // clamp to [15, 99]
+</div></code></pre>
+<p>The one-sentence insight is selected from a fixed insight template bank:</p>
+<pre class="hljs"><code><div>templates keyed by (A_band, B_band):
+  ('high', 'high')     → &quot;Both at peak energy today — rare and powerful.&quot;
+  ('high', 'moderate') → &quot;{A_name}'s energy dominates today — a good listening day for {B_name}.&quot;
+  ('high', 'low')      → &quot;Strong pull from {A_name}, quiet from {B_name} — give space.&quot;
+  ('moderate', 'high') → &quot;Their energy is higher today — let them lead the conversation.&quot;
+  ('moderate', 'moderate') → &quot;Even energy — steady, comfortable day for connection.&quot;
+  ('moderate', 'low')  → &quot;Different rhythms today — keep interactions light.&quot;
+  ('low', 'low')       → &quot;Both in quiet energy — depth over activity.&quot;
+  etc.
+</div></code></pre>
+<p>All templates are deterministic (same inputs → same output).</p>
+<h4 id="storage">Storage</h4>
+<p>No new storage needed. Compatibility score is calculated at read time from today's cached scores for both users. Results are cached in <code>today_summary_cache</code> alongside the user's own daily data.</p>
+<hr>
+<h3 id="block-14-reflect-on-today">Block 14: Reflect on Today</h3>
+<p><strong>AI: NO</strong> — user journal entry.</p>
+<p><strong>Placement:</strong> After Block 13 (Compatibility Pulse), before Block 15 (Ask the Stars).</p>
+<p><strong>Rationale:</strong> Reflection is placed before Tomorrow's Preview because the natural flow is: <em>review the day → plan for tomorrow</em>. It also acts as a soft gate that makes Tomorrow's Preview feel earned rather than just visible.</p>
+<p><strong>UI:</strong></p>
+<pre class="hljs"><code><div>REFLECT ON TODAY
+
+[How did your day actually go?              ]
+[                                            ]   ← free text textarea
+[                                            ]
+                                  [ Save reflection ]
+</div></code></pre>
+<p>On save:</p>
+<ul>
+<li>Textarea is replaced by: ✓ confirmation view showing the saved text on a subtle green background</li>
+<li>Saved to <code>user_reflections</code> with <code>type = 'reflection'</code>, <code>target_date = today</code></li>
+</ul>
+<p><strong>Tone:</strong> The prompt is deliberately open-ended (&quot;How did your day actually go?&quot;) — not &quot;What went well?&quot; or &quot;What are you grateful for?&quot; which feel forced. The goal is honest reflection, not positive spin.</p>
+<p><strong>Optional follow-up tomorrow:</strong> When the user opens the app the next morning, a soft nudge reads: <em>&quot;Yesterday you reflected: &quot;{excerpt}...&quot; → {link to full text}&quot;</em> — only if they had a low-energy or high-energy day (not moderate).</p>
+<hr>
+<h3 id="block-15-ask-the-stars">Block 15: Ask the Stars</h3>
+<p><strong>AI: NO</strong> — fully deterministic. User types any free-text question, receives a pre-written oracular answer from a fixed 50-entry bank, selected by nakshatra × tithi.<br>
+<strong>Placement:</strong> Between Block 14 (Reflect on Today) and Block 17 (Tomorrow's Preview).<br>
+<strong>Purpose:</strong> Creates the feeling of mystical guidance while requiring zero AI. The ritual — typing a real question, a brief &quot;reading&quot; animation, a meaningful answer — is emotionally resonant and highly shareable.</p>
+<h4 id="behaviour">Behaviour</h4>
+<ol>
+<li>User sees: title + prompt (&quot;What's on your mind today?&quot;) + text input.</li>
+<li>User types any question and taps &quot;Ask the stars →&quot;.</li>
+<li><strong>1.7-second reading animation</strong>: a pulsing orb with the ✦ symbol and text &quot;Reading {nakshatra} nakshatra…&quot;</li>
+<li>Answer is revealed with attribution: nakshatra name + tithi number.</li>
+<li>Once answered, the input is replaced — the user cannot re-ask today.</li>
+<li>A small note reads: <em>&quot;This answer is set by today's sky. It won't change until tomorrow.&quot;</em></li>
+</ol>
+<h4 id="answer-selection-algorithm">Answer selection algorithm</h4>
+<pre class="hljs"><code><div>nakshatra_idx = canonical index of today's nakshatra (0–26)
+answer_idx    = (nakshatra_idx × 3 + tithi) % 50
+answer        = ANSWER_BANK[answer_idx]
+</div></code></pre>
+<p>The question text is <strong>not used for selection</strong> — the answer is purely astronomical. This is intentional: the same cosmic sky answers everyone the same way today, regardless of what they asked. This is philosophically coherent with Vedic astrology and creates the &quot;the stars knew what I needed to hear&quot; moment.</p>
+<h4 id="answer-bank">Answer bank</h4>
+<p>50 unique responses covering the full spectrum of oracle archetypes:</p>
+<ul>
+<li>Direct yes / no / not-yet</li>
+<li>Action nudges (&quot;Move forward. The hesitation is fear, not wisdom.&quot;)</li>
+<li>Patience nudges (&quot;Wait three days. The answer will be clearer after the moon shifts.&quot;)</li>
+<li>Reflective / reframe (&quot;The answer is already inside you. You're asking the stars to confirm it.&quot;)</li>
+<li>Mystery / trust (&quot;This is not a door you open. It opens itself when ready.&quot;)</li>
+</ul>
+<p>The bank is stored as a constant array in the codebase — no database table needed.</p>
+<h4 id="storage">Storage</h4>
+<pre class="hljs"><code><div>user_checkins → add column:
+  star_question: TEXT  nullable   (the question text, stored for user's history)
+  star_answer_idx: SMALLINT nullable  (the index used, for audit/analytics)
+  star_asked_at: TIMESTAMP nullable
+</div></code></pre>
+<p>The stored answer index allows us to reconstruct the exact answer shown to the user, even if the bank order changes (we keep a versioned snapshot).</p>
+<hr>
+<h3 id="block-16-vedic-dice">Block 16: Vedic Dice</h3>
+<p><strong>AI: NO</strong> — fully deterministic. Number derived from nakshatra index + tithi modulo 9, mapped to Vedic number meanings.<br>
+<strong>Placement:</strong> After Block 15 (Ask the Stars), before Block 17 (Tomorrow's Preview).<br>
+<strong>Purpose:</strong> A tactile, one-tap daily ritual. User gets their cosmic number for the day — a number 1–9 with a short meaning. The satisfying dice-roll animation creates a habit loop. Earns an achievement on first use. <strong>One roll per day only</strong> (resets at midnight); this scarcity drives daily return.</p>
+<h4 id="what-is-displayed">What is displayed</h4>
+<ul>
+<li>A stylised die showing today's Vedic number (1–9)</li>
+<li>A one-word quality for that number (e.g. &quot;Clarity&quot;, &quot;Strength&quot;, &quot;Expansion&quot;)</li>
+<li>A two-sentence interpretation personalised to today's sky (nakshatra + number quality)</li>
+<li>A note: <em>&quot;Your cosmic number resets at midnight&quot;</em></li>
+</ul>
+<pre class="hljs"><code><div>  ┌───────────┐
+  │     7     │  COSMIC NUMBER
+  │  ● ● ● ●  │  ANALYSIS
+  │  ● ● ●    │
+  └───────────┘
+  Quality: WISDOM
+  &quot;Seven is the number of deep knowing. Today's
+   Pushya sky amplifies this — trust what you
+   already understand, even if you can't explain it.&quot;
+</div></code></pre>
+<h4 id="roll-animation">Roll animation</h4>
+<ol>
+<li>User taps &quot;Roll&quot; button (large, tactile)</li>
+<li>Die face cycles rapidly through 1–9 (300ms, 9 frames at 33ms each)</li>
+<li>Slows and <strong>lands on the cosmic number</strong> (~400ms deceleration)</li>
+<li>Number face freezes; quality word fades in; interpretation slides up</li>
+<li>After reveal: &quot;Roll&quot; button becomes &quot;Rolled ✓&quot; and is disabled for the day</li>
+</ol>
+<p>Total animation: ~700ms — feels magical, runs entirely in CSS/JS, no network call.</p>
+<h4 id="number-selection-algorithm">Number selection algorithm</h4>
+<pre class="hljs"><code><div>nakshatra_idx = canonical nakshatra index (0–26)
+cosmic_number = ((nakshatra_idx + tithi - 1) % 9) + 1
+</div></code></pre>
+<p>This produces a number 1–9. Same sky = same number all day. Changes daily.</p>
+<h4 id="vedic-number-meanings-the-9-entry-lookup-table">Vedic number meanings (the 9-entry lookup table)</h4>
+<table>
+<thead>
+<tr>
+<th>Number</th>
+<th>One-word quality</th>
+<th>Full interpretation template</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>New Beginnings</td>
+<td>&quot;One is the number of first steps. Today is favoured for starting — an action taken now carries more force than one taken later.&quot;</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Balance</td>
+<td>&quot;Two is the number of partnership. What needs to be weighed, shared, or aligned? Today responds well to cooperation over solo effort.&quot;</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Expression</td>
+<td>&quot;Three is the number of creativity and communication. Say what needs saying. Create what wants to be made. Today amplifies your voice.&quot;</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Foundation</td>
+<td>&quot;Four is the number of structure and stability. Build something that will last — plans made today have staying power.&quot;</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Movement</td>
+<td>&quot;Five is the number of change and momentum. Expect movement in situations that felt stuck. Stay adaptable — the shift is real.&quot;</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Harmony</td>
+<td>&quot;Six is the number of beauty and care. Relationships and your environment respond to attention today. Small acts of kindness carry.&quot;</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Wisdom</td>
+<td>&quot;Seven is the number of deep knowing. Trust what you already understand, even if you can't fully explain it yet.&quot;</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Power</td>
+<td>&quot;Eight is the number of authority and results. Today is for decisions, leadership, and completing what you started.&quot;</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Completion</td>
+<td>&quot;Nine is the number of endings that clear the path. Something finishing today is making space. Let it go cleanly.&quot;</td>
+</tr>
+</tbody>
+</table>
+<h4 id="storage">Storage</h4>
+<pre class="hljs"><code><div>user_checkins → add column:
+  dice_rolled_at: TIMESTAMP nullable   (null = not rolled today)
+  dice_number: SMALLINT nullable        (1–9, for analytics/history)
+</div></code></pre>
+<p>The rolled state persists per calendar day (reset at midnight local time). If user rolls, closes app, and returns — they see their result, not a new roll.</p>
+<hr>
+<h3 id="block-17-tomorrows-preview--tomorrows-intention">Block 17: Tomorrow's Preview + Tomorrow's Intention</h3>
+<p><strong>AI: NO</strong> — deterministic facts + fixed templates.</p>
+<p><strong>Visibility:</strong> only after 21:00 in the user's local timezone. Before 21:00 this block does not exist on screen.</p>
+<h4 id="priority-order-first-match-wins">Priority order (first match wins)</h4>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">buildTomorrowPreview</span>(<span class="hljs-params">tomorrowPanchang, natal, tomorrowScores</span>) </span>{
+  <span class="hljs-keyword">const</span> tomorrow_tithi    = tomorrowPanchang.tithi.number
+  <span class="hljs-keyword">const</span> tomorrow_vaara    = tomorrowPanchang.vaara
+  <span class="hljs-keyword">const</span> tomorrow_nakshatra = tomorrowPanchang.nakshatra
+  <span class="hljs-keyword">const</span> tomorrow_avg      = mean(<span class="hljs-built_in">Object</span>.values(tomorrowScores))
+  <span class="hljs-keyword">const</span> tomorrow_top      = topCategory(tomorrowScores)
+
+  <span class="hljs-keyword">const</span> condition =
+    (tomorrow_tithi === <span class="hljs-number">15</span>)                                              ? <span class="hljs-string">"purnima"</span>
+  : (tomorrow_tithi === <span class="hljs-number">30</span>)                                              ? <span class="hljs-string">"amavasya"</span>
+  : (tomorrow_tithi === <span class="hljs-number">14</span> || tomorrow_tithi === <span class="hljs-number">29</span>)                     ? <span class="hljs-string">"chaturdashi"</span>
+  : (normalize(tomorrow_nakshatra) === normalize(natal.nakshatra))       ? <span class="hljs-string">"nakshatra_birthday"</span>
+  : (tomorrow_tithi === natal.tithi_number)                              ? <span class="hljs-string">"tithi_birthday"</span>
+  : (tomorrow_avg &gt;= <span class="hljs-number">75</span>)                                                 ? <span class="hljs-string">"high_energy"</span>
+  : (tomorrow_avg &lt;= <span class="hljs-number">35</span>)                                                 ? <span class="hljs-string">"low_energy"</span>
+  : (tomorrow_vaara === <span class="hljs-string">"Friday"</span>)                                        ? <span class="hljs-string">"venus_day"</span>
+  : (tomorrow_vaara === <span class="hljs-string">"Thursday"</span>)                                      ? <span class="hljs-string">"jupiter_day"</span>
+  : (tomorrow_vaara === <span class="hljs-string">"Monday"</span>)                                        ? <span class="hljs-string">"moon_day"</span>
+  :                                                                        <span class="hljs-string">"default"</span>
+
+  <span class="hljs-keyword">return</span> { ...TOMORROW_TEMPLATES[condition], <span class="hljs-attr">top_category</span>: tomorrow_top, <span class="hljs-attr">label</span>: energyLabel(tomorrow_avg) }
+}
+</div></code></pre>
+<h4 id="templates-10">Templates (10)</h4>
+<pre class="hljs"><code><div><span class="hljs-keyword">const</span> TOMORROW_TEMPLATES = {
+
+  <span class="hljs-attr">purnima</span>: {
+    <span class="hljs-attr">icon</span>: <span class="hljs-string">"🌕"</span>,
+    <span class="hljs-attr">headline</span>: <span class="hljs-string">"Tomorrow is Full Moon"</span>,
+    <span class="hljs-attr">body</span>: <span class="hljs-string">"Full Moon days are rare and powerful. Your Love and Social energy will peak. Come back tomorrow — there's a badge waiting."</span>
+  },
+
+  <span class="hljs-attr">amavasya</span>: {
+    <span class="hljs-attr">icon</span>: <span class="hljs-string">"🌑"</span>,
+    <span class="hljs-attr">headline</span>: <span class="hljs-string">"Tomorrow is New Moon"</span>,
+    <span class="hljs-attr">body</span>: <span class="hljs-string">"New Moon is the best day to set clear intentions and start fresh. Come back tomorrow morning to open a clean cycle."</span>
+  },
+
+  <span class="hljs-attr">chaturdashi</span>: {
+    <span class="hljs-attr">icon</span>: <span class="hljs-string">"⚡"</span>,
+    <span class="hljs-attr">headline</span>: <span class="hljs-string">"Tomorrow is an intense day"</span>,
+    <span class="hljs-attr">body</span>: <span class="hljs-string">"The 14th tithi carries high tension energy. Avoid major decisions and confrontations — let it pass and the Full or New Moon follows."</span>
+  },
+
+  <span class="hljs-attr">nakshatra_birthday</span>: {
+    <span class="hljs-attr">icon</span>: <span class="hljs-string">"⭐"</span>,
+    <span class="hljs-attr">headline</span>: <span class="hljs-string">"Tomorrow is Your Star Day"</span>,
+    <span class="hljs-attr">body</span>: <span class="hljs-string">"The Moon returns to your birth nakshatra. A personal high-energy day. Come back tomorrow to collect your badge."</span>
+  },
+
+  <span class="hljs-attr">tithi_birthday</span>: {
+    <span class="hljs-attr">icon</span>: <span class="hljs-string">"🎂"</span>,
+    <span class="hljs-attr">headline</span>: <span class="hljs-string">"Tomorrow is Your Lunar Birthday"</span>,
+    <span class="hljs-attr">body</span>: <span class="hljs-string">"The Moon reaches the same phase it was in when you were born. A quiet but meaningful personal day — good for reflection and love."</span>
+  },
+
+  <span class="hljs-attr">high_energy</span>: {
+    <span class="hljs-attr">icon</span>: <span class="hljs-string">"⚡"</span>,
+    <span class="hljs-attr">headline</span>: <span class="hljs-string">"Tomorrow looks powerful"</span>,
+    <span class="hljs-attr">body</span>: <span class="hljs-string">"Your {top_category} energy will be at its peak. A good day to act on something important — check back in the morning."</span>
+  },
+
+  <span class="hljs-attr">low_energy</span>: {
+    <span class="hljs-attr">icon</span>: <span class="hljs-string">"🌙"</span>,
+    <span class="hljs-attr">headline</span>: <span class="hljs-string">"Tomorrow is a rest day"</span>,
+    <span class="hljs-attr">body</span>: <span class="hljs-string">"The stars are quiet tomorrow. A good day for inner work, rest, and letting things settle rather than pushing forward."</span>
+  },
+
+  <span class="hljs-attr">venus_day</span>: {
+    <span class="hljs-attr">icon</span>: <span class="hljs-string">"💛"</span>,
+    <span class="hljs-attr">headline</span>: <span class="hljs-string">"Tomorrow is Venus Day (Friday)"</span>,
+    <span class="hljs-attr">body</span>: <span class="hljs-string">"The best day of the week for love, beauty, and connection. Your Love and Social energy will be elevated. Make plans tonight."</span>
+  },
+
+  <span class="hljs-attr">jupiter_day</span>: {
+    <span class="hljs-attr">icon</span>: <span class="hljs-string">"🌟"</span>,
+    <span class="hljs-attr">headline</span>: <span class="hljs-string">"Tomorrow is Jupiter Day (Thursday)"</span>,
+    <span class="hljs-attr">body</span>: <span class="hljs-string">"Jupiter expands what it touches. Tomorrow favours financial decisions, growth conversations, and anything you want to build long-term."</span>
+  },
+
+  <span class="hljs-attr">moon_day</span>: {
+    <span class="hljs-attr">icon</span>: <span class="hljs-string">"🌙"</span>,
+    <span class="hljs-attr">headline</span>: <span class="hljs-string">"Tomorrow is Moon Day (Monday)"</span>,
+    <span class="hljs-attr">body</span>: <span class="hljs-string">"The Moon's own day — strongest for family, emotional conversations, and intuitive decisions. Let feeling lead tomorrow."</span>
+  },
+
+  <span class="hljs-attr">default</span>: {
+    <span class="hljs-attr">icon</span>: <span class="hljs-string">"🔮"</span>,
+    <span class="hljs-attr">headline</span>: <span class="hljs-string">"Tomorrow's energy: {label}"</span>,
+    <span class="hljs-attr">body</span>: <span class="hljs-string">"Your {top_category} will be the strongest area. Check back tomorrow morning for the full picture."</span>
+  }
+}
+</div></code></pre>
+<h4 id="tomorrows-intention-block-17i--shown-directly-below-tomorrows-preview">Tomorrow's Intention (Block 17i — shown directly below Tomorrow's Preview)</h4>
+<p>After the preview card, a small input block lets the user write their intention for tomorrow:</p>
+<pre class="hljs"><code><div>✦ Set an intention for tomorrow
+[{tomorrowCard.headline} — what will you focus on?   ]
+[                                                      ]
+                                          [ Set intention ]
+</div></code></pre>
+<p><strong>Behavior:</strong></p>
+<ul>
+<li>Free text textarea, max 280 chars</li>
+<li>Saved to <code>user_reflections</code> table with <code>type = 'intention'</code>, <code>target_date = tomorrow</code></li>
+<li>On save: textarea is replaced by confirmation (&quot;✓ {saved text}&quot;)</li>
+<li>Next morning: on Today page load, if <code>today == intention.target_date</code>, show a gentle reminder at the top of the page: &quot;Your intention for today: &quot;{text}&quot;&quot;</li>
+<li>No AI involved</li>
+</ul>
+<p><strong>Storage:</strong></p>
+<pre class="hljs"><code><div>user_reflections {
+  user_id, type, target_date, text, created_at
+}
+</div></code></pre>
+<hr>
+<h3 id="block-18-stories-carousel">Block 18: Stories Carousel</h3>
+<p>No changes from current implementation. Stories are scheduled via admin panel and personalized by nakshatra / moon_sign lookup.</p>
+<hr>
+<h2 id="5-achievement-system--full-spec">5. Achievement System — Full Spec</h2>
+<p>Achievements are earned automatically on check-in. All checks run server-side in <code>POST /checkin</code>.</p>
+<h3 id="types">Types</h3>
+<ul>
+<li><strong>One-time badges:</strong> earned once, live permanently.</li>
+<li><strong>Repeatable badges:</strong> can be earned multiple times (accumulate count). Show <code>× N</code> on the badge.</li>
+<li><strong>Milestone badges:</strong> earned at specific streak thresholds, one-time per threshold.</li>
+</ul>
+<hr>
+<h3 id="category-1-cosmic-events-repeatable">Category 1: Cosmic Events (repeatable)</h3>
+<table>
+<thead>
+<tr>
+<th>Badge ID</th>
+<th>Icon</th>
+<th>Name</th>
+<th>Trigger</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>full_moon_witness</code></td>
+<td>🌕</td>
+<td>Full Moon Witness</td>
+<td>Checked in on Purnima</td>
+<td>Once per Full Moon</td>
+</tr>
+<tr>
+<td><code>new_moon_keeper</code></td>
+<td>🌑</td>
+<td>New Moon Keeper</td>
+<td>Checked in on Amavasya</td>
+<td>Once per New Moon</td>
+</tr>
+<tr>
+<td><code>star_day</code></td>
+<td>⭐</td>
+<td>Star Day</td>
+<td>Checked in on Nakshatra Birthday</td>
+<td>~once/27 days</td>
+</tr>
+<tr>
+<td><code>lunar_birthday</code></td>
+<td>🎂</td>
+<td>Lunar Birthday</td>
+<td>Checked in on Tithi Birthday</td>
+<td>~once/29 days</td>
+</tr>
+<tr>
+<td><code>vaara_birthday</code></td>
+<td>📅</td>
+<td>Your Day</td>
+<td>Checked in on Vaara Birthday</td>
+<td>Weekly</td>
+</tr>
+<tr>
+<td><code>rare_alignment</code></td>
+<td>🌟</td>
+<td>Rare Alignment</td>
+<td>Nakshatra + Tithi + Vaara all match</td>
+<td>A few times/year</td>
+</tr>
+<tr>
+<td><code>eclipse_chaser</code></td>
+<td>🌒</td>
+<td>Eclipse Chaser</td>
+<td>Checked in during lunar eclipse</td>
+<td>Very rare</td>
+</tr>
+<tr>
+<td><code>solar_event</code></td>
+<td>☀️</td>
+<td>Solstice Keeper</td>
+<td>Checked in on solstice or equinox</td>
+<td>4 times/year</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="category-2-streak-milestones-one-time-per-threshold">Category 2: Streak Milestones (one-time per threshold)</h3>
+<table>
+<thead>
+<tr>
+<th>Badge ID</th>
+<th>Icon</th>
+<th>Name</th>
+<th>Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>streak_3</code></td>
+<td>🔥</td>
+<td>First Spark</td>
+<td>3-day streak</td>
+</tr>
+<tr>
+<td><code>streak_7</code></td>
+<td>🔥🔥</td>
+<td>First Week</td>
+<td>7-day streak</td>
+</tr>
+<tr>
+<td><code>streak_14</code></td>
+<td>🌙</td>
+<td>Moonwalker</td>
+<td>14-day streak</td>
+</tr>
+<tr>
+<td><code>streak_29</code></td>
+<td>🌕</td>
+<td>Full Cycle</td>
+<td>29-day streak (one full lunar cycle)</td>
+</tr>
+<tr>
+<td><code>streak_90</code></td>
+<td>✨</td>
+<td>Three Moons</td>
+<td>90-day streak</td>
+</tr>
+<tr>
+<td><code>streak_180</code></td>
+<td>🌠</td>
+<td>Half Year</td>
+<td>180-day streak</td>
+</tr>
+<tr>
+<td><code>streak_365</code></td>
+<td>🏆</td>
+<td>Year of Stars</td>
+<td>365-day streak</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="category-3-time-in-app--loyalty-milestones-one-time">Category 3: Time in App — Loyalty Milestones (one-time)</h3>
+<p>Triggered by <code>account_age_days</code> (days since registration), not streak.</p>
+<table>
+<thead>
+<tr>
+<th>Badge ID</th>
+<th>Icon</th>
+<th>Name</th>
+<th>Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>loyalty_3d</code></td>
+<td>🌱</td>
+<td>First Steps</td>
+<td>3 days since joining</td>
+</tr>
+<tr>
+<td><code>loyalty_7d</code></td>
+<td>🌿</td>
+<td>First Week</td>
+<td>1 week since joining</td>
+</tr>
+<tr>
+<td><code>loyalty_30d</code></td>
+<td>🌳</td>
+<td>One Month</td>
+<td>30 days since joining</td>
+</tr>
+<tr>
+<td><code>loyalty_90d</code></td>
+<td>🌲</td>
+<td>Three Months</td>
+<td>90 days since joining</td>
+</tr>
+<tr>
+<td><code>loyalty_180d</code></td>
+<td>🏔️</td>
+<td>Half Year</td>
+<td>180 days since joining</td>
+</tr>
+<tr>
+<td><code>loyalty_365d</code></td>
+<td>🌌</td>
+<td>One Full Year</td>
+<td>365 days since joining</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="category-4-social--matching-one-time-or-repeatable">Category 4: Social &amp; Matching (one-time or repeatable)</h3>
+<table>
+<thead>
+<tr>
+<th>Badge ID</th>
+<th>Icon</th>
+<th>Name</th>
+<th>Trigger</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>first_match</code></td>
+<td>💫</td>
+<td>First Connection</td>
+<td>First mutual match</td>
+<td>One-time</td>
+</tr>
+<tr>
+<td><code>five_matches</code></td>
+<td>💫💫</td>
+<td>Rising Star</td>
+<td>5 matches total</td>
+<td>One-time</td>
+</tr>
+<tr>
+<td><code>twenty_matches</code></td>
+<td>🌟</td>
+<td>Star Connector</td>
+<td>20 matches total</td>
+<td>One-time</td>
+</tr>
+<tr>
+<td><code>compatibility_reader</code></td>
+<td>🔭</td>
+<td>Cosmic Reader</td>
+<td>Viewed compatibility report</td>
+<td>One-time</td>
+</tr>
+<tr>
+<td><code>invited_friend</code></td>
+<td>🤝</td>
+<td>Cosmic Invite</td>
+<td>Invited a friend who joined</td>
+<td>Repeatable</td>
+</tr>
+<tr>
+<td><code>shared_today</code></td>
+<td>📲</td>
+<td>Sky Sharer</td>
+<td>Shared Today card to social</td>
+<td>Repeatable</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="category-5-events-repeatable-per-event">Category 5: Events (repeatable per event)</h3>
+<table>
+<thead>
+<tr>
+<th>Badge ID</th>
+<th>Icon</th>
+<th>Name</th>
+<th>Trigger</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>event_checkin</code></td>
+<td>🎪</td>
+<td>Star Gatherer</td>
+<td>Checked in at a Bisou event</td>
+</tr>
+<tr>
+<td><code>event_matched</code></td>
+<td>🎯</td>
+<td>Event Match</td>
+<td>Got a match at an event</td>
+</tr>
+<tr>
+<td><code>event_series</code></td>
+<td>🏅</td>
+<td>Event Regular</td>
+<td>Attended 3+ events</td>
+</tr>
+</tbody>
+</table>
+<p>Events are flagged via the existing event check-in system. Badge is awarded when <code>event_attendance</code> record is created for a user.</p>
+<hr>
+<h3 id="badge-stacking-repeatable-badges">Badge stacking (repeatable badges)</h3>
+<p>Repeatable badges show count and optionally change appearance at milestones:</p>
+<pre class="hljs"><code><div>Full Moon Witness ×1   → 🌕 standard
+Full Moon Witness ×3   → 🌕 silver glow
+Full Moon Witness ×6   → 🌕 gold glow
+Full Moon Witness ×12  → 🌕 with crown (full year)
+</div></code></pre>
+<p>Visual tiers: Standard → Silver → Gold → Crown (at 1×, 3×, 6×, 12+×).</p>
+<hr>
+<h3 id="award-logic-runs-on-every-check-in">Award logic (runs on every check-in)</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">awardBadges</span>(<span class="hljs-params">userId, context</span>) </span>{
+  <span class="hljs-keyword">const</span> { today_tithi, is_nakshatra_birthday, is_tithi_birthday,
+          is_vaara_birthday, stars_align, is_eclipse,
+          streak, account_age_days, match_count, events_attended } = context
+
+  <span class="hljs-keyword">const</span> rules = [
+    {
+      <span class="hljs-attr">id</span>: <span class="hljs-string">"full_moon_witness"</span>,
+      <span class="hljs-attr">check</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> today_tithi.number === <span class="hljs-number">15</span>,
+      <span class="hljs-attr">repeatable</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">dedupe_key</span>: <span class="hljs-string">`full_moon_<span class="hljs-subst">${today_date}</span>`</span> <span class="hljs-comment">// one per lunar cycle</span>
+    },
+    {
+      <span class="hljs-attr">id</span>: <span class="hljs-string">"new_moon_keeper"</span>,
+      <span class="hljs-attr">check</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> today_tithi.number === <span class="hljs-number">30</span>,
+      <span class="hljs-attr">repeatable</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">dedupe_key</span>: <span class="hljs-string">`new_moon_<span class="hljs-subst">${today_date}</span>`</span>
+    },
+    {
+      <span class="hljs-attr">id</span>: <span class="hljs-string">"star_day"</span>,
+      <span class="hljs-attr">check</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> is_nakshatra_birthday,
+      <span class="hljs-attr">repeatable</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">dedupe_key</span>: <span class="hljs-string">`star_day_<span class="hljs-subst">${today_date}</span>`</span>
+    },
+    {
+      <span class="hljs-attr">id</span>: <span class="hljs-string">"lunar_birthday"</span>,
+      <span class="hljs-attr">check</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> is_tithi_birthday,
+      <span class="hljs-attr">repeatable</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">dedupe_key</span>: <span class="hljs-string">`lunar_bday_<span class="hljs-subst">${today_date}</span>`</span>
+    },
+    {
+      <span class="hljs-attr">id</span>: <span class="hljs-string">"rare_alignment"</span>,
+      <span class="hljs-attr">check</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> stars_align,
+      <span class="hljs-attr">repeatable</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">dedupe_key</span>: <span class="hljs-string">`alignment_<span class="hljs-subst">${today_date}</span>`</span>
+    },
+    {
+      <span class="hljs-attr">id</span>: <span class="hljs-string">"eclipse_chaser"</span>,
+      <span class="hljs-attr">check</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> is_eclipse,
+      <span class="hljs-attr">repeatable</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">dedupe_key</span>: <span class="hljs-string">`eclipse_<span class="hljs-subst">${today_date}</span>`</span>
+    },
+    {
+      <span class="hljs-attr">id</span>: <span class="hljs-string">"streak_7"</span>,
+      <span class="hljs-attr">check</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> streak === <span class="hljs-number">7</span>,
+      <span class="hljs-attr">repeatable</span>: <span class="hljs-literal">false</span>
+    },
+    {
+      <span class="hljs-attr">id</span>: <span class="hljs-string">"streak_14"</span>,
+      <span class="hljs-attr">check</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> streak === <span class="hljs-number">14</span>,
+      <span class="hljs-attr">repeatable</span>: <span class="hljs-literal">false</span>
+    },
+    {
+      <span class="hljs-attr">id</span>: <span class="hljs-string">"streak_29"</span>,
+      <span class="hljs-attr">check</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> streak === <span class="hljs-number">29</span>,
+      <span class="hljs-attr">repeatable</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">dedupe_key</span>: <span class="hljs-string">`full_cycle_<span class="hljs-subst">${lunar_cycle_id}</span>`</span> <span class="hljs-comment">// unique per lunar cycle</span>
+    },
+    {
+      <span class="hljs-attr">id</span>: <span class="hljs-string">"streak_365"</span>,
+      <span class="hljs-attr">check</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> streak === <span class="hljs-number">365</span>,
+      <span class="hljs-attr">repeatable</span>: <span class="hljs-literal">false</span>
+    },
+    <span class="hljs-comment">// loyalty badges</span>
+    { <span class="hljs-attr">id</span>: <span class="hljs-string">"loyalty_7d"</span>,   <span class="hljs-attr">check</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> account_age_days === <span class="hljs-number">7</span>,   <span class="hljs-attr">repeatable</span>: <span class="hljs-literal">false</span> },
+    { <span class="hljs-attr">id</span>: <span class="hljs-string">"loyalty_30d"</span>,  <span class="hljs-attr">check</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> account_age_days === <span class="hljs-number">30</span>,  <span class="hljs-attr">repeatable</span>: <span class="hljs-literal">false</span> },
+    { <span class="hljs-attr">id</span>: <span class="hljs-string">"loyalty_180d"</span>, <span class="hljs-attr">check</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> account_age_days === <span class="hljs-number">180</span>, <span class="hljs-attr">repeatable</span>: <span class="hljs-literal">false</span> },
+    { <span class="hljs-attr">id</span>: <span class="hljs-string">"loyalty_365d"</span>, <span class="hljs-attr">check</span>: <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> account_age_days === <span class="hljs-number">365</span>, <span class="hljs-attr">repeatable</span>: <span class="hljs-literal">false</span> },
+  ]
+
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">const</span> rule <span class="hljs-keyword">of</span> rules) {
+    <span class="hljs-keyword">if</span> (!rule.check()) <span class="hljs-keyword">continue</span>
+
+    <span class="hljs-keyword">const</span> already = rule.repeatable
+      ? <span class="hljs-keyword">await</span> hasEarnedWithKey(userId, rule.id, rule.dedupe_key)
+      : <span class="hljs-keyword">await</span> hasEarned(userId, rule.id)
+
+    <span class="hljs-keyword">if</span> (!already) {
+      <span class="hljs-keyword">await</span> awardBadge(userId, rule.id, rule.dedupe_key)
+    }
+  }
+}
+</div></code></pre>
+<hr>
+<h2 id="6-dynamic-background-system">6. Dynamic Background System</h2>
+<p>See <a href="#3-dynamic-background">Section 3 — Dynamic Background</a> for the full spec, all 20 asset keys, the time-of-day tint system, and the selection algorithm. The background key is stored in <code>today_summary_cache.background_key</code> and resolved once per day at midnight.</p>
+<hr>
+<h2 id="7-caching--performance">7. Caching &amp; Performance</h2>
+<h3 id="cache-strategy">Cache strategy</h3>
+<p>All expensive content is pre-generated nightly at <strong>00:00 local time</strong> for active users via the existing <code>today-page-pregen</code> job.</p>
+<pre class="hljs"><code><div>today_summary_cache stores per user per day:
+  - background_key          (deterministic, instant)
+  - headline_type           (deterministic, instant)
+  - category_scores [6]     (deterministic, instant)
+  - category_labels [6]     (deterministic, instant)
+  - do_tips [3]             (deterministic, instant)
+  - avoid_tips [3]          (deterministic, instant)
+  - vibe_text               (AI — 1 call, cached)
+  - category_explanations   (AI — 6 calls, cached)
+  - morning_text            (template, instant)
+  - afternoon_text          (template, instant)
+  - evening_text            (template, instant)
+  - tomorrow_preview        (deterministic, instant — rebuilt nightly)
+</div></code></pre>
+<h3 id="ai-calls-per-user-per-day">AI calls per user per day</h3>
+<table>
+<thead>
+<tr>
+<th>Call</th>
+<th>Count</th>
+<th>Model</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vibe text</td>
+<td>1</td>
+<td>gpt-4o-mini</td>
+</tr>
+<tr>
+<td>Category explanation (on-demand tap)</td>
+<td>0–6</td>
+<td>gpt-4o-mini</td>
+</tr>
+<tr>
+<td><strong>Max total</strong></td>
+<td><strong>7</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Category explanations are lazy-loaded: generated only when user taps a category for the first time that day, then cached.</p>
+<h3 id="response-time-target">Response time target</h3>
+<ul>
+<li>Today page initial load: <strong>&lt; 200ms</strong> (all from cache)</li>
+<li>Category tap explanation (first time): <strong>&lt; 2s</strong> (AI call)</li>
+<li>Category tap explanation (cached): <strong>&lt; 50ms</strong></li>
+</ul>
+<hr>
+<h2 id="8-ai-usage-summary">8. AI Usage Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Block</th>
+<th>AI</th>
+<th>When generated</th>
+<th>Cached until</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Day Headline</td>
+<td>❌</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Energy Scores</td>
+<td>❌</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Energy Labels</td>
+<td>❌</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Category Explanation (on tap)</td>
+<td>✅</td>
+<td>On first tap that day</td>
+<td>Midnight</td>
+</tr>
+<tr>
+<td>Do / Avoid selection</td>
+<td>❌</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Do / Avoid texts</td>
+<td>❌</td>
+<td>Fixed content set</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Today's Vibe</td>
+<td>✅</td>
+<td>Nightly pre-generation</td>
+<td>Midnight</td>
+</tr>
+<tr>
+<td>Morning / Afternoon / Evening</td>
+<td>❌</td>
+<td>Fixed template lookup</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Moon Streak</td>
+<td>❌</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Badge award logic</td>
+<td>❌</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Tomorrow's Preview</td>
+<td>❌</td>
+<td>Fixed template lookup</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Background key</td>
+<td>❌</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Stories</td>
+<td>❌</td>
+<td>Scheduled content</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Summary: 2 AI touch points per day per user</strong> — one vibe text (pre-generated nightly) and up to 6 category explanations (generated lazily on first tap, then cached). Everything else is deterministic and requires no AI call.</p>
+<hr>
+<h2 id="appendix-determinism-guarantee">Appendix: Determinism Guarantee</h2>
+<p>Every block that is marked <strong>AI: NO</strong> is fully deterministic:</p>
+<blockquote>
+<p><strong>Given the same <code>birth_data</code>, <code>today_date</code>, and <code>user_id</code>, the output is always identical.</strong></p>
+</blockquote>
+<p>This is ensured by:</p>
+<ul>
+<li>No <code>Math.random()</code> anywhere in scoring or selection</li>
+<li>Do/Avoid tie-breaking is by fixed position in the content set (stable sort, earlier entry wins)</li>
+<li>Block 5 texts are selected by a direct two-key lookup: <code>TEMPLATES[vaara][slot][energy_band]</code> — no arrays, no index arithmetic</li>
+<li>All panchang calculations via Swiss Ephemeris with fixed Lahiri ayanamsa</li>
+</ul>
+<p>AI-generated fields (Vibe text, Category explanations) are generated once and cached, so they also become deterministic after first generation for that day.</p>
+
+</body>
+</html>
