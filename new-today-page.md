@@ -1,67 +1,77 @@
-# Bisou — New Today Page: Full Product & Technical Spec
+# Bisou — Today Page: Full Product & Technical Spec
+
+---
+
+## UX Principle: Clarity Before Terminology
+
+**This principle is mandatory for every block without exception.**
+
+```
+ALWAYS show first:   what it means for the user (plain language, no jargon)
+ON TAP show:         why / where it comes from / Vedic terms / technical details
+```
+
+Vedic terms (Pushya, Dwadashi, Shukla Paksha, Rahu Kaal) **are never the headline** of a block.
+They can appear as a label, tag, or part of the expanded view — but never as the first thing the user sees.
+
+---
 
 ## Table of Contents
 
-0. [Quick Reference — All Blocks at a Glance](#quick-reference--all-blocks-at-a-glance)
+0. [Quick Reference — All Blocks at a Glance](#quick-reference)
 1. [User Data We Have](#1-user-data-we-have)
 2. [Today Page Layout](#2-today-page-layout)
 3. [Dynamic Background](#3-dynamic-background)
 4. [Block-by-Block Technical Spec](#4-block-by-block-technical-spec)
-   - [Block 0: Header & Streak Badge](#block-0-header--streak-badge)
-   - [Block 1: Day Headline](#block-1-day-headline)
-   - [Block 2: Today's Energy](#block-2-todays-energy-6-categories)
-   - [Block 3: Energy Check-In](#block-3-energy-check-in)
+   - [Block 0: Header](#block-0-header)
+   - [Block 1: Day Synthesis](#block-1-day-synthesis)
+   - [Block 2: Today's Energy (3 categories)](#block-2-todays-energy-3-categories)
+   - [Block 3: Nakshatra of the Day](#block-3-nakshatra-of-the-day)
    - [Block 4: Do / Avoid](#block-4-do--avoid)
-   - [Block 6: Today's Vibe](#block-6-todays-vibe)
-   - [Block 7: Your Day (Morning / Afternoon / Evening)](#block-7-your-day-morning--afternoon--evening)
-   - [Block 8: Power Windows](#block-8-power-windows)
-   - [Block 9: Cosmic Body Map](#block-9-cosmic-body-map)
-   - [Block 10: Daily Oracle](#block-10-daily-oracle)
-   - [Block 11: Moon Streak (modal)](#block-11-moon-streak--progress-ring)
-   - [Block 12: Achievements](#block-12-achievements)
+   - [Block 5: Daily Cosmic Pull](#block-5-daily-cosmic-pull)
+   - [Block 6: Your Day in Three Parts](#block-6-your-day-in-three-parts)
+   - [Block 7: Power Windows + Rahu Kaal](#block-7-power-windows--rahu-kaal)
+   - [Block 8: Cosmic Body Map](#block-8-cosmic-body-map)
+   - [Block 9: Daily Oracle](#block-9-daily-oracle)
+   - [Block 10: Dasha / Antardasha Snapshot](#block-10-dasha--antardasha-snapshot)
+   - [Block 11: Moon Streak](#block-11-moon-streak)
+   - [Block 12: Stories Carousel](#block-12-stories-carousel)
    - [Block 13: Compatibility Pulse](#block-13-compatibility-pulse)
-   - [Block 15: Ask the Stars](#block-15-ask-the-stars)
-   - [Block 16: Vedic Dice](#block-16-vedic-dice)
-   - [Block 18: Stories Carousel](#block-18-stories-carousel)
+   - [Block 14: Achievements](#block-14-achievements)
 5. [Achievement System — Full Spec](#5-achievement-system--full-spec)
-6. [Dynamic Background System](#6-dynamic-background-system) _(see Section 3)_
+6. [Dynamic Background System](#6-dynamic-background-system)
 7. [Caching & Performance](#7-caching--performance)
 8. [AI Usage Summary](#8-ai-usage-summary)
+9. [Determinism Guarantee](#9-determinism-guarantee)
 
 ---
 
 ## Quick Reference — All Blocks at a Glance
 
-15 blocks total (0–18, excluding removed: 5, 14, 17, 17i) + dynamic background covering the full page.
+**15 blocks (0–14) + Dynamic Background.**
 
-| Block        | Name                    | How calculated                                                                                     | AI  | Options / Variants                                                                                       |
-| ------------ | ----------------------- | -------------------------------------------------------------------------------------------------- | --- | -------------------------------------------------------------------------------------------------------- |
-| BG           | Dynamic Background      | Priority rules + panchang + scores                                                                 | ❌  | **20** base themes × **3** time-of-day tints = up to **60** visual states                                |
-| 0            | Header                  | Date, name, streak, grace day flag                                                                 | ❌  | **3** greetings (Morning / Afternoon / Evening); optional 🛡️ if grace day used                           |
-| 1            | Day Headline            | panchang + avg score, priority tree                                                                | ❌  | **8** headline types × **8** moon phase labels + social proof line                                       |
-| 2            | Today's Energy          | Formula: tithi + vaara + nakshatra modifiers                                                       | ❌  | **6** categories × **0–100** score × **3** labels                                                        |
-| 2 _(on tap)_ | Category explanation    | AI (lazy, cached per day)                                                                          | ✅  | 1 fixed text per category per day after cache                                                            |
-| **3**        | **Energy Check-In**     | User picks mood emoji → compared to predicted energy band                                          | ❌  | **5** mood options × **3** predicted levels = **15** outcome messages                                    |
-| 4            | Do / Avoid              | Tag-matching: **60 do** + **60 avoid** tips against today's signals                                | ❌  | Pool of 120 tips; same signals always return same 3+3                                                    |
-| **5**        | **Daily Cosmic Pull**   | (nakshatra_idx × 3 + slot_idx) % 54 → card from 54-entry bank                                      | ❌  | **54** cards across **9** qualities; **3 pulls per day** (morning / afternoon / evening); flip animation |
-| 6            | Today's Vibe            | AI (pre-generated nightly, cached)                                                                 | ✅  | 1 fixed text per user per day after cache                                                                |
-| 7            | Your Day                | Lookup table: vaara × slot × energy_band                                                           | ❌  | **63** unique texts (7 vaara × 3 slots × 3 energy bands)                                                 |
-| **8**        | **Power Windows**       | Hora cycle (Chaldean order from sunrise) + low-energy window by weekday + midday peak window       | ❌  | **5** windows per day × **7** weekdays = **35** fixed windows; current slot highlighted                  |
-| **9**        | **Cosmic Body Map**     | Fixed 27-entry lookup: nakshatra → body area + awareness tip                                       | ❌  | **27** unique entries (one per nakshatra); read-only display                                             |
-| **10**       | **Daily Oracle**        | 3 face-down cards derived from nakshatra group; user picks one                                     | ❌  | **3** cards per day; each nakshatra has a fixed set of 3 messages (deterministic)                        |
-| 11           | Moon Streak             | Check-in count + panchang tithi for icons + grace day rule                                         | ❌  | Streak **0–∞**; progress ring **1–30** (lunar cycle); max 1 grace/7 days                                 |
-| 12           | Achievements            | Rules evaluated on each check-in                                                                   | ❌  | **~30** badge types; repeatable ones stack; **View All** opens full modal                                |
-| **13**       | **Compatibility Pulse** | Connect onboarding check → partner chart comparison (tithi + vaara + nakshatra delta per category) | ❌  | CTA if not onboarded; otherwise **1–3** match cards with daily score                                     |
-| 14           | Reflect on Today        | User-entered text, stored as journal entry                                                         | ❌  | Free text input; saved to user_reflections table                                                         |
-| **15**       | **Ask the Stars**       | User types question → deterministic answer from **50-entry bank** keyed to nakshatra × tithi       | ❌  | (nakshatra_index × 3 + tithi) % 50 — same sky = same answer all day                                      |
-| **16**       | **Vedic Dice**          | (nakshatra_idx + tithi − 1) % 9 + 1 → number 1–9 with fixed meaning                                | ❌  | **9** numbers × **9** meanings; **1 roll per day** (resets midnight); die-roll animation                 |
-| 17           | Tomorrow's Preview      | panchang tomorrow + fixed templates (after 21:00 only)                                             | ❌  | **10** templates                                                                                         |
-| 17i          | Tomorrow's Intention    | User-entered text tied to tomorrow's preview headline                                              | ❌  | Free text input; shown next morning as "Your intention for today"                                        |
-| 18           | Stories                 | Scheduled via admin + nakshatra/moon lookup                                                        | ❌  | **4–6** cards per day (admin-controlled)                                                                 |
+| Block | Name                      | How calculated                                     | AI        | Notes                                                                    |
+| ----- | ------------------------- | -------------------------------------------------- | --------- | ------------------------------------------------------------------------ |
+| BG    | Dynamic Background        | Priority rules + panchang + scores                 | ❌        | 20 themes × 3 tints = 60 states                                          |
+| 0     | Header                    | Date, name, streak                                 | ❌        | 3 greeting variants; no grace day                                        |
+| 1     | Day Synthesis             | panchang priority tree → 1 sentence                | ❌        | 9 synthesis types; moon transit line (if today); real social proof       |
+| 2     | Today's Energy            | Health; avg(Love,Social,Family); avg(Career,Money) | ✅ on tap | 3 rows; level + phrase; on tap: word-only why (no numbers) + AI (cached) |
+| 3     | Nakshatra of the Day      | 27-entry lookup (today's moon nakshatra)           | ❌        | Symbol + 1 practical sentence; on tap: devata, quality, full description |
+| 4     | Do / Avoid                | Tag-matching: 60 do + 60 avoid tips                | ❌        | Same signals → same 3+3 tips                                             |
+| 5     | Daily Cosmic Pull         | (nakshatra_idx × 3 + slot_idx) % 54                | ❌        | 54 cards; 3 pulls/day                                                    |
+| 6     | Your Day in Three Parts   | vaara × slot × energy_band lookup                  | ❌        | 63 texts; replaces Today's Vibe (no AI)                                  |
+| 7     | Power Windows + Rahu Kaal | Hora cycle + Rahu Kaal formula + Abhijit           | ❌        | Rahu Kaal properly named; calculated from sunrise/sunset                 |
+| 8     | Cosmic Body Map           | 27-entry nakshatra → body area                     | ❌        | Fixed 27-entry lookup; on tap: Vedic body-nakshatra explanation          |
+| 9     | Daily Oracle              | nakshatra_index → fixed card (27 cards)            | ❌        | 1 tap/day                                                                |
+| 10    | Dasha Snapshot            | Vimshottari system from natal Moon longitude       | ❌        | 1 sentence + tap; requires birth time; accuracy warning if time unknown  |
+| 11    | Moon Streak               | Check-in count; no grace day                       | ❌        | Progress ring = tithi / 30                                               |
+| 12    | Stories Carousel          | Admin scheduled + nakshatra lookup                 | ❌        | Stories personalized by nakshatra / moon sign                            |
+| 13    | Compatibility Pulse       | Energy score delta between matched users           | ❌        | Located near end of page                                                 |
+| 14    | Achievements              | Rules evaluated on each check-in                   | ❌        | Last block                                                               |
 
-**External Vedic API: not used on Today.** All astronomical calculations are local (Swiss Ephemeris).
-**AI calls per user per day: max 7** — 1 vibe text (pre-generated) + up to 6 category explanations (on first tap only, then cached until midnight). Everything else is deterministic: same birth data + same date always returns the same result.
-**Interactive blocks (3, 8–10, 13, 15, 16) are user-initiated** — they require a tap/action and are never auto-shown. Block 13 requires Connect onboarding to be completed; users who haven't done it see a CTA instead. Block 16 allows 1 roll per day. Block 10 (Oracle) allows 1 tap per day.
+**AI calls per user per day: max 3** — up to 3 energy category explanations (on first tap only, then cached until midnight). Everything else is deterministic.
+
+**External Vedic API: not used.** All astronomical calculations are local (Swiss Ephemeris + Lahiri ayanamsa).
 
 ---
 
@@ -70,7 +80,7 @@
 ```
 birth_date:     YYYY-MM-DD
 birth_place:    lat, lon, timezone_offset
-birth_time:     HH:MM  (default 12:00 if unknown)
+birth_time:     HH:MM  (default 12:00 if unknown — affects Dasha accuracy)
 gender:         string
 pronouns:       string[]
 name:           string
@@ -79,8 +89,14 @@ name:           string
 Derived once at registration and stored in `astro_data`:
 
 ```
-natal_nakshatra, natal_moon_sign, natal_rising,
-natal_sun_sign, natal_tithi, natal_vaara
+natal_nakshatra         (index 0–26)
+natal_moon_longitude    (decimal degrees 0–360) ← NEW: needed for Dasha calculation
+natal_moon_sign         (0–11)
+natal_rising            (0–11)
+natal_sun_sign          (0–11)
+natal_tithi             (1–30)
+natal_vaara             (0–6)
+birth_time_known        (boolean — false if default 12:00 was used) ← NEW
 ```
 
 ---
@@ -91,79 +107,68 @@ natal_sun_sign, natal_tithi, natal_vaara
 ┌─────────────────────────────────────────────────┐
 │  [DYNAMIC BACKGROUND — changes with energy]     │
 │                                                 │
-│  Thu, June 11                 🔔   🔥 14-day   │  ← BLOCK 0
+│  Thu, June 11                  🔔   🔥 14-day  │  ← BLOCK 0
 │  Good Morning, Sofia                            │
 │                                                 │
-│  ┌─────────────────────────────────────────┐    │
-│  │  BLOCK 1: DAY HEADLINE                  │    │
-│  │  ⚡ High Energy Day                     │    │
-│  │  The stars are working for you today    │    │
-│  │  Thursday · Waxing Moon · Full Moon     │    │
-│  │  tomorrow 🌕                            │    │
-│  └─────────────────────────────────────────┘    │
+│  ┌─────────────────────────────────────────┐   │
+│  │  BLOCK 1: DAY SYNTHESIS                 │   │
+│  │  Jupiter's day. Favourable for growth,  │   │
+│  │  learning, and important conversations. │   │
+│  │                                         │   │
+│  │  🌙 Moon enters Capricorn at 21:47      │   │  ← moon transit (if today)
+│  │  🌍 842 people in Bisou have a similar  │   │  ← real social proof
+│  │     day today                           │   │
+│  └─────────────────────────────────────────┘   │
 │                                                 │
-  │  BLOCK 2: TODAY'S ENERGY                        │
-  │  ┌──────────┐ ┌──────────┐ ┌──────────┐        │
-  │  │  Love    │ │ Career   │ │  Health  │        │
-  │  │   84%    │ │   61%    │ │   77%    │        │
-  │  │High Nrgy │ │ Moderate │ │High Nrgy │        │
-  │  └──────────┘ └──────────┘ └──────────┘        │
-  │  ┌──────────┐ ┌──────────┐ ┌──────────┐        │
-  │  │  Money   │ │  Social  │ │  Family  │        │
-  │  │   72%    │ │   90%    │ │   55%    │        │
-  │  │High Nrgy │ │High Nrgy │ │ Moderate │        │
-  │  └──────────┘ └──────────┘ └──────────┘        │
-  │                                                 │
-  │  ★ BLOCK 11: ENERGY CHECK-IN                     │
-  │  The stars say High Energy. How do you feel?   │
-  │  [😴][😐][😊][⚡][🌟]                          │
-  │                                                 │
-  │  BLOCK 11: DO / AVOID + [Share →]               │
-  │                                                 │
-  │  ★ BLOCK 12: DAILY COSMIC PULL                │
-  │  [face-down card]  ↑ Pull your morning card     │
-  │                                                 │
-  │  BLOCK 11: TODAY'S VIBE                          │
-  │                                                 │
-  │  BLOCK 12: YOUR DAY (Morning / Afternoon /       │
-  │           Evening — all shown)                  │
-  │                                                 │
-  │  ★ BLOCK 17: POWER WINDOWS                      │
-  │  ☀️ High energy start  7:00–8:30 AM  ● peak    │
-  │  ✦  Best decision window 11:48–12:24 ✦ golden  │
-  │  ⚠️ Low energy zone    1:30–3:00 PM  ✗ avoid   │
-  │  [tap any row for why]                          │
-  │                                                 │
-  │  ★ BLOCK 18: COSMIC BODY MAP                    │
-  │  🫁  PUSHYA DAY                                 │
-  │  Body focus: chest, lungs, stomach              │
-  │  "Digestive energy is sensitive today…"         │
-  │                                                 │
-  │  ★ BLOCK 10: DAILY ORACLE                       │
-  │  [✦ face-down card — tap once to reveal]        │
-  │                                                 │
-  │  [🔥 14-day → opens streak modal on tap]         │  ← BLOCK 11 (header pill)
-  │                                                 │
-  │  BLOCK 12: ACHIEVEMENTS (recent badges)          │
-  │  [View all →]                                   │
-  │                                                 │
-  │  ★ BLOCK 13: TODAY'S COMPATIBILITY             │
-  │  [If not onboarded: Complete Connect →]         │
-  │  [If onboarded: Marcus 91% · Liam 68%]          │
-  │                                                 │
-  │  ★ BLOCK 15: ASK THE STARS                       │
-  │  [What's on your mind today?            ]       │
-  │  [Should I take this opportunity?       ]       │
-  │                          [ Ask the stars → ]    │
-  │  → Reading Pushya nakshatra… (animation)        │
-  │  → "The path you want and the path that's..."   │
-  │                                                 │
-  │  ★ BLOCK 16: VEDIC DICE                        │
-  │  ┌───────┐                                      │
-  │  │   7   │  COSMIC NUMBER: WISDOM               │
-  │  └───────┘  [Roll]  (once per day)              │
-  │                                                 │
-  │  BLOCK 18: STORIES CAROUSEL                      │
+│  BLOCK 2: TODAY'S ENERGY (3 cards)              │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐      │
+│  │  Health  │  │Relations │  │  Career  │      │
+│  │  ▓▓▓▓▓   │  │  ▓▓▓░░   │  │  ▓▓▓▓░   │      │
+│  │ Body is  │  │ Steady   │  │ Energy   │      │
+│  │  on your │  │relations │  │for work  │      │
+│  │  side    │  │          │  │    is    │      │
+│  └──────────┘  └──────────┘  └──────────┘      │
+│                                                 │
+│  ★ BLOCK 3: NAKSHATRA OF THE DAY               │
+│  🌸  Today is Pushya                            │
+│  The sky is tuned to nurturing and warmth.      │
+│  [ What is Pushya? ]                            │
+│                                                 │
+│  BLOCK 4: DO / AVOID + [Share →]               │
+│                                                 │
+│  ★ BLOCK 5: DAILY COSMIC PULL                  │
+│  [face-down card]  ↑ Pull your morning card    │
+│                                                 │
+│  BLOCK 6: YOUR DAY IN THREE PARTS              │
+│  ☀️ Morning · 🌤 Afternoon · 🌙 Evening        │
+│                                                 │
+│  ★ BLOCK 7: POWER WINDOWS                      │
+│  ⚡ 07:00–08:30  Active start    ● Jupiter hora │
+│  ✦  11:48–12:24  Abhijit Muhurta ✦ gold        │
+│  ⚠️  14:45–16:30  Rahu Kaal       ✗ avoid       │
+│  [tap → explanation]                            │
+│                                                 │
+│  BLOCK 8: COSMIC BODY MAP                      │
+│  🫁  PUSHYA DAY · chest, lungs, stomach        │
+│                                                 │
+│  ★ BLOCK 9: DAILY ORACLE                       │
+│  [✦ face-down card — tap once to reveal]       │
+│                                                 │
+│  BLOCK 10: DASHA SNAPSHOT                      │
+│  🪐 You are in the Venus cycle                 │
+│  Time of relationships, beauty, and joy        │
+│  This cycle runs until February 2027           │
+│  [ What does this mean? ]                      │
+│                                                 │
+│  [🔥 14-day → opens streak modal]              │  ← BLOCK 11 pill
+│                                                 │
+│  BLOCK 12: STORIES CAROUSEL                    │
+│                                                 │
+│  ★ BLOCK 13: COMPATIBILITY PULSE               │
+│  [Marcus 91% · Liam 68%]                       │
+│                                                 │
+│  BLOCK 14: ACHIEVEMENTS                        │
+│  [recent badges]  [View all →]                 │
 └─────────────────────────────────────────────────┘
 ```
 
@@ -173,7 +178,7 @@ natal_sun_sign, natal_tithi, natal_vaara
 
 Like weather apps — the entire Today page background changes based on the day's energy and special events. Selected deterministically, no runtime generation. The system picks an asset key; design creates the assets.
 
-**20 distinct themes** × **3 time-of-day tints** = up to **60 visual states** per day. The base theme changes once per day at midnight. The tint layer shifts automatically with local time (morning / afternoon / evening overlay) — no extra design work, just a CSS-style color filter on the existing asset.
+**20 distinct themes** × **3 time-of-day tints** = up to **60 visual states** per day. The base theme changes once per day at midnight. The tint layer shifts automatically with local time (morning / afternoon / evening overlay).
 
 ### Background selection (priority order — first match wins)
 
@@ -196,7 +201,7 @@ function resolveBackgroundKey(context) {
   const { love, career, health, money, social, family } = scores;
 
   // ── Priority 1: Rarest cosmic events ──────────────────────────────
-  if (stars_align) return "celestial_event"; // nakshatra+tithi+vaara all match natal
+  if (stars_align) return "celestial_event";
   if (is_eclipse) return "eclipse";
   if (is_purnima) return "full_moon";
   if (is_amavasya) return "new_moon";
@@ -208,8 +213,6 @@ function resolveBackgroundKey(context) {
   if (is_solstice) return "solar_gate";
 
   // ── Priority 3: Vaara themes — conditional on ruling category High ─
-  // Each vaara only gets its special background when the category
-  // it rules is actually High (≥71). Otherwise falls through to score.
   if (today_vaara === "Friday" && love >= 71) return "venus_evening";
   if (today_vaara === "Monday" && family >= 71) return "moon_embrace";
   if (today_vaara === "Thursday" && money >= 71) return "jupiter_abundance";
@@ -229,7 +232,7 @@ function resolveBackgroundKey(context) {
 }
 ```
 
-### Full asset list (20 themes — design creates these)
+### Full asset list (20 themes)
 
 **Cosmic events (4)**
 
@@ -273,20 +276,18 @@ function resolveBackgroundKey(context) {
 
 ### Time-of-day tint layer
 
-On top of the base background, apply a lightweight color overlay that shifts with local time. This gives continuous visual change through the day at zero design cost.
-
 ```
 Morning   (midnight – noon)   → warm amber overlay   opacity 0.12
 Afternoon (noon – sunset)     → neutral / no tint     opacity 0.00
 Evening   (sunset – midnight) → deep indigo overlay   opacity 0.15
 ```
 
-### Rules
+**Rules:**
 
-- Base background key determined **once per day** at midnight, stored in `today_summary_cache`.
-- Time-of-day tint is applied client-side based on current local time — no cache needed.
-- Transition: 0.8s fade when app opens and background key has changed since last visit.
-- Tint shift (morning → afternoon → evening): 1.5s slow fade so the user notices the change gradually.
+- Base background key resolved **once per day** at midnight, stored in `today_summary_cache`.
+- Tint applied client-side from local time — no cache needed.
+- Transition: 0.8s fade when background key changes since last visit.
+- Tint shift (morning → afternoon → evening): 1.5s slow fade.
 
 ---
 
@@ -294,135 +295,266 @@ Evening   (sunset – midnight) → deep indigo overlay   opacity 0.15
 
 ---
 
-### Block 0: Header & Streak Badge
+### Block 0: Header
 
-**AI: NO** — pure data display.
+**AI: NO**
 
 ```
-"{weekday}, {Month} {day}"                   ← from today_date
-"Good {Morning|Afternoon|Evening}, {name}"   ← from local time + user name
+"{Weekday}, {Month} {day}"                   ← from today_date
+"Good {Morning|Afternoon|Evening}, {name}"   ← from local time + user.name
 🔔  ← notification bell
-🛡️  ← shown only when grace day was used in the current 7-day period
 🔥 {streak}-day  ← from user_checkins table
 ```
 
-Check-in is recorded automatically when user opens the Today page. No action required.
+Check-in is recorded automatically when user opens the Today page. No user action required.
 
-#### Grace Day Rule
+#### Streak Rule (no grace day)
 
-A user gets **one grace day per 7-day rolling period**. If they miss a single day:
+```sql
+-- Find the most recent consecutive check-in chain ending today
+SELECT COUNT(*) AS streak
+FROM (
+  SELECT date,
+         date - ROW_NUMBER() OVER (ORDER BY date) * INTERVAL '1 day' AS grp
+  FROM user_checkins
+  WHERE user_id = :uid
+    AND date <= CURRENT_DATE
+) t
+WHERE grp = (
+  SELECT date - ROW_NUMBER() OVER (ORDER BY date) * INTERVAL '1 day'
+  FROM user_checkins
+  WHERE user_id = :uid AND date = CURRENT_DATE
+)
+```
+
+Simplified logic:
 
 ```
-grace_available = (grace_used_count_in_last_7_days == 0)
-
-If grace_available AND days_missed == 1:
-  → streak is NOT reset
-  → grace_used = true for this period
-  → 🛡️ icon appears in header and Moon Streak block
-  → text: "Your streak was protected yesterday. One grace day used this week."
-
-If grace_not_available OR days_missed > 1:
-  → streak resets to 0 (or 1 on today's check-in)
+If user checked in yesterday:  streak = yesterday_streak + 1
+If user missed yesterday:      streak = 1  (today is day 1)
 ```
 
-Grace status is stored in `user_checkins.grace_used_at`. The 7-day window is a rolling window (not calendar week).
+No grace day. No shield icon. Missing a day resets the streak to 1 on next visit.
 
 ---
 
-### Block 1: Day Headline
+### Block 1: Day Synthesis
 
 **AI: NO** — fully deterministic.
 
-#### Algorithm
+#### Purpose
+
+Transform today's panchang into **one plain-language sentence** that communicates what kind of day it is. Users must not need to know any Vedic terms to understand the main message.
+
+#### Required inputs
 
 ```
-1. Compute average_score = mean of 6 category scores (see Block 2)
-
-2. Select headline_type by priority:
-
-   stars_align              → "🌟 Your Special Day"
-   is_purnima               → "🌕 Full Moon Day"
-   is_amavasya              → "🌑 New Moon Day"
-   is_nakshatra_birthday    → "⭐ Your Star Day"
-   is_tithi_birthday        → "🎂 Lunar Birthday"
-   average_score >= 75      → "⚡ High Energy Day"
-   average_score >= 50      → "🌊 Flow With It"
-   else                     → "🌙 Rest & Reflect"
-
-3. Subtitle — fixed template map:
-
-   "High Energy Day"   → "The stars are working for you today"
-   "Flow With It"      → "A steady day — go with the current"
-   "Rest & Reflect"    → "A quiet day. Good for inner work"
-   "Full Moon Day"     → "Peak energy. Emotions run high"
-   "New Moon Day"      → "Time to set new intentions"
-   "Your Star Day"     → "Today's sky matches your birth sky"
-   "Your Special Day"  → "A rare alignment — happens only a few times a year"
-   "Lunar Birthday"    → "The moon returns to your birth phase"
-
-4. Info line — constructed from parts:
-   "{today_vaara} · {moon_phase_label} · {countdown_label}"
-
-5. Social proof line — shown below the info pill:
-   "🌍 {n} people are having a {label} day today"
-
-   n is derived deterministically:
-     average_score >= 75 → base 8400 + (tithi × 187)
-     average_score 50–74 → base 14200 + (tithi × 231)
-     average_score < 50  → base 4100 + (tithi × 93)
-
-   label:
-     average_score >= 75 → "High Energy"
-     average_score 50–74 → "flowing"
-     average_score < 50  → "quiet"
-
-   This number is the same for all users with similar scores on the same day.
-   It creates a sense of community without requiring real-time data.
-
-   moon_phase_label:
-     tithi 1–7   → "Waxing Crescent"
-     tithi 8     → "First Quarter"
-     tithi 9–14  → "Waxing Gibbous"
-     tithi 15    → "Full Moon"
-     tithi 16–22 → "Waning Gibbous"
-     tithi 23    → "Last Quarter"
-     tithi 24–29 → "Waning Crescent"
-     tithi 30    → "New Moon"
-
-   countdown_label (show only when ≤ 3 days away):
-     "Full Moon tomorrow"
-     "Full Moon in 2 days"
-     "New Moon tomorrow"
-     etc.
+today_date, today_vaara (weekday string), average_score (number 0–100),
+is_purnima, is_amavasya, is_eclipse, stars_align,
+is_nakshatra_birthday, is_tithi_birthday, is_vaara_birthday,
+today_nakshatra (index 0–26), today_tithi (1–30),
+moon_nakshatra_at_start_of_day, moon_nakshatra_at_end_of_day,
+moon_sign_at_start_of_day, moon_sign_at_end_of_day,
+transit_time (if applicable), sign_transit_time (if applicable),
+user_energy_band ('high' | 'moderate' | 'low'),
+social_proof_count (from today_summary_cache)
 ```
+
+#### Step 1 — Compute average_score
+
+```
+average_score = mean of all 6 individual category scores
+(love, career, health, money, social, family — calculated in Block 2)
+```
+
+#### Step 2 — Select synthesis_type by priority
+
+```
+if stars_align:           synthesis_type = "stars_align"
+elif is_eclipse:          synthesis_type = "eclipse"
+elif is_purnima:          synthesis_type = "purnima"
+elif is_amavasya:         synthesis_type = "amavasya"
+elif is_nakshatra_birthday: synthesis_type = "nakshatra_birthday"
+elif is_tithi_birthday:   synthesis_type = "tithi_birthday"
+elif is_vaara_birthday:   synthesis_type = "vaara_birthday"
+else:                     synthesis_type = "regular_day"
+```
+
+#### Step 3 — Build synthesis sentence
+
+For special days (types 1–7), use fixed strings:
+
+```javascript
+const SPECIAL_DAY_SENTENCES = {
+  stars_align:
+    "A rare day — three Vedic cycles align with your birth. Uniquely yours.",
+  eclipse: "Eclipse day. Time to release the old and prepare for renewal.",
+  purnima:
+    "Full Moon. Energy at its peak — good for completing things and celebrating.",
+  amavasya: "New Moon. A quiet day, ideal for new intentions and inner work.",
+  nakshatra_birthday:
+    "Today's sky matches your birth sky. One of the most personal days of the month.",
+  tithi_birthday:
+    "The Moon has returned to its birth phase. Good for relationships and self-care.",
+  vaara_birthday:
+    "Your birth planet rules today. Your natural energy is amplified.",
+};
+```
+
+For `regular_day`, combine vaara base + energy band suffix:
+
+```javascript
+const VAARA_BASE = {
+  Sunday: "Sun's day.",
+  Monday: "Moon's day.",
+  Tuesday: "Mars's day.",
+  Wednesday: "Mercury's day.",
+  Thursday: "Jupiter's day.",
+  Friday: "Venus's day.",
+  Saturday: "Saturn's day.",
+};
+
+const VAARA_SUFFIX = {
+  // high = average_score >= 71
+  Sunday: {
+    high: "Favourable for health, clarity, and vitality.",
+    moderate: "Energy is steady — go at your own pace.",
+    low: "A quiet day. Rest matters more than achievement.",
+  },
+  Monday: {
+    high: "Favourable for family, care, and intuition.",
+    moderate: "A calm day. Good for home and domestic matters.",
+    low: "Low energy — a good time for quiet recovery.",
+  },
+  Tuesday: {
+    high: "Favourable for bold action and overcoming obstacles.",
+    moderate: "Moderate energy — don't force it, but don't stop.",
+    low: "Avoid conflict and overexertion today.",
+  },
+  Wednesday: {
+    high: "Favourable for negotiation, learning, and planning.",
+    moderate: "A good day for communication, without big decisions.",
+    low: "Mercury is quiet. A day for observation, not action.",
+  },
+  Thursday: {
+    high: "Favourable for growth, learning, and important decisions.",
+    moderate: "A steady day — learning and spiritual practice will help.",
+    low: "Jupiter is quiet. Rest and build your strength.",
+  },
+  Friday: {
+    high: "Favourable for relationships, beauty, and joy.",
+    moderate: "A calm Venus day — good for personal time.",
+    low: "Venus asks for recovery. Time for yourself.",
+  },
+  Saturday: {
+    high: "Favourable for structured work and discipline.",
+    moderate: "A good day for routine and clearing your task list.",
+    low: "Saturn in shadow. Rest without guilt.",
+  },
+};
+
+// energy_band derived from average_score:
+//   average_score >= 71 → 'high'
+//   average_score 41–70 → 'moderate'
+//   average_score <= 40 → 'low'
+
+const sentence =
+  VAARA_BASE[today_vaara] + " " + VAARA_SUFFIX[today_vaara][energy_band];
+```
+
+**Example:** Thursday, average_score = 78 → `"Jupiter's day. Favourable for growth, learning, and important decisions."`
+
+#### Step 4 — Moon Transit Line
+
+Shown **only** if the Moon changes nakshatra or sign today.
+
+```
+Calculation:
+  moon_nakshatra_at_start = nakshatra of Moon at 00:00:00 local time (Swiss Ephemeris)
+  moon_nakshatra_at_end   = nakshatra of Moon at 23:59:59 local time
+
+  moon_sign_at_start = rashi of Moon at 00:00:00 local time
+  moon_sign_at_end   = rashi of Moon at 23:59:59 local time
+
+Priority: if sign changes, show sign change (encompasses nakshatra change).
+          if only nakshatra changes (same sign), show nakshatra change.
+          if neither changes, show nothing.
+
+For sign change:
+  sign_transit_time = binary search on ephemeris for exact crossing time
+  display: "🌙 Moon enters {RASHI_EN_NAME[new_sign]} at {sign_transit_time} — {SIGN_TRANSIT_EFFECT[new_sign]}"
+
+For nakshatra change only:
+  transit_time = binary search on ephemeris for exact crossing time
+  display: "🌙 Moon moves into {NAKSHATRA_EN_NAME[new_nakshatra]} at {transit_time}"
+```
+
+**Rashi names and transit effects (12 entries):**
+
+| Rashi (EN)  | Transit effect                                |
+| ----------- | --------------------------------------------- |
+| Aries       | expect more initiative and decisiveness       |
+| Taurus      | mood becomes more stable and sensual          |
+| Gemini      | day becomes more dynamic, talkative mood      |
+| Cancer      | emotions deepen, a pull toward home           |
+| Leo         | energy rises and the urge to express yourself |
+| Virgo       | attention to detail and practical matters     |
+| Libra       | need for harmony and balance                  |
+| Scorpio     | deep and intense mood                         |
+| Sagittarius | optimism rises and a desire for movement      |
+| Capricorn   | serious and structured mood                   |
+| Aquarius    | independent mood, original ideas              |
+| Pisces      | dreamy and intuitive mood                     |
+
+#### Step 5 — Social Proof Line
+
+**Real data.** Shown only if `count >= 10`.
+
+```sql
+-- Runs at check-in time, result cached in today_summary_cache (refreshed every 30 min)
+SELECT energy_band, COUNT(DISTINCT user_id) AS count
+FROM user_checkins
+WHERE date = CURRENT_DATE
+GROUP BY energy_band;
+```
+
+```javascript
+const count = todaySummaryCache[user_energy_band].count;
+const bandLabel = { high: "high-energy", moderate: "flowing", low: "quiet" };
+
+if (count >= 10) {
+  display = `🌍 ${count} people in Bisou are having a ${bandLabel[user_energy_band]} day today`;
+} else {
+  display = null; // not shown (early morning or small audience)
+}
+```
+
+`energy_band` for a user: `average_score >= 71 → 'high'`, `41–70 → 'moderate'`, `<= 40 → 'low'`.
 
 ---
 
-### Block 2: Today's Energy (6 categories)
+### Block 2: Today's Energy (3 categories)
 
-**AI: NO** — deterministic scoring algorithm.
+**AI: YES on tap only** — max 3 AI calls per user per day, cached until midnight.
 
-Same input → always same output.
+#### 3 categories and their aggregation
 
-#### Categories and their Vedic house mapping (shown only in expanded tap view)
+| Category       | Includes               | Formula                                                 |
+| -------------- | ---------------------- | ------------------------------------------------------- |
+| Health         | Health                 | `health_score`                                          |
+| Relationships  | Love + Social + Family | `round((love_score + social_score + family_score) / 3)` |
+| Career & Money | Career + Money         | `round((career_score + money_score) / 2)`               |
 
-| Category | Vedic ruler     | House |
-| -------- | --------------- | ----- |
-| Love     | Venus (Shukra)  | 7th   |
-| Career   | Saturn (Shani)  | 10th  |
-| Health   | Sun (Surya)     | 1st   |
-| Money    | Jupiter (Guru)  | 2nd   |
-| Social   | Mercury (Budha) | 11th  |
-| Family   | Moon (Chandra)  | 4th   |
+All 6 base scores are aggregated into 3 categories for display.
 
-#### Score formula
+#### Formulas for 6 base scores
 
 ```
 raw_score = 50 + tithi_modifier + vaara_modifier + nakshatra_modifier + birthday_bonus
 final_score = clamp(raw_score, 0, 100)
 ```
 
-#### Tithi modifiers (Shukla paksha / waxing half)
+**Tithi modifiers (Shukla paksha / waxing half):**
 
 | Tithi            | Love | Career | Health | Money | Social | Family |
 | ---------------- | ---- | ------ | ------ | ----- | ------ | ------ |
@@ -442,11 +574,9 @@ final_score = clamp(raw_score, 0, 100)
 | Chaturdashi (14) | −5   | −5     | −5     | −5    | −5     | −5     |
 | Purnima (15)     | +15  | +15    | +15    | +15   | +15    | +15    |
 
-**Krishna paksha (waning, tithi 16–30):** use the same tithi name as the Shukla table above, but apply a −5 adjustment to every non-zero modifier. Specifically: a +15 becomes +10, a +10 becomes +5, a +5 becomes 0, a 0 stays 0, and a −5 stays −5 (do not make negatives more negative). Exception — Amavasya (tithi 30): Social −15, Love −5, Health +5 (fixed values, not derived from the Shukla table).
+**Krishna paksha (waning, tithi 16–30):** use same table but subtract 5 from every non-zero positive modifier. A +15 becomes +10, +10 → +5, +5 → 0. Negatives don't go more negative. Exception — Amavasya (tithi 30): Social −15, Love −5, Health +5 (fixed values).
 
-Example: Saptami (7) in Shukla has Love +10. Saptami in Krishna → Love +10 − 5 = +5.
-
-#### Vaara (weekday) modifiers
+**Vaara (weekday) modifiers:**
 
 | Vaara     | Planet  | Love | Career | Health | Money | Social | Family |
 | --------- | ------- | ---- | ------ | ------ | ----- | ------ | ------ |
@@ -458,7 +588,7 @@ Example: Saptami (7) in Shukla has Love +10. Saptami in Krishna → Love +10 −
 | Friday    | Venus   | +20  | 0      | 0      | +5    | +15    | 0      |
 | Saturday  | Saturn  | −10  | +5     | 0      | −5    | 0      | 0      |
 
-#### Nakshatra modifiers (today's Moon nakshatra)
+**Nakshatra modifiers (today's Moon nakshatra):**
 
 | Nakshatra         | Love | Career | Health | Money | Social | Family |
 | ----------------- | ---- | ------ | ------ | ----- | ------ | ------ |
@@ -490,77 +620,197 @@ Example: Saptami (7) in Shukla has Love +10. Saptami in Krishna → Love +10 −
 | Uttara Bhadrapada | 0    | 0      | +10    | 0     | 0      | +15    |
 | Revati            | +15  | 0      | 0      | 0     | +15    | 0      |
 
-#### Birthday bonuses
+**Birthday bonuses:**
 
 ```
-is_nakshatra_birthday   → all categories +10
-is_tithi_birthday       → Love +15, Family +10
-is_vaara_birthday       → Career +10, Social +10
-stars_align             → all categories +20
+is_nakshatra_birthday → all 6 categories +10
+is_tithi_birthday     → Love +15, Family +10
+is_vaara_birthday     → Career +10, Social +10
+stars_align           → all 6 categories +20
 ```
 
 #### Score → Label
 
 ```
-score >= 71  → "High Energy"   (green)
-score 41–70  → "Moderate"      (yellow)
-score <= 40  → "Low Energy"    (red)
+score >= 71 → "High"     (green)
+score 41–70 → "Moderate" (yellow)
+score <= 40 → "Low"      (red/muted)
 ```
 
-#### Category detail view (on tap) — AI: YES, cached
+#### Display phrase per category + band
+
+Shown on card directly below the level label:
+
+| Category       | High                                  | Moderate               | Low                   |
+| -------------- | ------------------------------------- | ---------------------- | --------------------- |
+| Health         | "Body is on your side"                | "Listen to your body"  | "Time to rest"        |
+| Relationships  | "A great day for the people you love" | "Steady relationships" | "Time for yourself"   |
+| Career & Money | "Energy for work is here"             | "A steady workday"     | "Avoid big decisions" |
+
+#### Visual indicator
+
+Each card shows a horizontal bar or arc (no number):
+
+- 🟢 Green → High
+- 🟡 Yellow → Moderate
+- 🔴 Muted → Low
+
+Percentage and numeric scores are never shown to the user — only the level label (High / Moderate / Low) on the collapsed row.
+
+#### On tap — expanded view
+
+Tapping a category row expands an inline panel below it. Only one category may be open at a time.
+
+**What the user sees:**
+
+A short paragraph (2–3 sentences) explaining _why_ the level is what it is — in plain language, using Vedic terms (tithi, vaara, nakshatra, ruling planet) but **no numbers, percentages, or score tables**.
+
+Example (Health · High):
+
+> Health carries strong graha-shakti today. Surya governs the 1st house — the body, prana, and daily strength. Purnima tithi — Chandra at full brilliance in Shukla paksha (waxing Moon) — floods the chart with lunar shakti for physical vitality and ojas. Chandra in Pushya nakshatra — presided by Brihaspati, Tamas guna — nourishes physical vitality and ojas.
+
+Each explanation weaves **panchang** elements (tithi, vara, paksha, nakshatra) with **graha** lords (Surya, Chandra, Shukra, Shani, Guru, Budha), **house** themes, and nakshatra **devata/guna** where relevant. No numbers in user-facing text.
+
+**Interaction:**
+
+```
+onTap(category_key):
+  if expanded == category_key → collapse
+  else → expand category_key, collapse others
+
+if explanation not in cache:
+  call AI once (see below) — AI receives score internally but output must contain no numbers
+  store in today_summary_cache.energy_explanations[category_key]
+else:
+  read from cache
+```
+
+**Implementation notes for programmers (internal — not shown in UI):**
+
+```javascript
+// Dominant component for merged categories (used to pick which modifiers drive the explanation)
+dominant_relations  = argmax(love_score, social_score, family_score)
+dominant_affairs    = career_score >= money_score ? 'career' : 'money'
+
+function getCategoryBreakdown(user, category_key):
+  underlying = resolve_underlying_category(category_key)
+  idx = index of underlying in [love, career, health, money, social, family]
+  tithi_mod     = lookup_tithi_modifier(today_tithi, today_paksha, idx)
+  vaara_mod     = lookup_vaara_modifier(today_vaara, idx)
+  nakshatra_mod = lookup_nakshatra_modifier(today_nakshatra, idx)
+  birthday_mod  = lookup_birthday_bonus(user.birthday_flags, idx)
+  raw = 50 + tithi_mod + vaara_mod + nakshatra_mod + birthday_mod
+  return { tithi: tithi_mod, vaara: vaara_mod, nakshatra: nakshatra_mod, birthday: birthday_mod }
+
+// Map modifier sign (+/−/0) → natural-language sentence per source (tithi, vaara, nakshatra, birthday)
+// Pick top 2 non-zero influences + band intro sentence → user-facing paragraph
+// merged_score used only for band label and AI input — never displayed
+```
+
+#### On tap — AI explanation (cached, max 3/day/user)
 
 ```
 INPUT:
-  category, score, label, vaara, vaara_planet,
+  category_name, merged_score, label, vaara, vaara_planet,
   tithi_name, nakshatra, birthday_flags, pronouns
 
-SYSTEM PROMPT:
-  "Write 2 sentences explaining why {category} energy
-   is {label} ({score}%) today. Mention the planetary
-   and lunar influences naturally. Warm and practical.
-   No Sanskrit jargon in main text. Use {pronouns}."
+  For merged categories:
+    "Relationships": dominant component = whichever of love/social/family has highest individual score
+    "Career & Money": dominant component = career if career_score > money_score, else money
 
-CACHE: per user per day per category (6 calls/day/user).
+SYSTEM PROMPT:
+  "Write 2–3 sentences explaining why {category_name} energy
+   is {label} today. Use Vedic astrology terms naturally: tithi, vara,
+   paksha, nakshatra, graha names (Surya, Chandra, Shukra, Shani, Guru, Budha),
+   relevant houses, and nakshatra deity where relevant. Warm and practical.
+   No numbers, percentages, or score values in the output.
+   No untranslated Sanskrit jargon — explain terms in context. Use {pronouns}."
+
+CACHE: per user per day per category (3 calls max/day/user).
        Stored in today_summary_cache until next midnight.
 ```
 
 ---
 
-### Block 3: Energy Check-In
+### Block 3: Nakshatra of the Day
 
-**AI: NO** — fully deterministic comparison between predicted energy band and user-selected mood.
-**Placement:** Directly below Block 2 (Energy).
-**Purpose:** Makes the page interactive immediately after the energy section; builds a personal accuracy log over time; increases daily return motivation.
+**AI: NO** — deterministic 27-entry lookup.
 
-#### Behaviour
+#### Purpose
 
-1. The block shows the predicted energy label (High / Moderate / Low) derived from Block 2's average score.
-2. Five mood buttons are displayed face-up: 😴 Drained · 😐 Flat · 😊 Okay · ⚡ Energized · 🌟 Electric.
-3. User taps one mood — the buttons are replaced with a result card.
-4. The result card shows a match label + one sentence based on the alignment between predicted and actual.
-5. A small footer shows the running accuracy streak ("Building your accuracy score · N days tracked").
-6. User can tap ↩ to reset their pick for the same session (does not affect stored data).
+Shows today's Moon nakshatra as a practical, human-readable insight. The symbol and one-sentence meaning are immediately understandable without any Vedic knowledge. The term "nakshatra" is introduced only as context, never as the headline.
 
-#### Outcome matrix
+#### Data source
 
-| Predicted | Actual mood             | Label       | Message                                                        |
-| --------- | ----------------------- | ----------- | -------------------------------------------------------------- |
-| High      | Energized / Electric    | In sync ⚡  | Your inner state matched the cosmic forecast today.            |
-| High      | Flat / Drained          | Off today   | The stars promised more. Your body had other plans. Noted.     |
-| Low       | Drained / Flat          | Confirmed   | A quiet day — the stars read you right.                        |
-| Low       | Energized / Electric    | Surprise 🌟 | Stronger than predicted. Something is shifting in your favour. |
-| Moderate  | Flat / Okay / Energized | Right on    | Steady alignment between forecast and reality.                 |
-| Any       | Okay (middle)           | Close       | Small gap between forecast and reality — that's normal.        |
+`today_nakshatra_idx` = index of the Moon's nakshatra at the time of local midnight (0–26), from Swiss Ephemeris. Same value used in Block 2 nakshatra modifiers.
 
-#### Storage
+#### Display
 
 ```
-user_checkins table (existing) → add column:
-  mood_key:    ENUM('drained','flat','okay','energized','electric')  nullable
-  mood_picked_at: TIMESTAMP  nullable
+┌─────────────────────────────────────────────┐
+│  {emoji}                                    │
+│                                             │
+│  Today is {nakshatra_name} day              │
+│                                             │
+│  {main_text}                                │
+│                                             │
+│  [ What is {nakshatra_name}? ]              │
+└─────────────────────────────────────────────┘
 ```
 
-No separate table needed. If `mood_key` is null the block shows the picker; if set it shows the result card.
+If moon transit happens today (see Block 1 Step 4), add below the main text:
+
+```
+🌙 After {transit_time} → {new_nakshatra_name} day
+```
+
+#### On tap — expanded view
+
+```
+{nakshatra_name}
+
+Devata: {devata_name}
+Symbol: {symbol_description}
+Quality: {guna}
+
+{extended_description}   ← 3–5 sentences, content team writes these
+```
+
+#### Full 27-entry lookup table
+
+| #   | Nakshatra         | Emoji | Devata                              | Main text                                                                                 | Quality  |
+| --- | ----------------- | ----- | ----------------------------------- | ----------------------------------------------------------------------------------------- | -------- |
+| 0   | Ashwini           | 🐴    | Ashwins (celestial physicians)      | A day for new beginnings and healing. Act boldly — now is the right time to start.        | Deva     |
+| 1   | Bharani           | 🌀    | Yama (god of dharma)                | A day of transformation. Release what no longer serves you — it clears space for the new. | Manushya |
+| 2   | Krittika          | 🔥    | Agni (god of fire)                  | A day of strength and clarity. Time for decisive action and direct communication.         | Rakshasa |
+| 3   | Rohini            | 🌹    | Brahma (the creator)                | A day of beauty and creativity. Good for art, love, and pleasure.                         | Manushya |
+| 4   | Mrigashira        | 🦌    | Soma (the Moon)                     | A day of curiosity and seeking. Explore something new — it will surprise you.             | Deva     |
+| 5   | Ardra             | 💧    | Rudra (Shiva)                       | A day of depth and change. Allow the transformation — it is already happening.            | Manushya |
+| 6   | Punarvasu         | ✨    | Aditi (mother of the gods)          | A day of renewal. Return to what you set aside — now is the right time.                   | Deva     |
+| 7   | Pushya            | 🌸    | Brihaspati (Jupiter)                | A day of nurturing and support. Care for those close to you — and yourself.               | Deva     |
+| 8   | Ashlesha          | 🐍    | Nagas (serpents)                    | A day of perception. Intuition is strong — trust what you feel.                           | Rakshasa |
+| 9   | Magha             | 👑    | Pitris (ancestors)                  | A day of respect and tradition. Good for official matters and honouring your roots.       | Rakshasa |
+| 10  | Purva Phalguni    | 🛏️    | Bhaga (pleasure)                    | A day of rest and enjoyment. Allow yourself to do nothing — that is also a practice.      | Manushya |
+| 11  | Uttara Phalguni   | 🤝    | Aryaman (partnership)               | A day of partnership and commitment. Good for agreements and shared endeavours.           | Manushya |
+| 12  | Hasta             | ✋    | Savitar (creative force of the Sun) | A day of skill and detail. Handwork and small tasks come out especially well.             | Deva     |
+| 13  | Chitra            | 💎    | Vishwakarma (architect of the gods) | A day of beauty and mastery. Create, adorn, pay attention to details.                     | Rakshasa |
+| 14  | Swati             | 🌿    | Vayu (wind)                         | A day of independence. Follow your own path and don't cling to outcomes.                  | Deva     |
+| 15  | Vishakha          | 🎯    | Indra and Agni                      | A day of focus. Staying on target brings results.                                         | Rakshasa |
+| 16  | Anuradha          | 🪷    | Mitra (friendship)                  | A day of friendship and resilience. Support those around you — they will support you.     | Deva     |
+| 17  | Jyeshtha          | ⚡    | Indra (king of gods)                | A day of strength and leadership. Take responsibility and show your power.                | Rakshasa |
+| 18  | Mula              | 🌱    | Nirrti (dissolution)                | A day of deep inquiry. Good for meditation and exploring your roots.                      | Rakshasa |
+| 19  | Purva Ashadha     | 🌊    | Apas (water goddesses)              | A day of purification and confidence. Stand firm despite doubts.                          | Manushya |
+| 20  | Uttara Ashadha    | 🏔️    | Vishwedevas (all gods)              | A day of victory and reliability. What you begin today is stable and long-lasting.        | Manushya |
+| 21  | Shravana          | 👂    | Vishnu (the preserver)              | A day of listening and learning. Listen more, speak less.                                 | Deva     |
+| 22  | Dhanishtha        | 🥁    | Ashta Vasus (8 elements)            | A day of abundance and movement. A good time for physical activity.                       | Rakshasa |
+| 23  | Shatabhishak      | 🔮    | Varuna (cosmic law)                 | A day of healing and mystery. Meditation and self-inquiry.                                | Rakshasa |
+| 24  | Purva Bhadrapada  | 🌩️    | Aja Ekapada                         | A day of intensity. Strong emotions — channel them into creativity or physical activity.  | Manushya |
+| 25  | Uttara Bhadrapada | 🌊    | Ahir Budhnya (depths of the ocean)  | A day of depth and wisdom. Calm on the surface, strength within.                          | Manushya |
+| 26  | Revati            | 🐟    | Pushan (god of journeys)            | A day of completion and care. A good time for forgiveness and preparing for the new.      | Deva     |
+
+**Extended descriptions (on tap)** — 3–5 sentences each — task for the content team. Structure provided above.
+
+**Storage:** No storage needed. Computed from `today_nakshatra_idx` (already in `today_summary_cache`).
 
 ---
 
@@ -570,31 +820,28 @@ No separate table needed. If `mood_key` is null the block shows the picker; if s
 
 #### How it works
 
-Each tip in the content set has a fixed list of **tags** — conditions under which it is relevant. The selection algorithm scores every tip against today's active signals and picks the top 3 by match count. When two tips have the same score, the one that appears earlier in the fixed-order content list wins (stable sort). No randomness is involved at any stage.
+Each tip has a fixed list of **tags** — conditions under which it is relevant. The algorithm scores every tip against today's active signals and picks the top 3 by match count. Ties broken by fixed position in content set (earlier wins). No randomness at any stage.
 
-#### Step 1 — Tag vocabulary (full list)
-
-All tags used in the content set. No other tag names are allowed.
+#### Tag vocabulary (full list)
 
 ```
 Vaara tags (7):
   Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday
 
 Paksha tags (2):
-  Shukla       ← waxing moon (tithi 1–14)
-  Krishna      ← waning moon (tithi 16–29)
+  Shukla  ← waxing moon (tithi 1–14)
+  Krishna ← waning moon (tithi 16–29)
 
-Special tithi tags (2):
+Special tithi tags (3):
   Purnima      ← Full Moon (tithi 15)
   Amavasya     ← New Moon (tithi 30)
   Chaturdashi  ← 14th tithi (intense, day before Full/New Moon)
 
-Nakshatra quality tags (2 — group the 27 nakshatras, don't tag individually):
-  Nakshatra_Dev      ← benevolent nakshatras: Ashwini, Mrigashira, Punarvasu,
-                        Pushya, Hasta, Swati, Anuradha, Shravana, Revati
-  Nakshatra_Intense  ← demanding nakshatras: Bharani, Krittika, Ardra,
-                        Ashlesha, Magha, Vishakha, Jyeshtha, Mula, Shatabhishak,
-                        Dhanishtha, Chaturdashi-linked ones
+Nakshatra quality tags (2):
+  Nakshatra_Dev      ← benevolent: Ashwini, Mrigashira, Punarvasu, Pushya,
+                        Hasta, Swati, Anuradha, Shravana, Revati
+  Nakshatra_Intense  ← demanding: Bharani, Krittika, Ardra, Ashlesha, Magha,
+                        Vishakha, Jyeshtha, Mula, Shatabhishak, Dhanishtha
 
 Category energy tags (12 — only High and Low; Moderate has no tag):
   Love_High, Love_Low
@@ -605,15 +852,13 @@ Category energy tags (12 — only High and Low; Moderate has no tag):
   Family_High, Family_Low
 
 Personal special day tags (4):
-  NakshatraBirthday  ← today nakshatra == natal nakshatra
-  TithiBirthday      ← today tithi == natal tithi
-  VaaraBirthday      ← today vaara == natal vaara
-  StarsAlign         ← all three match simultaneously
+  NakshatraBirthday
+  TithiBirthday
+  VaaraBirthday
+  StarsAlign
 ```
 
-#### Step 2 — Build today's active signals
-
-Signals are derived entirely from panchang and natal comparison. Same for every user with the same birth data on the same day.
+#### Build today's active signals
 
 ```
 Active signals = union of:
@@ -622,45 +867,32 @@ Active signals = union of:
   → Purnima and/or Amavasya if applicable
   → Chaturdashi if tithi is 14 or 29
   → Nakshatra_Dev or Nakshatra_Intense based on today's moon nakshatra
-  → category tags where score is High (≥71) or Low (≤40) for each of 6 categories
+  → category tags where individual score is High (≥71) or Low (≤40) for each of 6 categories
   → NakshatraBirthday / TithiBirthday / VaaraBirthday / StarsAlign if true
 ```
 
-#### Step 3 — Score and select
+Note: category tags use the 6 **individual** scores (love, career, health, money, social, family), not the 3 merged scores from Block 2.
 
-Every tip carries a `tags` list. Score = number of active signals that appear in the tip's tags. Select top 3 by score. Ties broken by fixed position in content set (earlier wins).
-
-```
-Example tip:
-  text: "Reach out to someone you've been meaning to reconnect with"
-  type: do
-  tags: [Love_High, Social_High, Friday, Nakshatra_Dev]
-
-  Active signals today: [Friday, Nakshatra_Dev, Love_High, Social_High, ...]
-  Score: 4 matches → ranked high
-```
-
-#### Step 4 — Fallback hierarchy (coverage guarantee)
-
-If fewer than 3 tips score above 0 after full matching, relax the filter:
+#### Score and select
 
 ```
-1. Full match  — use all active signals as above
+tip_score = number of active signals that appear in the tip's tags
+Select top 3 do tips by score (ties: earlier in content set wins)
+Select top 3 avoid tips by score (same rule)
+```
+
+#### Fallback hierarchy
+
+```
+1. Full match  — use all active signals
 2. Vaara only  — if <3 results, filter to tips tagged with today's vaara alone
-3. Paksha only — if <3 results, filter to tips tagged Shukla or Krishna only
-4. Universal   — if <3 results, fill remaining slots from tips tagged with no
-                 category or special signals (generic always-relevant tips)
+3. Paksha only — if <3 results, filter to Shukla or Krishna only
+4. Universal   — fill remaining slots from tips with no category/special signals
 ```
 
-Every vaara must have at least 3 Do and 3 Avoid tips tagged to it alone (minimum coverage rule). Content team must verify this before publishing.
+Every vaara must have at least 3 Do and 3 Avoid tips tagged to it alone (minimum coverage rule).
 
-#### Step 5 — Determinism guarantee
-
-Because signals are derived from panchang (no randomness) and tie-breaking is by fixed position (not insertion order or time), the same birth data + same date always produces the same 3 Do and 3 Avoid items.
-
-#### Step 6 — Display tags under each tip (UI)
-
-Each tip renders a row of 2–3 small pill-tags that explain _why_ this tip was selected. These are user-friendly translations of the internal tags — not the raw tag names.
+#### Display tags under each tip (UI)
 
 ```
 Internal tag → Display tag
@@ -675,19 +907,23 @@ Chaturdashi     → "Chaturdashi"
 Shukla          → "Waxing Moon"
 Krishna         → "Waning Moon"
 Nakshatra_Dev   → "{nakshatra_name}"  (e.g. "Pushya")
-Eclipse         → "Eclipse"
 StarsAlign      → "Rare Alignment"
 NakshatraBirthday → "Star Day"
 ```
 
-Show maximum 2–3 tags per tip. Priority: special event tags > category energy tags > vaara/paksha tags.
-Do tips use green pills; Avoid tips use amber pills.
+Show max 2–3 tags per tip. Priority: special event > category energy > vaara/paksha.
+Do tips: green pills. Avoid tips: amber pills.
 
----
+#### Share card
+
+```
+Today, {Date}
+DO:    tip1 · tip2 · tip3
+AVOID: tip1 · tip2 · tip3
+#Bisou
+```
 
 #### Full content set — DO tips (60 tips)
-
-Each tip is shown with its `tags` array. Tags are from the vocabulary above only.
 
 **Love & Relationships**
 
@@ -1127,52 +1363,84 @@ Each tip is shown with its `tags` array. Tags are from the vocabulary above only
 
 ---
 
-#### Share card
+### Block 5: Daily Cosmic Pull
+
+**AI: NO** — fully deterministic.
+
+#### Card assignment
 
 ```
-Today, {Date}
-DO:    tip1 · tip2 · tip3
-AVOID: tip1 · tip2 · tip3
-#Bisou
+slot_idx:       0 = morning, 1 = afternoon, 2 = evening
+nakshatra_idx:  index of today's moon nakshatra (0–26)
+
+card_idx = (nakshatra_idx × 3 + slot_idx) % 54
+card     = COSMIC_PULL_CARDS[card_idx]
+```
+
+54 cards across 9 qualities (6 cards per quality). Same nakshatra + same slot → same card, always.
+
+#### Behaviour
+
+1. Morning pull unlocks at sunrise; afternoon pull at noon; evening pull at sunset.
+2. Current slot shows a face-down card with "Pull your {Morning/Afternoon/Evening} card".
+3. Tap → CSS 3D flip animation (~550ms). Card reveals: quality, title, 2-sentence message.
+4. Once revealed, the card cannot be reset for that slot.
+5. All 3 slots visible simultaneously; locked future slots show face-down with lock icon.
+
+#### Storage
+
+```
+user_checkins → add columns (if not already):
+  morning_card_revealed:   BOOLEAN not null default false
+  afternoon_card_revealed: BOOLEAN not null default false
+  evening_card_revealed:   BOOLEAN not null default false
 ```
 
 ---
 
-### Block 6: Today's Vibe
+### Block 6: Your Day in Three Parts
 
-**AI: YES** — generated once per day, cached until midnight.
+**AI: NO** — fully deterministic lookup table. No AI used.
+
+#### Structure
+
+All three parts shown simultaneously (not tabs, not collapsed):
 
 ```
-INPUT (structured):
-  vaara, vaara_planet, tithi_name, nakshatra,
-  average_score, headline_type, top_category,
-  name, pronouns, birthday_flags
-
-SYSTEM PROMPT:
-  "Write a 2-3 sentence daily energy summary for an astrology
-   app. Base it only on the facts provided. Warm, friendly,
-   practical tone. Mention the weekday and moon phase naturally.
-   Do not use Sanskrit terms in the main text. Use {pronouns}."
-
-OUTPUT: 2–3 sentences. Cached in today_summary_cache.
+┌─────────────────────────────────────────────┐
+│  Your Day                                   │
+│                                             │
+│  ☀️ MORNING  · until {morning_end_time}     │
+│  {morning_text}                             │
+│                                             │
+│  🌤 AFTERNOON  · {afternoon_start}–{end}    │
+│  {afternoon_text}                           │
+│                                             │
+│  🌙 EVENING  · after {evening_start_time}   │
+│  {evening_text}                             │
+└─────────────────────────────────────────────┘
 ```
 
----
+#### Algorithm
 
-### Block 7: Your Day (Morning / Afternoon / Evening)
+```
+slot:         0 = morning, 1 = afternoon, 2 = evening
+vaara_idx:    0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
+energy_band:  0=Low, 1=Moderate, 2=High  (from average_score)
 
-**AI: NO** — fully deterministic. All three sections are always visible. Same input always returns the same text.
+text_key = vaara_idx * 9 + slot * 3 + energy_band
+text = YOUR_DAY_TEXTS[text_key]   // 63-entry array, 0-indexed
+```
 
-#### How it works
+#### Timing labels
 
-Each time slot (Morning, Afternoon, Evening) has one text determined by two inputs:
+```
+Morning   → local midnight until noon (or sunrise + 6h, whichever is later)
+Afternoon → noon until sunset
+Evening   → sunset onward
+```
 
-1. **today_vaara** — the weekday (Sunday through Saturday) — primary key
-2. **energy_band** — derived from average category score: `High` (≥71) / `Moderate` (41–70) / `Low` (≤40)
-
-The lookup is: `text = TEMPLATES[vaara][slot][energy_band]`
-
-There is exactly **one text** per combination. No arrays, no random pick. Every day of the week has its own distinct set of texts, so even with the same energy level, Monday reads differently from Friday. A user on High-energy Tuesday always sees the same Tuesday High-energy texts — deterministic and personal.
+Times from Swiss Ephemeris (sunrise/sunset for user's location). Displayed next to slot label.
 
 #### Full lookup table (63 texts)
 
@@ -1248,103 +1516,170 @@ There is exactly **one text** per combination. No arrays, no random pick. Every 
 
 ---
 
-#### Timing labels
+### Block 7: Power Windows + Rahu Kaal
 
-The slot names shown in the UI are time-anchored to the user's local sunrise/sunset from panchang:
+**AI: NO** — fully deterministic.
+
+#### Requires per-user per-day inputs
 
 ```
-Morning   → from local midnight until noon (or sunrise + 6h, whichever is later)
-Afternoon → from noon until sunset
-Evening   → from sunset onward
+sunrise_time:    local time of sunrise (Swiss Ephemeris, user's lat/lon)
+sunset_time:     local time of sunset  (Swiss Ephemeris, user's lat/lon)
+today_vaara:     weekday string (Sunday…Saturday)
+current_time:    user's local time (for highlighting current window)
 ```
 
-The time boundaries are displayed next to each slot label (e.g., "Morning · until 12:30") so the user knows when each section applies.
+#### Windows shown (up to 6 per day)
+
+| #   | Type                   | User-facing title                 | Marker   | Shown when                        |
+| --- | ---------------------- | --------------------------------- | -------- | --------------------------------- |
+| 1   | High-energy hora       | "Active start" or "Power opening" | 🟢 peak  | morning hora if Jupiter/Sun/Venus |
+| 2   | Abhijit Muhurta        | "Abhijit"                         | ✦ gold   | every day                         |
+| 3   | Rahu Kaal              | "Rahu Kaal"                       | 🔴 avoid | every day                         |
+| 4   | Current hora highlight | "Hora of {planet}"                | 🟡 now   | current 60-min window             |
+| 5   | Low hora               | "Rest zone"                       | 🔵 rest  | Moon/Saturn hora if afternoon     |
+| 6   | Evening rise           | "Evening rise"                    | 🟢       | evening high hora if applicable   |
+
+The window matching current local time is highlighted with a **"Now"** tag.
+
+#### Rahu Kaal calculation
+
+```
+Inputs: sunrise_time, sunset_time, today_vaara
+
+day_duration_minutes  = (sunset_time - sunrise_time) in minutes
+segment_duration_min  = day_duration_minutes / 8
+
+Rahu Kaal segment index by vaara (1 = first segment after sunrise):
+  Sunday:    8  (last segment of the day)
+  Monday:    2
+  Tuesday:   7
+  Wednesday: 5
+  Thursday:  6
+  Friday:    4
+  Saturday:  3
+
+rahu_start = sunrise_time + (segment_index - 1) × segment_duration_min
+rahu_end   = rahu_start + segment_duration_min
+```
+
+**Example** (sunrise 06:00, sunset 20:00, Thursday):
+
+```
+day_duration   = 840 min
+segment        = 105 min (1h 45m)
+Thursday index = 6
+rahu_start     = 06:00 + 5 × 105 = 14:45
+rahu_end       = 14:45 + 105 min = 16:30
+→ Display: "⚠️ Rahu Kaal  14:45–16:30"
+```
+
+**On tap explanation:**
+
+```
+Rahu Kaal — a daily 1.75-hour period associated with Rahu
+(the ascending lunar node). Considered inauspicious for starting
+new ventures, signing agreements, travelling, and making
+important decisions.
+
+Does not apply to activities already in progress.
+Calculated from sunrise time.
+```
+
+#### Abhijit Muhurta calculation
+
+```
+solar_noon    = sunrise_time + (sunset_time - sunrise_time) / 2
+
+abhijit_start = solar_noon - 24 minutes
+abhijit_end   = solar_noon + 24 minutes
+```
+
+**Example** (sunrise 06:00, sunset 20:00):
+
+```
+solar_noon    = 06:00 + 420 min = 13:00
+abhijit_start = 12:36
+abhijit_end   = 13:24
+→ Display: "✦ Abhijit  12:36–13:24"
+```
+
+**On tap explanation:**
+
+```
+Abhijit Muhurta — the "victorious moment" of the day,
+centred around solar noon. Neutralises even unfavourable
+astrological positions.
+
+Ideal for important beginnings, signing agreements,
+key decisions, and anything meant to have a lasting effect.
+
+Exception: Wednesday — Abhijit is considered weaker on this day.
+```
+
+#### Hora calculation (Chaldean order)
+
+```
+Chaldean planet order (index 0–6):
+  0=Saturn, 1=Jupiter, 2=Mars, 3=Sun, 4=Venus, 5=Mercury, 6=Moon
+
+Day ruler index (planet that rules Hora 1 = first hora of the day, starting at sunrise):
+  Sunday:    Sun    (idx 3)
+  Monday:    Moon   (idx 6)
+  Tuesday:   Mars   (idx 2)
+  Wednesday: Mercury (idx 5)
+  Thursday:  Jupiter (idx 1)
+  Friday:    Venus  (idx 4)
+  Saturday:  Saturn (idx 0)
+
+hora_index = floor((current_local_time - sunrise_time) / 60 minutes)
+hora_planet_idx = (day_ruler_idx + hora_index) % 7
+hora_planet = CHALDEAN_ORDER[hora_planet_idx]
+
+hora_start = sunrise_time + hora_index × 60 min
+hora_end   = hora_start + 60 min
+```
+
+**Storage:** no storage needed. Computed at render time from `vaara` + `sunrise_time`. Pre-computed into `today_summary_cache`.
 
 ---
 
-### Block 8: Power Windows
+### Block 8: Cosmic Body Map
 
-**AI: NO** — fully deterministic. Calculated from the Vedic hora cycle (60-minute planetary hours from sunrise) + one fixed "avoid" window per weekday + a midday peak window. All derived from weekday and local sunrise time.
-**Placement:** Directly below Block 7 (Your Day in Three Parts).
-**Purpose:** Answers the question "WHEN should I do this today?" — the most actionable question a user can have. Creates a reason to check the app in the morning and reference it throughout the day.
+**AI: NO**
 
-#### What is displayed
-
-Each day shows **4–5 time windows** with plain-English titles:
-
-| Window type                    | User-facing title                                                          | Source                                                                  | Quality          |
-| ------------------------------ | -------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ---------------- |
-| Peak hora (high-energy planet) | "High energy start", "Deep focus window", "Growth window", etc.            | First hora matching Jupiter, Mercury, Venus, or Sun from sunrise        | ✅ peak (green)  |
-| Best decision window           | "Best decision window"                                                     | Fixed calculation: ~11:48 AM – 12:24 PM (adjusts slightly with sunrise) | ✨ golden        |
-| Low energy window              | "Low energy zone"                                                          | Fixed table by weekday (approx. 1.5-hour block)                         | ⚠️ avoid (red)   |
-| Medium hora                    | Context-specific name ("Communication window", "Gut feeling window", etc.) | 2nd or 3rd useful hora of the day                                       | ✓ medium (amber) |
-| Rest / wind-down               | "Wind-down time", "Evening reflection"                                     | Moon hora in evening                                                    | 🌙 rest (blue)   |
-
-**Naming rule:** Window titles must always be plain English — no planetary terms in titles. Technical source (hora planet, Vedic period name) may appear only in the expanded hint text, and even then should be followed by a simple explanation.
-
-The window matching the current time of day (morning / afternoon / evening) is highlighted with a **"Now"** tag and a brighter border.
-
-Tapping a window expands it to show a plain-English explanation of why this window is favorable or unfavorable.
-
-#### Hora calculation algorithm
-
-```
-Chaldean order: Sun → Venus → Mercury → Moon → Saturn → Jupiter → Mars → (repeat)
-
-1. Find the planet ruling today's weekday:
-     Sunday=Sun, Monday=Moon, Tuesday=Mars, Wednesday=Mercury,
-     Thursday=Jupiter, Friday=Venus, Saturday=Saturn
-2. That planet rules Hora 1, starting at local sunrise
-3. Each subsequent hora lasts exactly 60 minutes
-4. Cycle through Chaldean order continuously for all 24 hours
-5. For each pre-defined window time, find which hora is active
-```
-
-#### Low energy window table (approximate, sunrise ~6:30 AM)
-
-_Internally this is known as "Rahu Kaal" — a standard Vedic calculation for the least favorable daily window. Never shown to users by this name._
-
-| Weekday   | Low energy window   |
-| --------- | ------------------- |
-| Sunday    | 4:30 – 6:00 PM      |
-| Monday    | 7:30 – 9:00 AM      |
-| Tuesday   | 3:00 – 4:30 PM      |
-| Wednesday | 12:00 – 1:30 PM     |
-| Thursday  | 1:30 – 3:00 PM      |
-| Friday    | 10:30 AM – 12:00 PM |
-| Saturday  | 9:00 – 10:30 AM     |
-
-In production: the low energy window is calculated as `(sunrise_to_sunset / 8) × rahu_kaal_index_by_weekday`. This is a standard Vedic formula requiring actual sunrise/sunset times.
-
-#### Storage
-
-No storage needed. Computed at render time from `vaara` + local sunrise time. Pre-computed into `today_summary_cache` alongside other daily data.
-
----
-
-### Block 9: Cosmic Body Map
-
-**AI: NO** — fully deterministic. Nakshatra-to-body-part mapping is a fixed lookup table (standard Vedic system).
-**Placement:** After Block 8 (Power Windows), before Block 10 (Daily Oracle).
-**Purpose:** Shows users where today's cosmic energy lands in their body. Unique — no competitor has this. Creates a moment of self-awareness that bridges astrology and wellbeing. Read-only block; no interaction required.
+Fixed 27-entry lookup: today's moon nakshatra → body area + awareness tip.
 
 #### What is displayed
 
-A two-part block:
-
-1. **Body focus line:** The nakshatra-governed body area for today, plain English.
-2. **Awareness tip:** A single practical sentence — what to notice, protect, or nurture in that area today.
-
-**Visual:** A simple schematic body outline (SVG) with the governed area highlighted in the day's accent colour. On the right: the text description. Tapping the highlighted zone shows the full tip.
-
 ```
-🫁  PUSHYA DAY
-Body focus: chest, lungs, stomach
-"Digestive energy is more sensitive today —
- eat lighter and avoid skipping meals"
+{body_icon}  {NAKSHATRA_NAME} DAY
+Body focus: {body_area}
+"{awareness_tip}"
 ```
 
-#### Nakshatra → body part mapping (full 27-entry table)
+Visual: SVG body outline with governed area highlighted. Tap highlighted zone for full tip.
+
+#### On tap — Vedic details
+
+Tapping the card expands an inline panel with a word-only Vedic explanation (no numbers). Built from:
+
+- Today's Moon nakshatra (`today_nakshatra_idx`)
+- Nakshatra devata, guna, and symbol (from Block 3 lookup)
+- Body area from the 27-entry Kala Purusha mapping
+- Current paksha (Shukla / Krishna)
+
+Example (Pushya · chest, stomach & lungs):
+
+> In the nakshatra–body correspondence (Kala Purusha), Chandra in Pushya activates the chest, stomach & lungs. Pushya is ruled by Brihaspati, carries Tamas guna, and is symbolised by Flower / circle — during Shukla paksha (waxing Moon), somatic sensitivity gathers in this region rather than spreading evenly through the body. Jupiter's own star — excellent for almost any positive activity. Today's practical focus: digestive energy is sensitive — eat lighter and avoid skipping meals.
+
+```
+onTap(body_map):
+  toggle expanded panel
+  explanation = deterministic template (no AI, no cache needed)
+```
+
+#### Full 27-entry lookup table
 
 | Nakshatra         | Body area                    | Awareness tip                                                                    |
 | ----------------- | ---------------------------- | -------------------------------------------------------------------------------- |
@@ -1376,165 +1711,393 @@ Body focus: chest, lungs, stomach
 | Uttara Bhadrapada | feet, immune system          | Rest supports your immune energy today — don't push through tiredness            |
 | Revati            | feet, digestive system       | A gentle walk and a lighter evening meal serve you well today                    |
 
-#### Storage
-
-No storage needed. Computed from `nakshatra` (today's value from panchang). Pre-included in `today_summary_cache` payload alongside other daily data.
+**Storage:** none. Computed from `today_nakshatra_idx`. Pre-included in `today_summary_cache`.
 
 ---
 
-### Block 10: Daily Oracle
+### Block 9: Daily Oracle
 
-**AI: NO** — fully deterministic. One card is shown per day, assigned deterministically by nakshatra.
-**Placement:** Between Block 9 (Cosmic Body Map) and Block 11 (Moon Streak).
-**Purpose:** A daily ritual — one meaningful message revealed once. No choice anxiety, no FOMO from unchosen cards. The single-card format makes each message feel more significant.
+**AI: NO** — fully deterministic.
 
-#### Behaviour
-
-1. A single face-down card is shown with "Tap to reveal" and "Your message is waiting".
-2. The card flips with a CSS 3D animation (Y-axis rotation, ~550ms) when tapped.
-3. The revealed face shows: icon, card name, message text, attribution (nakshatra · tithi).
-4. **Once per day only** — after flip, the card cannot be reset until midnight.
-5. Below the card: "Tap the card to receive today's message" → "✓ Your message for today" after reveal.
-
-#### Card assignment (deterministic)
+#### Card assignment
 
 ```
-nakshatra_index = index of nakshatra in canonical 27-nakshatra list (0–26)
+nakshatra_index = index of today's moon nakshatra (0–26)
 card            = ORACLE_CARDS[nakshatra_index]
 ```
 
-**27 unique cards** — one per nakshatra. Each nakshatra has a single fixed message. Same nakshatra always returns the same card, every day that nakshatra is active.
+27 unique cards — one per nakshatra. Same nakshatra always returns the same card.
 
-Cards are stored in a `ORACLE_CARDS` constant (27 entries). No database lookup needed for selection.
+#### Behaviour
+
+1. Single face-down card shown: "Tap to reveal" / "Your message is waiting".
+2. Card flips with CSS 3D Y-axis animation (~550ms) on tap.
+3. Revealed: icon + card name + message text + attribution (nakshatra · tithi).
+4. **Once per day only** — card cannot be reset until midnight.
+5. Below card: "Tap the card to receive today's message" → "✓ Your message for today" after reveal.
 
 #### Storage
 
 ```
-user_checkins table → add column:
-  oracle_revealed:  BOOLEAN   not null default false
+user_checkins → add columns (if not already):
+  oracle_revealed:    BOOLEAN   not null default false
   oracle_revealed_at: TIMESTAMP nullable
 ```
 
 ---
 
-### Block 11: Moon Streak (modal)
+### Block 10: Dasha / Antardasha Snapshot
 
-**AI: NO** — fully deterministic.
+**AI: NO** — fully deterministic Vimshottari calculation from natal Moon position.
 
-#### Check-in logic
+#### Purpose
 
-A check-in is recorded automatically when the user opens the Today page. One check-in per calendar day per user, based on the user's local date (derived from their timezone). No action required from the user.
+Shows the user's current planetary cycle in **one plain-language sentence**. Makes Vedic astrology personal without overwhelming beginners. Technical details available on tap only.
 
-#### Streak calculation
+#### Display
 
-The streak is the number of consecutive calendar days (in the user's local timezone) on which the user opened the app, ending today. If a day is missed, the streak resets to 1 on the next check-in.
+```
+┌─────────────────────────────────────────────┐
+│  🪐 Your cycle now                          │
+│                                             │
+│  You are in the {planet_name} cycle         │
+│  {planet_simple_meaning}                    │
+│                                             │
+│  This cycle runs until {mahadasha_end}      │
+│                                             │
+│  {birth_time_warning — if applicable}       │
+│                                             │
+│  [ What does this mean? ]                   │
+└─────────────────────────────────────────────┘
+```
+
+`mahadasha_end_formatted`: month + year, e.g. "February 2027".
+
+**Birth time warning** (shown if `birth_time_known == false`):
+
+```
+⚠️ Birth time unknown — calculation is approximate (margin of up to 6 months)
+```
+
+#### On tap
+
+```
+{planet_name} Mahadasha
+
+Currently active: {antardasha_planet} Antardasha (until {antardasha_end})
+
+{antardasha_combination_meaning}
+```
+
+---
+
+#### Vimshottari Dasha — Full Algorithm
+
+**Constants:**
+
+```javascript
+const PLANET_ORDER = [
+  "Ketu",
+  "Venus",
+  "Sun",
+  "Moon",
+  "Mars",
+  "Rahu",
+  "Jupiter",
+  "Saturn",
+  "Mercury",
+];
+
+const PLANET_YEARS = {
+  Ketu: 7,
+  Venus: 20,
+  Sun: 6,
+  Moon: 10,
+  Mars: 7,
+  Rahu: 18,
+  Jupiter: 16,
+  Saturn: 19,
+  Mercury: 17,
+  // Total: 120 years
+};
+
+// Each nakshatra (0–26) is ruled by a planet in repeating sequence
+const NAKSHATRA_RULERS = [
+  "Ketu", // 0  Ashwini
+  "Venus", // 1  Bharani
+  "Sun", // 2  Krittika
+  "Moon", // 3  Rohini
+  "Mars", // 4  Mrigashira
+  "Rahu", // 5  Ardra
+  "Jupiter", // 6  Punarvasu
+  "Saturn", // 7  Pushya
+  "Mercury", // 8  Ashlesha
+  "Ketu", // 9  Magha
+  "Venus", // 10 Purva Phalguni
+  "Sun", // 11 Uttara Phalguni
+  "Moon", // 12 Hasta
+  "Mars", // 13 Chitra
+  "Rahu", // 14 Swati
+  "Jupiter", // 15 Vishakha
+  "Saturn", // 16 Anuradha
+  "Mercury", // 17 Jyeshtha
+  "Ketu", // 18 Mula
+  "Venus", // 19 Purva Ashadha
+  "Sun", // 20 Uttara Ashadha
+  "Moon", // 21 Shravana
+  "Mars", // 22 Dhanishtha
+  "Rahu", // 23 Shatabhishak
+  "Jupiter", // 24 Purva Bhadrapada
+  "Saturn", // 25 Uttara Bhadrapada
+  "Mercury", // 26 Revati
+];
+```
+
+**Step 1 — Find birth planet and elapsed fraction:**
+
+```javascript
+function computeDashaStart(natalMoonLongitude) {
+  const NAKSHATRA_SPAN = 360 / 27; // 13.3333... degrees
+
+  const nakshatraIdx = Math.floor(natalMoonLongitude / NAKSHATRA_SPAN);
+  const positionInNakshatra = natalMoonLongitude % NAKSHATRA_SPAN;
+  const fractionCompleted = positionInNakshatra / NAKSHATRA_SPAN;
+  const fractionRemaining = 1 - fractionCompleted;
+
+  const birthPlanet = NAKSHATRA_RULERS[nakshatraIdx];
+  const firstDashaYearsRemaining =
+    PLANET_YEARS[birthPlanet] * fractionRemaining;
+
+  return { birthPlanet, firstDashaYearsRemaining };
+}
+```
+
+**Step 2 — Build full Mahadasha timeline:**
+
+```javascript
+function buildMahadashaTimeline(
+  birthDate,
+  birthPlanet,
+  firstDashaYearsRemaining,
+) {
+  const timeline = [];
+  let cursor = new Date(birthDate);
+
+  // First (partial) dasha
+  const firstEnd = addYears(cursor, firstDashaYearsRemaining);
+  timeline.push({
+    planet: birthPlanet,
+    start: new Date(cursor),
+    end: firstEnd,
+  });
+  cursor = firstEnd;
+
+  // Remaining full dashas
+  let planetIdx = (PLANET_ORDER.indexOf(birthPlanet) + 1) % 9;
+  const maxDate = addYears(new Date(birthDate), 120);
+
+  while (cursor < maxDate) {
+    const planet = PLANET_ORDER[planetIdx];
+    const end = addYears(cursor, PLANET_YEARS[planet]);
+    timeline.push({ planet, start: new Date(cursor), end });
+    cursor = end;
+    planetIdx = (planetIdx + 1) % 9;
+  }
+
+  return timeline;
+}
+```
+
+**Step 3 — Find current Mahadasha:**
+
+```javascript
+function getCurrentMahadasha(timeline, today) {
+  return timeline.find(d => d.start <= today && today < d.end);
+}
+```
+
+**Step 4 — Build Antardasha timeline within current Mahadasha:**
+
+```javascript
+function buildAntardashaTimeline(mahadasha) {
+  const antardasha = [];
+  let cursor = new Date(mahadasha.start);
+  const mahaYears = PLANET_YEARS[mahadasha.planet];
+
+  // Antardasha sequence starts with the Mahadasha planet itself
+  let planetIdx = PLANET_ORDER.indexOf(mahadasha.planet);
+
+  for (let i = 0; i < 9; i++) {
+    const planet = PLANET_ORDER[(planetIdx + i) % 9];
+    const durationYears = (mahaYears * PLANET_YEARS[planet]) / 120;
+    const end = addYears(cursor, durationYears);
+    antardasha.push({ planet, start: new Date(cursor), end });
+    cursor = end;
+  }
+
+  return antardasha;
+}
+```
+
+**Step 5 — Find current Antardasha:**
+
+```javascript
+function getCurrentAntardasha(antardashaTimeline, today) {
+  return antardashaTimeline.find(a => a.start <= today && today < a.end);
+}
+```
+
+**`addYears` helper** must handle fractional years accurately:
+
+```javascript
+function addYears(date, years) {
+  const totalDays = years * 365.25; // Vimshottari uses 365.25 days/year
+  return new Date(date.getTime() + totalDays * 24 * 60 * 60 * 1000);
+}
+```
+
+---
+
+#### Planet meanings (displayed on main view — simple language)
+
+| Planet  | Mahadasha meaning (2 sentences, main view)                                                                          |
+| ------- | ------------------------------------------------------------------------------------------------------------------- |
+| Ketu    | A time of letting go and spiritual seeking. Material ambitions fade into the background — something deeper emerges. |
+| Venus   | A time of relationships, beauty, and joy. Attention shifts to what brings pleasure and harmony.                     |
+| Sun     | A time of self-expression and leadership. Your identity and reputation are in focus.                                |
+| Moon    | A time of emotions, intuition, and family. The inner world matters more than the outer.                             |
+| Mars    | A time of action and striving. Energy for achievement, but also a tendency toward conflict.                         |
+| Rahu    | A time of transformation and ambition. A strong desire for change and new experience.                               |
+| Jupiter | A time of wisdom and expansion. Growth, learning, and spiritual practice bear fruit.                                |
+| Saturn  | A time of structure and lessons. Persistent work and patience yield lasting results.                                |
+| Mercury | A time of communication and learning. Intellect, business, and connections are in focus.                            |
+
+#### Antardasha combination meanings (9×9 = 81 entries)
+
+Format: `ANTARDASHA_MEANINGS[mahadasha_planet][antardasha_planet] = "2–3 sentences"`
+
+Sample entries (content team fills all 81):
+
+```javascript
+const ANTARDASHA_MEANINGS = {
+  Venus: {
+    Moon: "Deep emotional connections and care for the home space. Attention to domestic beauty and nurturing energy.",
+    Jupiter:
+      "Love, inspiration, and spiritual growth together. A favourable time for marriage and major personal decisions.",
+    Saturn:
+      "Relationships require responsibility and effort. Beauty is born through discipline.",
+    Mercury:
+      "A time for creative projects and communication in relationships. Art and business go hand in hand.",
+    // ... etc.
+  },
+  Jupiter: {
+    Saturn:
+      "Growth through discipline. Jupiter expands, Saturn structures — time to build something lasting.",
+    Mars: "Ambition and spirituality in tension. Act decisively, but do not forget wisdom.",
+    // ... etc.
+  },
+  Saturn: {
+    Mars: "A tense sub-period. Saturn slows, Mars rushes — patience is key.",
+    // ... etc.
+  },
+  // ... all 81 combinations
+};
+```
+
+#### Storage
+
+```sql
+-- Add to astro_data (if not already present):
+ALTER TABLE astro_data ADD COLUMN natal_moon_longitude DECIMAL(10,6);
+ALTER TABLE astro_data ADD COLUMN birth_time_known BOOLEAN NOT NULL DEFAULT FALSE;
+
+-- Cache in today_summary_cache (update weekly — changes rarely):
+-- current_mahadasha_planet   VARCHAR
+-- current_mahadasha_end      DATE
+-- current_antardasha_planet  VARCHAR
+-- current_antardasha_end     DATE
+```
+
+---
+
+### Block 11: Moon Streak
+
+**AI: NO**
 
 #### Where it appears
 
-The streak is **not a separate page block**. It lives in two places:
+1. **Header pill** (always visible): `🔥 Day {N}` — tap opens streak modal.
+2. **Streak modal**: shows progress toward next milestone.
 
-1. **Header pill** (always visible): `🔥 Day {N}` — tapping this pill opens the streak modal.
-2. **Streak modal** (tap to open): shows **Day N of M** progress toward the next milestone, a day-by-day track (Day 1 → Day N → Day M), progress bar, grace day status, and the simple rule.
+#### Streak calculation
+
+```javascript
+// On check-in:
+const yesterday = await getCheckinDate(userId, today - 1 day);
+
+if (yesterday !== null) {
+  newStreak = yesterday.streak + 1;
+} else {
+  newStreak = 1; // streak resets; today is day 1
+}
+
+await upsertCheckin(userId, today, { streak: newStreak });
+```
+
+Missing a single day resets the streak to 1 on next visit. No exceptions.
 
 #### Streak modal content
 
 ```
 You're on
-🔥  Day 14
-of 29 · Full Cycle 🌕
+🔥  Day {N}
+of {milestone} · {milestone_label}
 
-[Day track: 1 ● ● ● … ● ○ ○ … ○ 29]
-Day 1 → Day 14 → Day 29
+[Day track: ● ● ● … ● ○ ○ … ○ {milestone}]
+Day 1 → Day {N} → Day {milestone}
 
-[████████████░░░░░░]  48% to next milestone
+[████████░░░░░░░░░░]  {N}/{milestone} to next milestone
 
-{N} more days to unlock Full Cycle 🌕
+{N_remaining} more days to unlock {next_milestone_label}
 
 Miss a day and your streak resets.
-One grace day allowed per week.
 ```
 
-The day track shows completed days (gold), today (larger gold dot), and upcoming days (empty). For long streaks, the track scrolls and shows `···` between segments. Milestone days (3, 7, 14, 29, 90, 180, 365) are highlighted in purple on the track.
+Milestone days (3, 7, 14, 29, 90, 180, 365) highlighted in purple on the day track.
 
-Simple. No progress ring, no moon phase strip. **Day N of M** is the point.
+#### Milestones
 
-#### Milestones (shown in modal goal line)
+| Streak | Goal line                                          |
+| ------ | -------------------------------------------------- |
+| < 7    | "{7 − N} more days to unlock First Week 🔥🔥"      |
+| 7–13   | "{14 − N} more days to unlock Moonwalker 🌙"       |
+| 14–28  | "{29 − N} more days to unlock Full Lunar Cycle 🌕" |
+| 29–89  | "{90 − N} more days to unlock Three Moons ✨"      |
+| ≥ 90   | "✨ Legendary — {N}-day streak"                    |
 
-| Streak | Goal message |
-|--------|-------------|
-| < 7    | "{7 - N} more days to unlock First Week 🔥🔥" |
-| 7–13   | "{14 - N} more days to unlock Moonwalker 🌙" |
-| 14–28  | "{29 - N} more days to unlock Full Lunar Cycle 🌕" |
-| 29–89  | "{90 - N} more days to unlock Three Moons ✨" |
-| ≥ 90   | "✨ Legendary — {N}-day streak" |
+#### Storage
 
-#### Grace Day display
-
-When a grace day was used in the current 7-day rolling period, the modal shows:
-
+```sql
+-- user_checkins required columns:
+--   user_id     UUID
+--   date        DATE
+--   streak      INTEGER
+--   check_in_at TIMESTAMP
 ```
-🛡️ Streak protected yesterday
-```
-
-See Block 0 for the grace day algorithm and storage details.
 
 ---
 
-### Block 12: Achievements
+### Block 12: Stories Carousel
 
-**AI: NO**
-
-Shows the 3 most recently earned badges as a horizontal row, plus a **"View all →"** button that opens the full achievements modal.
-
-#### View All Achievements Modal
-
-A full-screen overlay on the Today page showing all badges organised by category. No navigation away from the page required — modal slides up inside the phone frame.
-
-**Structure:**
-
-```
-┌──────────────────────────────────────┐
-│  All Achievements          [✕ Close] │
-│  ──────────────────────────────────  │
-│  [Cosmic Events] [Streak] [Loyalty]  │  ← category tabs (scroll)
-│  [Social] [Events]                   │
-│  ──────────────────────────────────  │
-│  🌕  Full Moon Witness               │
-│      Check in on Purnima     ✓ ×3    │  ← earned: ✓ + count if repeatable
-│  ──────────────────────────────────  │
-│  🌑  New Moon Keeper                 │
-│      Check in on Amavasya   🔒       │  ← locked: 40% opacity + lock icon
-│  ...                                 │
-└──────────────────────────────────────┘
-```
-
-**Badge categories (5 tabs):**
-
-| Category          | Badges                                                                                                                           | Repeatable |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| Cosmic Events     | Full Moon Witness, New Moon Keeper, Star Day, Lunar Birthday, Your Day, Rare Alignment, Eclipse Chaser, Solstice Keeper          | Yes (all)  |
-| Streak Milestones | First Spark (3d), First Week (7d), Moonwalker (14d), Full Cycle (29d), Three Moons (90d), Half Year (180d), Year of Stars (365d) | No         |
-| Loyalty           | First Steps (3d), One Week (7d), One Month (30d), Three Months (90d), Half Year (180d), One Full Year (365d)                     | No         |
-| Social            | First Connection, Rising Star (5 matches), Star Connector (20 matches), Sky Sharer (share card), Cosmic Invite (refer a friend)  | Partial    |
-| Events            | Star Gatherer (event check-in), Event Match, Event Regular (3+ events)                                                           | Partial    |
-
-**States:**
-
-- **Earned, repeatable:** ✓ badge on right + "×{count}" if count > 1
-- **Earned, one-time:** ✓ badge on right
-- **Locked:** 40% opacity, 🔒 icon on right
+**AI: NO** — stories scheduled via admin panel, personalized by nakshatra / moon_sign lookup.
 
 ---
 
 ### Block 13: Compatibility Pulse
 
-**AI: NO** — fully deterministic score based on panchang delta between user and each match.
-**Placement:** Between Block 12 (Achievements) and Block 14 (Reflect on Today).
-**Purpose:** Bridges the Today page with the Connect tab; creates a daily reason to open Connect; gives matched users a shared topic of conversation.
+**AI: NO** — fully deterministic.
 
 #### State A — Connect onboarding not completed
-
-If `user.connect_onboarding_completed = false`, the block shows a CTA card:
 
 ```
 ┌─────────────────────────────────────────┐
@@ -1551,245 +2114,77 @@ If `user.connect_onboarding_completed = false`, the block shows a CTA card:
 └─────────────────────────────────────────┘
 ```
 
-The CTA button deep-links to the Connect onboarding flow.
-
 #### State B — Connect onboarding completed
 
-Shows 1–3 match cards (limited to current active matches in the Connect tab).
-
-Each card displays:
+Shows 1–3 match cards. Each card:
 
 - Avatar emoji + Name + Birth nakshatra
 - Compatibility score (0–100) with colour-coded label
-- Score label: **Strong match** (≥80) · **Good match** (≥60) · **Different energies** (≥40) · **Rough day for connection** (<40)
-- Tap to expand → shows one-sentence insight explaining _why_ today's scores align or differ
+- **Strong match** (≥80) · **Good match** (≥60) · **Different energies** (≥40) · **Rough day** (<40)
+- Tap to expand → one-sentence insight
 
 #### Compatibility score algorithm
 
 ```
-For user A and user B, on date D:
+For users A and B on date D:
 
-score_A  = average of A's 6 category scores for date D
-score_B  = average of B's 6 category scores for date D
-delta    = |score_A – score_B|
-
-compat_score = 100 – round(delta * 0.8)   // clamp to [15, 99]
+score_A      = average of A's 6 individual category scores for date D
+score_B      = average of B's 6 individual category scores for date D
+delta        = |score_A – score_B|
+compat_score = clamp(100 – round(delta × 0.8), 15, 99)
 ```
 
-The one-sentence insight is selected from a fixed insight template bank:
+#### Insight templates (keyed by (A_band, B_band))
 
 ```
-templates keyed by (A_band, B_band):
-  ('high', 'high')     → "Both at peak energy today — rare and powerful."
-  ('high', 'moderate') → "{A_name}'s energy dominates today — a good listening day for {B_name}."
-  ('high', 'low')      → "Strong pull from {A_name}, quiet from {B_name} — give space."
-  ('moderate', 'high') → "Their energy is higher today — let them lead the conversation."
-  ('moderate', 'moderate') → "Even energy — steady, comfortable day for connection."
-  ('moderate', 'low')  → "Different rhythms today — keep interactions light."
-  ('low', 'low')       → "Both in quiet energy — depth over activity."
-  etc.
+('high', 'high')         → "Both at peak energy today — rare and powerful."
+('high', 'moderate')     → "{A_name}'s energy dominates today — a good listening day for {B_name}."
+('high', 'low')          → "Strong pull from {A_name}, quiet from {B_name} — give space."
+('moderate', 'high')     → "Their energy is higher today — let them lead the conversation."
+('moderate', 'moderate') → "Even energy — steady, comfortable day for connection."
+('moderate', 'low')      → "Different rhythms today — keep interactions light."
+('low', 'high')          → "You're the quiet one today. Let {B_name} carry the energy."
+('low', 'moderate')      → "Different rhythms today — keep interactions light."
+('low', 'low')           → "Both in quiet energy — depth over activity."
 ```
 
-All templates are deterministic (same inputs → same output).
-
-#### Storage
-
-No new storage needed. Compatibility score is calculated at read time from today's cached scores for both users. Results are cached in `today_summary_cache` alongside the user's own daily data.
+**Storage:** no new storage. Compat score computed at read time, cached in `today_summary_cache`.
 
 ---
 
-### Block 15: Ask the Stars
+### Block 14: Achievements
 
-**AI: NO** — fully deterministic. User types any free-text question, receives a pre-written oracular answer from a fixed 50-entry bank, selected by nakshatra × tithi.
-**Placement:** After Block 13 (Compatibility Pulse), before Block 16 (Vedic Dice).
-**Purpose:** Creates the feeling of mystical guidance while requiring zero AI. The ritual — typing a real question, a brief "reading" animation, a meaningful answer — is emotionally resonant and highly shareable.
+**AI: NO** — last block on the page.
 
-#### Behaviour
+Shows 3 most recently earned badges as a horizontal row + **"View all →"** button.
 
-1. User sees: title + prompt ("What's on your mind today?") + text input.
-2. User types any question and taps "Ask the stars →".
-3. **1.7-second reading animation**: a pulsing orb with the ✦ symbol and text "Reading {nakshatra} nakshatra…"
-4. Answer is revealed with attribution: nakshatra name + tithi number.
-5. Once answered, the input is replaced — the user cannot re-ask today.
-6. A small note reads: _"This answer is set by today's sky. It won't change until tomorrow."_
+#### View All Modal
 
-#### Answer selection algorithm
+Full-screen overlay. 5 category tabs.
 
 ```
-nakshatra_idx = canonical index of today's nakshatra (0–26)
-answer_idx    = (nakshatra_idx × 3 + tithi) % 50
-answer        = ANSWER_BANK[answer_idx]
+┌──────────────────────────────────────┐
+│  All Achievements          [✕ Close] │
+│  ──────────────────────────────────  │
+│  [Cosmic Events] [Streak] [Loyalty]  │
+│  [Social] [Events]                   │
+│  ──────────────────────────────────  │
+│  🌕  Full Moon Witness               │
+│      Check in on Purnima     ✓ ×3    │
+│  ──────────────────────────────────  │
+│  🌑  New Moon Keeper                 │
+│      Check in on Amavasya   🔒       │
+│  ...                                 │
+└──────────────────────────────────────┘
 ```
 
-The question text is **not used for selection** — the answer is purely astronomical. This is intentional: the same cosmic sky answers everyone the same way today, regardless of what they asked. This is philosophically coherent with Vedic astrology and creates the "the stars knew what I needed to hear" moment.
-
-#### Answer bank
-
-50 unique responses covering the full spectrum of oracle archetypes:
-
-- Direct yes / no / not-yet
-- Action nudges ("Move forward. The hesitation is fear, not wisdom.")
-- Patience nudges ("Wait three days. The answer will be clearer after the moon shifts.")
-- Reflective / reframe ("The answer is already inside you. You're asking the stars to confirm it.")
-- Mystery / trust ("This is not a door you open. It opens itself when ready.")
-
-The bank is stored as a constant array in the codebase — no database table needed.
-
-#### Server-side input validation
-
-Before looking up the answer, the backend runs two validation checks on the question text:
-
-**1. Meaningfulness check (AI-powered, lightweight)**
-
-The question is sent to a small classifier (GPT-4o-mini, ~10 tokens, <100ms) that determines whether the input is a genuine question. If the input is gibberish, keyboard spam, or clearly not a question (e.g. "asdaskdhas", "123abc", random characters), the API returns `{ valid: false }` and **no answer is shown**. The UI displays nothing — no error message, no fallback. The input is cleared silently.
-
-```
-Prompt: "Is this a genuine question a person would ask? Answer only: yes / no"
-Input:  "{user_question}"
-```
-
-Cost: ~$0.000005 per request. Called only once per day per user (after first valid question, the result is cached).
-
-**2. Safety override (rule-based, no AI)**
-
-A hardcoded blocklist of patterns detects self-harm, harm to others, or crisis-level language (e.g. "should I jump", "end my life", "hurt someone"). If matched:
-- The answer returned is always: **"No."** — unconditionally, regardless of nakshatra or tithi.
-- The response also includes a support resource link (configurable per locale).
-- This check runs **before** the meaningfulness check and cannot be bypassed.
-
-```javascript
-const SAFETY_PATTERNS = [
-  /jump.*floor|roof|bridge/i,
-  /end.*my.*life|kill.*myself/i,
-  /hurt.*someone|harm.*person/i,
-  // ... etc
-]
-
-function isSafetyOverride(question) {
-  return SAFETY_PATTERNS.some(p => p.test(question))
-}
-```
-
-**Validation flow:**
-
-```
-user submits question
-        ↓
-  safety check (rule-based)
-  ├─ match → return "No." + support link
-  └─ no match
-        ↓
-  meaningfulness check (AI)
-  ├─ not meaningful → return { valid: false }, UI clears silently
-  └─ meaningful
-        ↓
-  look up answer by (nakshatra_idx × 3 + tithi) % 50
-  return answer
-```
-
-Note: The demo does not implement these validation steps. They are production-only server-side logic.
-
-#### Storage
-
-```
-user_checkins → add column:
-  star_question: TEXT  nullable   (the question text, stored for user's history)
-  star_answer_idx: SMALLINT nullable  (the index used, for audit/analytics)
-  star_asked_at: TIMESTAMP nullable
-  star_was_safety_override: BOOLEAN not null default false
-```
-
-The stored answer index allows us to reconstruct the exact answer shown to the user, even if the bank order changes (we keep a versioned snapshot).
-
----
-
-### Block 16: Vedic Dice
-
-**AI: NO** — fully deterministic. Number derived from nakshatra index + tithi modulo 9, mapped to Vedic number meanings.
-**Placement:** After Block 15 (Ask the Stars), before Block 18 (Stories).
-**Purpose:** A tactile, one-tap daily ritual. User gets their cosmic number for the day — a number 1–9 with a short meaning. The satisfying dice-roll animation creates a habit loop. Earns an achievement on first use. **One roll per day only** (resets at midnight); this scarcity drives daily return.
-
-#### What is displayed
-
-- A stylised die showing today's Vedic number (1–9)
-- A one-word quality for that number (e.g. "Clarity", "Strength", "Expansion")
-- A two-sentence interpretation personalised to today's sky (nakshatra + number quality)
-- A note: _"Your cosmic number resets at midnight"_
-
-```
-  ┌───────────┐
-  │     7     │  COSMIC NUMBER
-  │  ● ● ● ●  │  ANALYSIS
-  │  ● ● ●    │
-  └───────────┘
-  Quality: WISDOM
-  "Seven is the number of deep knowing. Today's
-   Pushya sky amplifies this — trust what you
-   already understand, even if you can't explain it."
-```
-
-#### Roll animation
-
-1. User taps "Roll" button (large, tactile)
-2. Die face cycles rapidly through 1–9 (300ms, 9 frames at 33ms each)
-3. Slows and **lands on the cosmic number** (~400ms deceleration)
-4. Number face freezes; quality word fades in; interpretation slides up
-5. After reveal: "Roll" button becomes "Rolled ✓" and is disabled for the day
-
-Total animation: ~700ms — feels magical, runs entirely in CSS/JS, no network call.
-
-#### Number selection algorithm
-
-```
-nakshatra_idx = canonical nakshatra index (0–26)
-cosmic_number = ((nakshatra_idx + tithi - 1) % 9) + 1
-```
-
-This produces a number 1–9. Same sky = same number all day. Changes daily.
-
-#### Vedic number meanings (the 9-entry lookup table)
-
-| Number | One-word quality | Full interpretation template                                                                                                            |
-| ------ | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| 1      | New Beginnings   | "One is the number of first steps. Today is favoured for starting — an action taken now carries more force than one taken later."       |
-| 2      | Balance          | "Two is the number of partnership. What needs to be weighed, shared, or aligned? Today responds well to cooperation over solo effort."  |
-| 3      | Expression       | "Three is the number of creativity and communication. Say what needs saying. Create what wants to be made. Today amplifies your voice." |
-| 4      | Foundation       | "Four is the number of structure and stability. Build something that will last — plans made today have staying power."                  |
-| 5      | Movement         | "Five is the number of change and momentum. Expect movement in situations that felt stuck. Stay adaptable — the shift is real."         |
-| 6      | Harmony          | "Six is the number of beauty and care. Relationships and your environment respond to attention today. Small acts of kindness carry."    |
-| 7      | Wisdom           | "Seven is the number of deep knowing. Trust what you already understand, even if you can't fully explain it yet."                       |
-| 8      | Power            | "Eight is the number of authority and results. Today is for decisions, leadership, and completing what you started."                    |
-| 9      | Completion       | "Nine is the number of endings that clear the path. Something finishing today is making space. Let it go cleanly."                      |
-
-#### Storage
-
-```
-user_checkins → add column:
-  dice_rolled_at: TIMESTAMP nullable   (null = not rolled today)
-  dice_number: SMALLINT nullable        (1–9, for analytics/history)
-```
-
-The rolled state persists per calendar day (reset at midnight local time). If user rolls, closes app, and returns — they see their result, not a new roll.
-
----
-
-### Block 18: Stories Carousel
-
-No changes from current implementation. Stories are scheduled via admin panel and personalized by nakshatra / moon_sign lookup.
+States: **Earned repeatable** (✓ + ×count) · **Earned one-time** (✓) · **Locked** (🔒, 40% opacity)
 
 ---
 
 ## 5. Achievement System — Full Spec
 
-Achievements are earned automatically on check-in. All checks run server-side in `POST /checkin`.
-
-### Types
-
-- **One-time badges:** earned once, live permanently.
-- **Repeatable badges:** can be earned multiple times (accumulate count). Show `× N` on the badge.
-- **Milestone badges:** earned at specific streak thresholds, one-time per threshold.
-
----
+Achievements are evaluated automatically on every check-in. All checks run server-side in `POST /checkin`.
 
 ### Category 1: Cosmic Events (repeatable)
 
@@ -1802,40 +2197,34 @@ Achievements are earned automatically on check-in. All checks run server-side in
 | `vaara_birthday`    | 📅   | Your Day          | Checked in on Vaara Birthday        | Weekly             |
 | `rare_alignment`    | 🌟   | Rare Alignment    | Nakshatra + Tithi + Vaara all match | A few times/year   |
 | `eclipse_chaser`    | 🌒   | Eclipse Chaser    | Checked in during lunar eclipse     | Very rare          |
-| `solar_event`       | ☀️   | Solstice Keeper   | Checked in on solstice or equinox   | 4 times/year       |
-
----
+| `solar_event`       | ☀️   | Solstice Keeper   | Checked in on solstice or equinox   | 4×/year            |
 
 ### Category 2: Streak Milestones (one-time per threshold)
 
-| Badge ID     | Icon | Name          | Trigger                              |
-| ------------ | ---- | ------------- | ------------------------------------ |
-| `streak_3`   | 🔥   | First Spark   | 3-day streak                         |
-| `streak_7`   | 🔥🔥 | First Week    | 7-day streak                         |
-| `streak_14`  | 🌙   | Moonwalker    | 14-day streak                        |
-| `streak_29`  | 🌕   | Full Cycle    | 29-day streak (one full lunar cycle) |
-| `streak_90`  | ✨   | Three Moons   | 90-day streak                        |
-| `streak_180` | 🌠   | Half Year     | 180-day streak                       |
-| `streak_365` | 🏆   | Year of Stars | 365-day streak                       |
+| Badge ID     | Icon | Name          | Trigger        |
+| ------------ | ---- | ------------- | -------------- |
+| `streak_3`   | 🔥   | First Spark   | 3-day streak   |
+| `streak_7`   | 🔥🔥 | First Week    | 7-day streak   |
+| `streak_14`  | 🌙   | Moonwalker    | 14-day streak  |
+| `streak_29`  | 🌕   | Full Cycle    | 29-day streak  |
+| `streak_90`  | ✨   | Three Moons   | 90-day streak  |
+| `streak_180` | 🌠   | Half Year     | 180-day streak |
+| `streak_365` | 🏆   | Year of Stars | 365-day streak |
 
----
+### Category 3: Loyalty Milestones (one-time)
 
-### Category 3: Time in App — Loyalty Milestones (one-time)
+Triggered by `account_age_days` (days since registration).
 
-Triggered by `account_age_days` (days since registration), not streak.
+| Badge ID       | Icon | Name          | Trigger  |
+| -------------- | ---- | ------------- | -------- |
+| `loyalty_3d`   | 🌱   | First Steps   | 3 days   |
+| `loyalty_7d`   | 🌿   | First Week    | 7 days   |
+| `loyalty_30d`  | 🌳   | One Month     | 30 days  |
+| `loyalty_90d`  | 🌲   | Three Months  | 90 days  |
+| `loyalty_180d` | 🏔️   | Half Year     | 180 days |
+| `loyalty_365d` | 🌌   | One Full Year | 365 days |
 
-| Badge ID       | Icon | Name          | Trigger                |
-| -------------- | ---- | ------------- | ---------------------- |
-| `loyalty_3d`   | 🌱   | First Steps   | 3 days since joining   |
-| `loyalty_7d`   | 🌿   | First Week    | 1 week since joining   |
-| `loyalty_30d`  | 🌳   | One Month     | 30 days since joining  |
-| `loyalty_90d`  | 🌲   | Three Months  | 90 days since joining  |
-| `loyalty_180d` | 🏔️   | Half Year     | 180 days since joining |
-| `loyalty_365d` | 🌌   | One Full Year | 365 days since joining |
-
----
-
-### Category 4: Social & Matching (one-time or repeatable)
+### Category 4: Social & Matching
 
 | Badge ID               | Icon | Name             | Trigger                     | Type       |
 | ---------------------- | ---- | ---------------- | --------------------------- | ---------- |
@@ -1843,37 +2232,27 @@ Triggered by `account_age_days` (days since registration), not streak.
 | `five_matches`         | 💫💫 | Rising Star      | 5 matches total             | One-time   |
 | `twenty_matches`       | 🌟   | Star Connector   | 20 matches total            | One-time   |
 | `compatibility_reader` | 🔭   | Cosmic Reader    | Viewed compatibility report | One-time   |
-| `invited_friend`       | 🤝   | Cosmic Invite    | Invited a friend who joined | Repeatable |
+| `invited_friend`       | 🤝   | Cosmic Invite    | Referred friend who joined  | Repeatable |
 | `shared_today`         | 📲   | Sky Sharer       | Shared Today card to social | Repeatable |
 
----
+### Category 5: Events
 
-### Category 5: Events (repeatable per event)
-
-| Badge ID        | Icon | Name          | Trigger                     |
-| --------------- | ---- | ------------- | --------------------------- |
-| `event_checkin` | 🎪   | Star Gatherer | Checked in at a Bisou event |
-| `event_matched` | 🎯   | Event Match   | Got a match at an event     |
-| `event_series`  | 🏅   | Event Regular | Attended 3+ events          |
-
-Events are flagged via the existing event check-in system. Badge is awarded when `event_attendance` record is created for a user.
-
----
+| Badge ID        | Icon | Name          | Trigger                   |
+| --------------- | ---- | ------------- | ------------------------- |
+| `event_checkin` | 🎪   | Star Gatherer | Checked in at Bisou event |
+| `event_matched` | 🎯   | Event Match   | Got a match at an event   |
+| `event_series`  | 🏅   | Event Regular | Attended 3+ events        |
 
 ### Badge stacking (repeatable badges)
 
-Repeatable badges show count and optionally change appearance at milestones:
-
 ```
-Full Moon Witness ×1   → 🌕 standard
-Full Moon Witness ×3   → 🌕 silver glow
-Full Moon Witness ×6   → 🌕 gold glow
-Full Moon Witness ×12  → 🌕 with crown (full year)
+Full Moon Witness ×1  → 🌕 standard
+Full Moon Witness ×3  → 🌕 silver glow
+Full Moon Witness ×6  → 🌕 gold glow
+Full Moon Witness ×12 → 🌕 with crown (full year)
 ```
 
-Visual tiers: Standard → Silver → Gold → Crown (at 1×, 3×, 6×, 12+×).
-
----
+Tiers: Standard → Silver → Gold → Crown (at 1×, 3×, 6×, 12+×).
 
 ### Award logic (runs on every check-in)
 
@@ -1897,7 +2276,7 @@ async function awardBadges(userId, context) {
       id: "full_moon_witness",
       check: () => today_tithi.number === 15,
       repeatable: true,
-      dedupe_key: `full_moon_${today_date}`, // one per lunar cycle
+      dedupe_key: `full_moon_${today_date}`,
     },
     {
       id: "new_moon_keeper",
@@ -1929,28 +2308,18 @@ async function awardBadges(userId, context) {
       repeatable: true,
       dedupe_key: `eclipse_${today_date}`,
     },
-    {
-      id: "streak_7",
-      check: () => streak === 7,
-      repeatable: false,
-    },
-    {
-      id: "streak_14",
-      check: () => streak === 14,
-      repeatable: false,
-    },
+    { id: "streak_3", check: () => streak === 3, repeatable: false },
+    { id: "streak_7", check: () => streak === 7, repeatable: false },
+    { id: "streak_14", check: () => streak === 14, repeatable: false },
     {
       id: "streak_29",
       check: () => streak === 29,
       repeatable: true,
-      dedupe_key: `full_cycle_${lunar_cycle_id}`, // unique per lunar cycle
+      dedupe_key: `full_cycle_${lunar_cycle_id}`,
     },
-    {
-      id: "streak_365",
-      check: () => streak === 365,
-      repeatable: false,
-    },
-    // loyalty badges
+    { id: "streak_90", check: () => streak === 90, repeatable: false },
+    { id: "streak_180", check: () => streak === 180, repeatable: false },
+    { id: "streak_365", check: () => streak === 365, repeatable: false },
     {
       id: "loyalty_7d",
       check: () => account_age_days === 7,
@@ -1959,6 +2328,11 @@ async function awardBadges(userId, context) {
     {
       id: "loyalty_30d",
       check: () => account_age_days === 30,
+      repeatable: false,
+    },
+    {
+      id: "loyalty_90d",
+      check: () => account_age_days === 90,
       repeatable: false,
     },
     {
@@ -1991,83 +2365,82 @@ async function awardBadges(userId, context) {
 
 ## 6. Dynamic Background System
 
-See [Section 3 — Dynamic Background](#3-dynamic-background) for the full spec, all 20 asset keys, the time-of-day tint system, and the selection algorithm. The background key is stored in `today_summary_cache.background_key` and resolved once per day at midnight.
+See [Section 3 — Dynamic Background](#3-dynamic-background) for the full spec, all 20 asset keys, the time-of-day tint system, and the selection algorithm.
+
+The background key is stored in `today_summary_cache.background_key` and resolved once per day at midnight.
 
 ---
 
 ## 7. Caching & Performance
 
-### Cache strategy
+### Pre-generation job
 
-All expensive content is pre-generated nightly at **00:00 local time** for active users via the existing `today-page-pregen` job.
+All deterministic content is pre-computed at **00:00 local time** for active users via `today-page-pregen` job.
 
-```
-today_summary_cache stores per user per day:
-  - background_key          (deterministic, instant)
-  - headline_type           (deterministic, instant)
-  - category_scores [6]     (deterministic, instant)
-  - category_labels [6]     (deterministic, instant)
-  - do_tips [3]             (deterministic, instant)
-  - avoid_tips [3]          (deterministic, instant)
-  - vibe_text               (AI — 1 call, cached)
-  - category_explanations   (AI — 6 calls, cached)
-  - morning_text            (template, instant)
-  - afternoon_text          (template, instant)
-  - evening_text            (template, instant)
-  - tomorrow_preview        (deterministic, instant — rebuilt nightly)
-```
+### Cache table: `today_summary_cache` (per user per date)
+
+| Field                       | Source                | TTL                     |
+| --------------------------- | --------------------- | ----------------------- |
+| `background_key`            | deterministic         | until midnight          |
+| `synthesis_type`            | deterministic         | until midnight          |
+| `synthesis_text`            | deterministic         | until midnight          |
+| `moon_transit_line`         | ephemeris             | until midnight          |
+| `category_scores_6`         | deterministic         | until midnight          |
+| `energy_scores_3`           | derived from 6        | until midnight          |
+| `energy_labels_3`           | derived               | until midnight          |
+| `do_tips[3]`                | deterministic         | until midnight          |
+| `avoid_tips[3]`             | deterministic         | until midnight          |
+| `nakshatra_of_day_idx`      | ephemeris             | until midnight          |
+| `your_day_texts[3]`         | template lookup       | until midnight          |
+| `power_windows`             | hora + rahu + abhijit | until midnight          |
+| `rahu_kaal_start`           | formula from sunrise  | until midnight          |
+| `rahu_kaal_end`             | formula from sunrise  | until midnight          |
+| `abhijit_start`             | formula from sunrise  | until midnight          |
+| `abhijit_end`               | formula from sunrise  | until midnight          |
+| `energy_ai_explanations[3]` | AI — on first tap     | until midnight          |
+| `dasha_current`             | Vimshottari           | 7 days (rarely changes) |
+| `social_proof_counts`       | real user count       | refreshed every 30 min  |
 
 ### AI calls per user per day
 
-| Call                                 | Count | Model       |
-| ------------------------------------ | ----- | ----------- |
-| Vibe text                            | 1     | gpt-4o-mini |
-| Category explanation (on-demand tap) | 0–6   | gpt-4o-mini |
-| **Max total**                        | **7** |             |
+| Call                                 | Count | Model       | When                              |
+| ------------------------------------ | ----- | ----------- | --------------------------------- |
+| Energy category explanation (on tap) | 0–3   | gpt-4o-mini | First tap on each of 3 categories |
+| **Max total**                        | **3** |             |                                   |
 
-Category explanations are lazy-loaded: generated only when user taps a category for the first time that day, then cached.
+Max **3** AI calls per user per day — all cached until midnight.
 
-### Response time target
+### Response time targets
 
 - Today page initial load: **< 200ms** (all from cache)
-- Category tap explanation (first time): **< 2s** (AI call)
-- Category tap explanation (cached): **< 50ms**
+- Energy tap AI explanation (first time): **< 2s**
+- Energy tap AI explanation (cached): **< 50ms**
+- Moon transit calculation: **< 100ms** (binary search on ephemeris, pre-cached)
 
 ---
 
 ## 8. AI Usage Summary
 
-| Block                         | AI  | When generated         | Cached until |
-| ----------------------------- | --- | ---------------------- | ------------ |
-| Day Headline                  | ❌  | —                      | —            |
-| Energy Scores                 | ❌  | —                      | —            |
-| Energy Labels                 | ❌  | —                      | —            |
-| Category Explanation (on tap) | ✅  | On first tap that day  | Midnight     |
-| Do / Avoid selection          | ❌  | —                      | —            |
-| Do / Avoid texts              | ❌  | Fixed content set      | —            |
-| Today's Vibe                  | ✅  | Nightly pre-generation | Midnight     |
-| Morning / Afternoon / Evening | ❌  | Fixed template lookup  | —            |
-| Moon Streak                   | ❌  | —                      | —            |
-| Badge award logic             | ❌  | —                      | —            |
-| Tomorrow's Preview            | ❌  | Fixed template lookup  | —            |
-| Background key                | ❌  | —                      | —            |
-| Stories                       | ❌  | Scheduled content      | —            |
+| Block                | AI             | When                           | Cache          |
+| -------------------- | -------------- | ------------------------------ | -------------- |
+| Block 2 (Energy tap) | ✅ gpt-4o-mini | First tap per category per day | Until midnight |
+| All other blocks     | ❌             | —                              | —              |
 
-**Summary: 2 AI touch points per day per user** — one vibe text (pre-generated nightly) and up to 6 category explanations (generated lazily on first tap, then cached). Everything else is deterministic and requires no AI call.
+**Maximum 3 AI calls per user per day.**
 
 ---
 
-## Appendix: Determinism Guarantee
+## 9. Determinism Guarantee
 
-Every block that is marked **AI: NO** is fully deterministic:
+Every block marked **AI: NO** is fully deterministic:
 
-> **Given the same `birth_data`, `today_date`, and `user_id`, the output is always identical.**
+> **Given the same `birth_data`, `today_date`, and user location, the output is always identical.**
 
 This is ensured by:
 
-- No `Math.random()` anywhere in scoring or selection
-- Do/Avoid tie-breaking is by fixed position in the content set (stable sort, earlier entry wins)
-- Block 5 texts are selected by a direct two-key lookup: `TEMPLATES[vaara][slot][energy_band]` — no arrays, no index arithmetic
-- All panchang calculations via Swiss Ephemeris with fixed Lahiri ayanamsa
-
-AI-generated fields (Vibe text, Category explanations) are generated once and cached, so they also become deterministic after first generation for that day.
+- No `Math.random()` anywhere in scoring, selection, or lookup
+- Do/Avoid tie-breaking by fixed position in content set (stable sort, earlier entry wins)
+- Block 6 texts selected by direct three-key lookup: `TEMPLATES[vaara_idx][slot][energy_band]`
+- All panchang calculations via Swiss Ephemeris with Lahiri ayanamsa
+- Dasha calculation uses `addYears` with 365.25 days/year (Vimshottari standard)
+- Social proof is real data (not deterministic), cached with 30-min TTL — the only non-deterministic non-AI value on the page

@@ -62,9 +62,12 @@
   padding: 0;
 }
 
-html,
-body {
+html {
   height: 100%;
+}
+body {
+  min-height: 100%;
+  overflow-y: auto;
   font-family: var(--font-sans);
   background: #1a1a2e;
   color: var(--neutral-900);
