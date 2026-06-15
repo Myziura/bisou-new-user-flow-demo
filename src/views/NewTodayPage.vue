@@ -3,34 +3,139 @@ import { ref, computed } from 'vue'
 import PhoneFrame from '../components/PhoneFrame.vue'
 
 // ── Background gradients ─────────────────────────────────────────────────────
+// Each entry stacks: [planetary bloom] + [depth bloom] + [dark base]
+// All share the same visual language: near-black base + 1-2 soft radial blooms
 
 const BG = {
-  celestial_event:   'linear-gradient(135deg, #1a0533 0%, #4d0f8f 25%, #0a1a4a 55%, #0f3a2a 100%)',
-  eclipse:           'radial-gradient(ellipse at 50% 35%, #6b1a00 0%, #2a0000 50%, #000000 100%)',
-  full_moon:         'linear-gradient(180deg, #060e2a 0%, #0d1d54 35%, #1a2d7a 65%, #253a8c 100%)',
-  new_moon:          'linear-gradient(180deg, #020406 0%, #040810 40%, #060a16 70%, #080c1c 100%)',
-  star_day:          'linear-gradient(135deg, #120038 0%, #28005e 45%, #0d0028 100%)',
-  lunar_birthday:    'linear-gradient(180deg, #0a152e 0%, #142450 40%, #1e2a60 70%, #201540 100%)',
-  your_day:          'linear-gradient(180deg, #2a1000 0%, #5a2800 35%, #a04820 65%, #c86030 100%)',
-  solar_gate:        'linear-gradient(180deg, #3a2600 0%, #7a5000 35%, #c07a00 70%, #e0b820 100%)',
-  venus_evening:     'linear-gradient(180deg, #280a20 0%, #581840 40%, #9c3860 70%, #c45848 100%)',
-  moon_embrace:      'linear-gradient(180deg, #06101c 0%, #0e1c34 35%, #182c4e 65%, #243660 100%)',
-  jupiter_abundance: 'linear-gradient(180deg, #06101e 0%, #0e1e38 35%, #1a3268 65%, #503a00 100%)',
-  mercury_mind:      'linear-gradient(135deg, #001016 0%, #002030 40%, #003e48 70%, #006050 100%)',
-  mars_fire:         'linear-gradient(180deg, #120000 0%, #280000 30%, #600000 60%, #9a2800 100%)',
-  sun_radiance:      'linear-gradient(180deg, #281600 0%, #583000 30%, #9c6600 60%, #ce9618 100%)',
-  saturn_clarity:    'linear-gradient(180deg, #04080e 0%, #0c1228 40%, #141c3e 70%, #1c2450 100%)',
-  golden_hour:       'linear-gradient(180deg, #1e0e00 0%, #4e2c00 35%, #9a5c00 65%, #cc7c00 100%)',
-  clear_sky:         'linear-gradient(180deg, #060c1c 0%, #0e1c36 35%, #1a2e58 65%, #264272 100%)',
-  overcast:          'linear-gradient(180deg, #0e1016 0%, #1a1e2c 40%, #262a40 70%, #383c58 100%)',
-  cloudy:            'linear-gradient(180deg, #0c0e16 0%, #181a2a 40%, #24283c 70%, #484c64 100%)',
-  deep_night:        'linear-gradient(180deg, #020204 0%, #040508 40%, #06080e 70%, #080e28 100%)',
+  // Special events — vivid & distinct
+  celestial_event: [
+    'radial-gradient(ellipse 90% 55% at 25% 15%, rgba(140,55,255,0.50) 0%, transparent 65%)',
+    'radial-gradient(ellipse 70% 45% at 80% 85%, rgba(0,180,200,0.25) 0%, transparent 60%)',
+    'linear-gradient(175deg, #08011a 0%, #04091e 55%, #060d18 100%)',
+  ].join(', '),
+
+  eclipse: [
+    'radial-gradient(ellipse 75% 50% at 50% 20%, rgba(180,20,0,0.55) 0%, transparent 65%)',
+    'radial-gradient(ellipse 50% 35% at 50% 90%, rgba(80,10,0,0.4) 0%, transparent 60%)',
+    'linear-gradient(180deg, #080000 0%, #050000 55%, #020000 100%)',
+  ].join(', '),
+
+  full_moon: [
+    'radial-gradient(ellipse 70% 45% at 50% 10%, rgba(180,200,255,0.30) 0%, transparent 65%)',
+    'radial-gradient(ellipse 60% 40% at 50% 80%, rgba(40,80,180,0.22) 0%, transparent 60%)',
+    'linear-gradient(180deg, #03091e 0%, #06102e 50%, #0a183e 100%)',
+  ].join(', '),
+
+  new_moon: [
+    'radial-gradient(ellipse 55% 40% at 50% 15%, rgba(60,40,120,0.20) 0%, transparent 65%)',
+    'radial-gradient(ellipse 40% 30% at 50% 85%, rgba(20,10,60,0.15) 0%, transparent 60%)',
+    'linear-gradient(180deg, #010103 0%, #020307 50%, #030408 100%)',
+  ].join(', '),
+
+  star_day: [
+    'radial-gradient(ellipse 80% 50% at 40% 20%, rgba(120,40,255,0.50) 0%, transparent 65%)',
+    'radial-gradient(ellipse 55% 35% at 70% 75%, rgba(60,0,180,0.30) 0%, transparent 55%)',
+    'linear-gradient(165deg, #0a0120 0%, #060018 55%, #04000e 100%)',
+  ].join(', '),
+
+  lunar_birthday: [
+    'radial-gradient(ellipse 70% 45% at 50% 15%, rgba(130,160,255,0.28) 0%, transparent 60%)',
+    'radial-gradient(ellipse 55% 35% at 55% 80%, rgba(100,40,180,0.25) 0%, transparent 55%)',
+    'linear-gradient(180deg, #030a1e 0%, #07102c 50%, #0c1638 100%)',
+  ].join(', '),
+
+  // Planetary rulers
+  your_day: [
+    'radial-gradient(ellipse 75% 50% at 50% 10%, rgba(220,100,20,0.45) 0%, transparent 65%)',
+    'radial-gradient(ellipse 55% 35% at 50% 90%, rgba(140,50,0,0.30) 0%, transparent 55%)',
+    'linear-gradient(180deg, #120400 0%, #0e0300 55%, #080200 100%)',
+  ].join(', '),
+
+  solar_gate: [
+    'radial-gradient(ellipse 80% 50% at 50% 12%, rgba(220,160,0,0.50) 0%, transparent 65%)',
+    'radial-gradient(ellipse 55% 35% at 50% 85%, rgba(160,80,0,0.30) 0%, transparent 55%)',
+    'linear-gradient(180deg, #130a00 0%, #0e0600 55%, #080400 100%)',
+  ].join(', '),
+
+  venus_evening: [
+    'radial-gradient(ellipse 75% 50% at 45% 15%, rgba(200,50,130,0.45) 0%, transparent 65%)',
+    'radial-gradient(ellipse 55% 35% at 60% 80%, rgba(140,20,80,0.30) 0%, transparent 55%)',
+    'linear-gradient(175deg, #100208 0%, #0a0206 55%, #060104 100%)',
+  ].join(', '),
+
+  moon_embrace: [
+    'radial-gradient(ellipse 70% 45% at 50% 12%, rgba(120,150,220,0.30) 0%, transparent 60%)',
+    'radial-gradient(ellipse 50% 35% at 50% 85%, rgba(40,80,160,0.20) 0%, transparent 55%)',
+    'linear-gradient(180deg, #020810 0%, #04101e 55%, #061428 100%)',
+  ].join(', '),
+
+  jupiter_abundance: [
+    'radial-gradient(ellipse 75% 50% at 45% 15%, rgba(40,80,200,0.45) 0%, transparent 65%)',
+    'radial-gradient(ellipse 55% 35% at 65% 80%, rgba(20,40,140,0.30) 0%, transparent 55%)',
+    'linear-gradient(175deg, #030812 0%, #050c1e 55%, #06102a 100%)',
+  ].join(', '),
+
+  mercury_mind: [
+    'radial-gradient(ellipse 70% 45% at 40% 18%, rgba(0,180,160,0.40) 0%, transparent 60%)',
+    'radial-gradient(ellipse 50% 35% at 70% 80%, rgba(0,100,80,0.25) 0%, transparent 55%)',
+    'linear-gradient(165deg, #000e0c 0%, #001210 55%, #001410 100%)',
+  ].join(', '),
+
+  mars_fire: [
+    'radial-gradient(ellipse 75% 50% at 50% 15%, rgba(200,30,0,0.50) 0%, transparent 65%)',
+    'radial-gradient(ellipse 55% 35% at 50% 85%, rgba(120,10,0,0.30) 0%, transparent 55%)',
+    'linear-gradient(180deg, #0e0000 0%, #090000 55%, #060000 100%)',
+  ].join(', '),
+
+  sun_radiance: [
+    'radial-gradient(ellipse 75% 50% at 50% 12%, rgba(220,150,0,0.50) 0%, transparent 65%)',
+    'radial-gradient(ellipse 55% 35% at 50% 85%, rgba(160,80,0,0.28) 0%, transparent 55%)',
+    'linear-gradient(180deg, #120800 0%, #0c0500 55%, #080300 100%)',
+  ].join(', '),
+
+  saturn_clarity: [
+    'radial-gradient(ellipse 65% 40% at 50% 12%, rgba(80,100,160,0.28) 0%, transparent 60%)',
+    'radial-gradient(ellipse 45% 30% at 50% 85%, rgba(40,60,110,0.18) 0%, transparent 55%)',
+    'linear-gradient(180deg, #020408 0%, #030610 55%, #040818 100%)',
+  ].join(', '),
+
+  // Energy tiers
+  golden_hour: [
+    'radial-gradient(ellipse 70% 45% at 50% 15%, rgba(200,130,0,0.45) 0%, transparent 60%)',
+    'radial-gradient(ellipse 50% 35% at 50% 85%, rgba(140,60,0,0.25) 0%, transparent 55%)',
+    'linear-gradient(180deg, #0e0600 0%, #090400 55%, #060200 100%)',
+  ].join(', '),
+
+  clear_sky: [
+    'radial-gradient(ellipse 65% 42% at 50% 12%, rgba(40,100,200,0.35) 0%, transparent 60%)',
+    'radial-gradient(ellipse 50% 30% at 50% 85%, rgba(20,60,140,0.22) 0%, transparent 55%)',
+    'linear-gradient(180deg, #030810 0%, #050d1e 55%, #07122a 100%)',
+  ].join(', '),
+
+  overcast: [
+    'radial-gradient(ellipse 60% 40% at 50% 12%, rgba(60,70,110,0.28) 0%, transparent 60%)',
+    'radial-gradient(ellipse 45% 28% at 50% 85%, rgba(30,40,80,0.18) 0%, transparent 55%)',
+    'linear-gradient(180deg, #060810 0%, #090b16 55%, #0c0e1e 100%)',
+  ].join(', '),
+
+  cloudy: [
+    'radial-gradient(ellipse 55% 35% at 50% 12%, rgba(55,55,90,0.22) 0%, transparent 60%)',
+    'radial-gradient(ellipse 40% 25% at 50% 85%, rgba(30,30,60,0.15) 0%, transparent 55%)',
+    'linear-gradient(180deg, #06060c 0%, #080810 55%, #0a0a16 100%)',
+  ].join(', '),
+
+  deep_night: [
+    'radial-gradient(ellipse 50% 30% at 50% 12%, rgba(30,20,80,0.18) 0%, transparent 60%)',
+    'radial-gradient(ellipse 35% 20% at 50% 85%, rgba(10,10,40,0.12) 0%, transparent 55%)',
+    'linear-gradient(180deg, #010103 0%, #020205 55%, #030308 100%)',
+  ].join(', '),
 }
 
+// Time-of-day aurora — a radial horizon glow that sits above the base bg
 const TIME_TINT = {
-  morning:   'rgba(196, 128, 32, 0.13)',
-  afternoon: 'rgba(0,0,0,0)',
-  evening:   'rgba(16, 0, 80, 0.16)',
+  morning:   'radial-gradient(ellipse 100% 45% at 50% 100%, rgba(210,140,40,0.22) 0%, rgba(180,100,20,0.10) 45%, transparent 70%)',
+  afternoon: 'radial-gradient(ellipse 80% 30% at 50% 100%, rgba(30,80,180,0.10) 0%, transparent 60%)',
+  evening:   'radial-gradient(ellipse 100% 50% at 50% 100%, rgba(100,20,200,0.28) 0%, rgba(60,0,140,0.12) 45%, transparent 70%)',
 }
 
 // ── Moon / energy helpers ────────────────────────────────────────────────────
@@ -247,6 +352,17 @@ const ALL_BADGES = [
 ]
 
 const BADGE_CATEGORIES = ['Cosmic Events', 'Streak Milestones', 'Loyalty', 'Social', 'Events']
+
+const STREAK_MILESTONES = [3, 7, 14, 29, 90, 180, 365]
+const STREAK_MILESTONE_LABELS = {
+  3: 'First Spark 🔥',
+  7: 'First Week 🔥🔥',
+  14: 'Moonwalker 🌙',
+  29: 'Full Cycle 🌕',
+  90: 'Three Moons ✨',
+  180: 'Half Year 🌠',
+  365: 'Year of Stars 🏆',
+}
 
 // ── Power Windows ─────────────────────────────────────────────────────────────
 
@@ -867,6 +983,7 @@ const expandedWindow  = ref(null)
 const starQuestion    = ref('')
 const starAnswering   = ref(false)
 const starAnswerShown = ref(false)
+const showStreakModal  = ref(false)
 const diceRolled      = ref(false)
 const diceRolling     = ref(false)
 const diceDisplayNum  = ref(null)
@@ -984,6 +1101,60 @@ const todayDate = computed(() =>
   new Date().toLocaleDateString('en', { weekday: 'long', month: 'long', day: 'numeric' })
 )
 
+const streakNextGoal = computed(() =>
+  STREAK_MILESTONES.find(m => m > s.value.streak) ?? s.value.streak
+)
+
+const streakGoalLabel = computed(() =>
+  STREAK_MILESTONE_LABELS[streakNextGoal.value] ?? `Day ${streakNextGoal.value}`
+)
+
+const streakDaysToGoal = computed(() =>
+  Math.max(0, streakNextGoal.value - s.value.streak)
+)
+
+const streakProgressPercent = computed(() => {
+  const goal = streakNextGoal.value
+  if (!goal) return 100
+  return Math.min(100, Math.round((s.value.streak / goal) * 100))
+})
+
+const streakTrackDays = computed(() => {
+  const streak = s.value.streak
+  const goal = streakNextGoal.value
+  const items = []
+  const maxDots = 10
+
+  let start = 1
+  let end = goal
+  if (goal > maxDots) {
+    start = Math.max(1, streak - 4)
+    end = Math.min(goal, start + maxDots - 1)
+    start = Math.max(1, end - maxDots + 1)
+  }
+
+  if (start > 1) items.push({ key: 'el-start', ellipsis: true })
+  for (let d = start; d <= end; d++) {
+    items.push({
+      key: `d-${d}`,
+      day: d,
+      status: d < streak ? 'done' : d === streak ? 'current' : 'upcoming',
+      isMilestone: STREAK_MILESTONES.includes(d),
+    })
+  }
+  if (end < goal) {
+    items.push({ key: 'el-end', ellipsis: true })
+    items.push({
+      key: `d-${goal}`,
+      day: goal,
+      status: 'upcoming',
+      isMilestone: true,
+      isGoal: true,
+    })
+  }
+  return items
+})
+
 // Earned badge IDs (computed from streak + special flags)
 const earnedIds = computed(() => {
   const ids = new Set(s.value.badges.map(b => b.id).filter(Boolean))
@@ -1025,6 +1196,7 @@ function resetInteractive() {
   diceRolling.value     = false
   diceDisplayNum.value  = null
   pullRevealed.value    = { morning: false, afternoon: false, evening: false }
+  showStreakModal.value  = false
 }
 
 function rollDice() {
@@ -1090,6 +1262,11 @@ function saveReflection() {
 function saveIntention() {
   if (!intention.value.trim()) return
   intentionSaved.value = true
+}
+
+function revealOracle() {
+  if (oraclePickedIdx.value !== null) return
+  oraclePickedIdx.value = 0
 }
 </script>
 
@@ -1165,6 +1342,74 @@ function saveIntention() {
           </div>
         </transition>
 
+        <!-- ── Streak modal overlay ── -->
+        <transition name="modal">
+          <div v-if="showStreakModal" class="modal-overlay" @click.self="showStreakModal = false">
+            <div class="modal-sheet streak-modal-sheet">
+              <div class="modal-header">
+                <h2 class="modal-title">Your Streak</h2>
+                <button class="modal-close" @click="showStreakModal = false">✕</button>
+              </div>
+              <div class="streak-modal-body">
+                <p class="streak-modal-kicker">You're on</p>
+                <div class="streak-modal-number">
+                  <span class="streak-modal-fire">🔥</span>
+                  <span class="streak-modal-count">Day {{ s.streak }}</span>
+                </div>
+                <p class="streak-modal-label">of {{ streakNextGoal }} · {{ streakGoalLabel }}</p>
+
+                <div class="streak-track-wrap">
+                  <div class="streak-track">
+                    <template v-for="(item, i) in streakTrackDays" :key="item.key">
+                      <span v-if="item.ellipsis" class="streak-ellipsis">···</span>
+                      <div
+                        v-else
+                        class="streak-day"
+                        :class="[
+                          `streak-day--${item.status}`,
+                          { 'streak-day--milestone': item.isMilestone, 'streak-day--goal': item.isGoal },
+                        ]"
+                      >
+                        <div class="streak-day-dot-wrap">
+                          <span class="streak-day-dot" />
+                          <span
+                            v-if="i < streakTrackDays.length - 1 && !streakTrackDays[i + 1]?.ellipsis"
+                            class="streak-day-line"
+                            :class="{ 'streak-day-line--done': item.status === 'done' }"
+                          />
+                        </div>
+                        <span class="streak-day-num">{{ item.day }}</span>
+                      </div>
+                    </template>
+                  </div>
+                  <p class="streak-track-legend">
+                    Day 1 <span class="streak-track-arrow">→</span> Day {{ s.streak }}
+                    <template v-if="streakDaysToGoal > 0">
+                      <span class="streak-track-arrow">→</span> Day {{ streakNextGoal }}
+                    </template>
+                  </p>
+                </div>
+
+                <div class="streak-bar">
+                  <div class="streak-bar-fill" :style="{ width: `${streakProgressPercent}%` }" />
+                </div>
+                <p class="streak-bar-label">{{ streakProgressPercent }}% to next milestone</p>
+
+                <p v-if="s.graceDay" class="streak-modal-grace">🛡️ Streak protected yesterday</p>
+                <div class="streak-modal-goal">
+                  <template v-if="streakDaysToGoal > 0">
+                    {{ streakDaysToGoal }} more {{ streakDaysToGoal === 1 ? 'day' : 'days' }} to unlock <strong>{{ streakGoalLabel }}</strong>
+                  </template>
+                  <template v-else>
+                    <strong>✨ {{ streakGoalLabel }} unlocked!</strong>
+                  </template>
+                </div>
+                <p class="streak-modal-rule">Miss a day and your streak resets. One grace day allowed per week.</p>
+              </div>
+            </div>
+          </div>
+        </transition>
+
         <!-- Scrollable content -->
         <div class="scroll">
 
@@ -1176,7 +1421,7 @@ function saveIntention() {
             </div>
             <div class="ph-header-right">
               <span v-if="s.graceDay" class="grace-pill" title="Streak protected">🛡️</span>
-              <span class="streak-pill">🔥 {{ s.streak }}-day</span>
+              <span class="streak-pill" style="cursor:pointer" @click="showStreakModal = true">🔥 Day {{ s.streak }}</span>
               <span class="notif-btn">🔔</span>
             </div>
           </header>
@@ -1295,43 +1540,6 @@ function saveIntention() {
             <button class="share-btn">📲  Share card · #Bisou</button>
           </section>
 
-          <!-- ── Block VIII: Daily Cosmic Pull ── -->
-          <section class="section">
-            <p class="sec-label">DAILY COSMIC PULL</p>
-            <p class="pull-sub">{{ availablePullSlots.length }} of 3 pulls available today</p>
-            <div class="pull-slots">
-              <div
-                v-for="slot in ['morning','afternoon','evening']"
-                :key="slot"
-                class="pull-slot"
-                :class="{ 'pull-slot--locked': !availablePullSlots.includes(slot), 'pull-slot--revealed': pullRevealed[slot] }"
-              >
-                <template v-if="pullRevealed[slot]">
-                  <div class="pull-card-face" :style="{ borderColor: pullCardFor(slot).color }">
-                    <span class="pull-quality-symbol">{{ pullCardFor(slot).symbol }}</span>
-                    <p class="pull-quality-name" :style="{ color: pullCardFor(slot).color }">{{ pullCardFor(slot).quality.toUpperCase() }}</p>
-                    <p class="pull-msg">{{ pullCardFor(slot).msg }}</p>
-                    <p class="pull-attr">{{ s.nakshatra }} · {{ slot.charAt(0).toUpperCase() + slot.slice(1) }}</p>
-                  </div>
-                </template>
-                <template v-else-if="availablePullSlots.includes(slot)">
-                  <div class="pull-card-back" @click="revealPull(slot)">
-                    <span class="pull-back-symbol">✦</span>
-                    <p class="pull-back-label">{{ slot.charAt(0).toUpperCase() + slot.slice(1) }} pull</p>
-                    <p class="pull-back-hint">Tap to reveal</p>
-                  </div>
-                </template>
-                <template v-else>
-                  <div class="pull-card-locked">
-                    <span class="pull-lock-icon">🔒</span>
-                    <p class="pull-lock-label">{{ slot.charAt(0).toUpperCase() + slot.slice(1) }}</p>
-                    <p class="pull-lock-time">{{ slot === 'afternoon' ? 'Opens at noon' : 'Opens at 6 PM' }}</p>
-                  </div>
-                </template>
-              </div>
-            </div>
-          </section>
-
           <!-- ── Block 4: Today's Vibe ── -->
           <section class="section">
             <p class="sec-label">TODAY'S VIBE</p>
@@ -1410,89 +1618,39 @@ function saveIntention() {
             </div>
           </section>
 
-          <!-- ── Block II: Daily Oracle ── -->
-          <section class="section">
+          <!-- ── Block 10: Daily Oracle ── -->
+          <section class="section oracle-section">
             <p class="sec-label">TODAY'S ORACLE</p>
-            <p class="oracle-sub">{{ s.nakshatra }} nakshatra speaks — choose a card</p>
-            <div class="oracle-row">
+
+            <div class="oracle-skirt">
+              <div class="oracle-skirt-glow" />
+
               <div
-                v-for="(card, i) in s.oracleCards"
-                :key="i"
                 class="oracle-card"
-                :class="{
-                  'oracle-card--flipped': oraclePickedIdx === i,
-                  'oracle-card--faded':   oraclePickedIdx !== null && oraclePickedIdx !== i,
-                }"
-                @click="oraclePickedIdx === null && (oraclePickedIdx = i)"
+                :class="{ 'oracle-card--revealed': oraclePickedIdx !== null }"
+                @click="revealOracle"
               >
-                <div class="oracle-inner">
-                  <div class="oracle-face oracle-back">
-                    <div class="oracle-back-symbol">✦</div>
-                    <p class="oracle-back-name">{{ card.name }}</p>
+                <transition name="oracle-turn" mode="out-in">
+                  <div v-if="oraclePickedIdx === null" key="back" class="oracle-face oracle-face--back">
+                    <p class="oracle-back-star">✦</p>
+                    <p class="oracle-back-label">Oracle</p>
+                    <p class="oracle-back-nakshatra">{{ s.nakshatra }}</p>
+                    <p class="oracle-back-cta">Tap to reveal</p>
                   </div>
-                  <div class="oracle-face oracle-front">
-                    <p class="oracle-front-icon">{{ card.icon }}</p>
-                    <p class="oracle-front-msg">{{ card.message }}</p>
+                  <div v-else key="front" class="oracle-face oracle-face--front">
+                    <p class="oracle-front-meta">{{ s.nakshatra }} · Tithi {{ s.tithi }}</p>
+                    <p class="oracle-front-icon">{{ s.oracleCards[0].icon }}</p>
+                    <p class="oracle-front-name">{{ s.oracleCards[0].name }}</p>
+                    <p class="oracle-front-msg">{{ s.oracleCards[0].message }}</p>
                   </div>
-                </div>
-              </div>
-            </div>
-            <p v-if="oraclePickedIdx === null" class="oracle-hint">Tap a card to reveal today's message</p>
-            <p v-else class="oracle-hint oracle-hint--done">✓ Your message for today</p>
-          </section>
-
-          <!-- ── Block 6: Moon Streak ── -->
-          <section class="section">
-            <p class="sec-label">MOON STREAK</p>
-            <div class="moon-card glass">
-              <div class="moon-top">
-                <div class="ring-wrap">
-                  <svg viewBox="0 0 80 80" class="ring-svg">
-                    <circle cx="40" cy="40" r="32" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="5"/>
-                    <circle
-                      cx="40" cy="40" r="32" fill="none"
-                      :stroke="ringColor" stroke-width="5"
-                      :stroke-dasharray="RING_C"
-                      :stroke-dashoffset="ringOffset"
-                      stroke-linecap="round"
-                      transform="rotate(-90 40 40)"
-                      style="transition: stroke-dashoffset 0.7s ease"
-                    />
-                    <text x="40" y="37" text-anchor="middle" fill="white" font-size="14" font-weight="700" font-family="Inter,sans-serif">{{ s.tithi }}</text>
-                    <text x="40" y="50" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="7" font-family="Inter,sans-serif">of 30</text>
-                  </svg>
-                  <p class="ring-phase">{{ getMoonIcon(s.tithi) }}</p>
-                </div>
-
-                <div class="streak-info">
-                  <div class="streak-row">
-                    <p class="streak-big">🔥 {{ s.streak }}</p>
-                    <span v-if="s.graceDay" class="grace-tag">🛡️ Protected</span>
-                  </div>
-                  <p class="streak-sub">day streak</p>
-                  <p class="streak-phase">{{ moonPhaseLabel(s.tithi) }}</p>
-                  <p class="streak-phase">Day {{ s.tithi }} of lunar cycle</p>
-                </div>
+                </transition>
               </div>
 
-              <div class="moon-strip">
-                <span v-for="(icon, i) in last9" :key="i" class="moon-dot" :class="{ 'moon-dot--today': i === 8 }">{{ icon }}</span>
-              </div>
-              <p class="strip-caption">Last 9 days</p>
-
-              <div class="streak-goal">
-                <template v-if="s.streak < 7"><span>{{ 7 - s.streak }} days to unlock 🔥🔥 First Week</span></template>
-                <template v-else-if="s.streak < 14"><span>{{ 14 - s.streak }} days to unlock 🌙 Moonwalker</span></template>
-                <template v-else-if="s.streak < 29"><span>{{ 29 - s.streak }} days to Full Lunar Cycle 🌕</span></template>
-                <template v-else-if="s.streak < 90"><span>{{ 90 - s.streak }} days to Three Moons ✨</span></template>
-                <template v-else><span>✨ {{ s.streak }}-day streak — legendary</span></template>
-              </div>
-
-              <p v-if="s.graceDay" class="grace-note">
-                🛡️ Your streak was protected yesterday. One grace day used this week.
-              </p>
+              <p v-if="oraclePickedIdx === null" class="oracle-hint">Your daily message awaits</p>
+              <p v-else class="oracle-hint oracle-hint--done">✦ Received · your message for today</p>
             </div>
           </section>
+
 
           <!-- ── Block 7: Achievements ── -->
           <section class="section">
@@ -1555,31 +1713,6 @@ function saveIntention() {
                 </transition>
               </div>
               <p class="compat-hint">Tap a match to see today's insight</p>
-            </div>
-          </section>
-
-          <!-- ── Reflect on Today ── -->
-          <section class="section">
-            <p class="sec-label">REFLECT ON TODAY</p>
-            <div class="journal-card glass">
-              <p class="journal-prompt">How did your day actually go?</p>
-              <textarea
-                v-if="!reflectionSaved"
-                v-model="reflection"
-                class="journal-input"
-                placeholder="What happened, what surprised you, what felt right…"
-                rows="3"
-              />
-              <div v-else class="journal-saved">
-                <span class="saved-icon">✓</span>
-                <p class="saved-text">{{ reflection }}</p>
-              </div>
-              <button
-                v-if="!reflectionSaved"
-                class="journal-btn"
-                :disabled="!reflection.trim()"
-                @click="saveReflection"
-              >Save reflection</button>
             </div>
           </section>
 
@@ -1652,41 +1785,6 @@ function saveIntention() {
                 :disabled="diceRolled || diceRolling"
                 @click="rollDice"
               >{{ diceRolled ? 'Rolled ✓' : diceRolling ? 'Rolling…' : 'Roll' }}</button>
-            </div>
-          </section>
-
-          <!-- ── Block 8: Tomorrow's Preview + Intention ── -->
-          <section class="section">
-            <p class="sec-label">TOMORROW'S PREVIEW</p>
-            <div class="tomorrow-card glass">
-              <span class="tomorrow-icon">{{ tomorrowCard.icon }}</span>
-              <div class="tomorrow-body">
-                <p class="tomorrow-hl">{{ tomorrowCard.headline }}</p>
-                <p class="tomorrow-text">{{ tomorrowCard.body }}</p>
-              </div>
-            </div>
-            <p class="demo-note">⏱ Visible after 21:00 in the real app</p>
-
-            <!-- Tomorrow intention -->
-            <div class="intention-card glass">
-              <p class="intention-label">✦ Set an intention for tomorrow</p>
-              <textarea
-                v-if="!intentionSaved"
-                v-model="intention"
-                class="journal-input"
-                :placeholder="`${tomorrowCard.headline} — what will you focus on?`"
-                rows="2"
-              />
-              <div v-else class="journal-saved">
-                <span class="saved-icon">✓</span>
-                <p class="saved-text">{{ intention }}</p>
-              </div>
-              <button
-                v-if="!intentionSaved"
-                class="journal-btn intention-save-btn"
-                :disabled="!intention.trim()"
-                @click="saveIntention"
-              >Set intention</button>
             </div>
           </section>
 
@@ -1824,20 +1922,35 @@ function saveIntention() {
   z-index: 0;
   pointer-events: none;
   background-image:
-    radial-gradient(1px 1px at 12% 8%,  rgba(255,255,255,0.8) 0%, transparent 100%),
-    radial-gradient(1px 1px at 28% 3%,  rgba(255,255,255,0.5) 0%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 62% 6%, rgba(255,255,255,0.9) 0%, transparent 100%),
-    radial-gradient(1px 1px at 80% 12%, rgba(255,255,255,0.4) 0%, transparent 100%),
-    radial-gradient(1px 1px at 45% 18%, rgba(255,255,255,0.6) 0%, transparent 100%),
-    radial-gradient(1px 1px at 92% 22%, rgba(255,255,255,0.5) 0%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 18% 30%, rgba(255,255,255,0.3) 0%, transparent 100%),
-    radial-gradient(1px 1px at 70% 35%, rgba(255,255,255,0.7) 0%, transparent 100%),
-    radial-gradient(1px 1px at 5%  45%, rgba(255,255,255,0.4) 0%, transparent 100%),
-    radial-gradient(1px 1px at 55% 50%, rgba(255,255,255,0.3) 0%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 88% 55%, rgba(255,255,255,0.6) 0%, transparent 100%),
-    radial-gradient(1px 1px at 35% 65%, rgba(255,255,255,0.4) 0%, transparent 100%),
-    radial-gradient(1px 1px at 75% 72%, rgba(255,255,255,0.3) 0%, transparent 100%),
-    radial-gradient(1px 1px at 22% 80%, rgba(255,255,255,0.5) 0%, transparent 100%);
+    /* bright stars */
+    radial-gradient(1.5px 1.5px at 12%  8%,  rgba(255,255,255,0.90) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 28%  3%,  rgba(255,255,255,0.55) 0%, transparent 100%),
+    radial-gradient(2px   2px   at 62%  6%,  rgba(255,255,255,0.95) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 80% 12%,  rgba(255,255,255,0.45) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 45% 18%,  rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 92% 22%,  rgba(255,255,255,0.55) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 18% 30%,  rgba(255,255,255,0.35) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 70% 35%,  rgba(255,255,255,0.75) 0%, transparent 100%),
+    radial-gradient(1px   1px   at  5% 45%,  rgba(255,255,255,0.45) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 55% 50%,  rgba(255,255,255,0.35) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 88% 55%,  rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 35% 65%,  rgba(255,255,255,0.45) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 75% 72%,  rgba(255,255,255,0.35) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 22% 80%,  rgba(255,255,255,0.55) 0%, transparent 100%),
+    /* extra faint dust */
+    radial-gradient(1px   1px   at 50%  2%,  rgba(255,255,255,0.40) 0%, transparent 100%),
+    radial-gradient(1px   1px   at  7% 14%,  rgba(255,255,255,0.28) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 38% 28%,  rgba(255,255,255,0.22) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 84% 38%,  rgba(255,255,255,0.30) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 15% 58%,  rgba(255,255,255,0.20) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 63% 62%,  rgba(255,255,255,0.25) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 42% 78%,  rgba(255,255,255,0.20) 0%, transparent 100%),
+    radial-gradient(1px   1px   at 96% 82%,  rgba(255,255,255,0.28) 0%, transparent 100%),
+    /* warm-tinted brighter stars */
+    radial-gradient(1.5px 1.5px at 33%  5%,  rgba(255,240,200,0.70) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 72% 20%,  rgba(200,220,255,0.65) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at  8% 70%,  rgba(220,200,255,0.55) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 58% 88%,  rgba(255,240,180,0.50) 0%, transparent 100%);
 }
 
 .tint {
@@ -2696,97 +2809,155 @@ function saveIntention() {
   text-align: center;
 }
 
-/* ── Block II: Daily Oracle ───────────────────────────────────────────────── */
-.oracle-sub {
-  font-size: 11px;
-  color: rgba(255,255,255,0.38);
-  font-weight: 600;
-  margin-bottom: 12px;
-  letter-spacing: 0.03em;
-}
+/* ── Block 10: Daily Oracle ───────────────────────────────────────────────── */
 
-.oracle-row {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
-}
+.oracle-section { padding-bottom: 4px; }
 
-.oracle-card {
-  flex: 1;
-  perspective: 500px;
-  cursor: pointer;
-  height: 148px;
-  transition: opacity 0.3s;
-}
-.oracle-card--faded { opacity: 0.28; pointer-events: none; }
-
-.oracle-inner {
-  width: 100%;
-  height: 100%;
+.oracle-skirt {
   position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.oracle-card--flipped .oracle-inner { transform: rotateY(180deg); }
-
-.oracle-face {
-  position: absolute;
-  inset: 0;
-  border-radius: 14px;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  width: 100%;
+  height: 360px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 10px 8px;
-  border: 1px solid rgba(255,255,255,0.1);
 }
 
-.oracle-back {
-  background: linear-gradient(160deg, rgba(28,10,56,0.95) 0%, rgba(8,18,48,0.95) 100%);
+.oracle-skirt-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%);
+  width: 220px;
+  height: 320px;
+  background: radial-gradient(ellipse at 50% 40%, rgba(140,80,255,0.25) 0%, transparent 70%);
+  pointer-events: none;
+  filter: blur(16px);
 }
-.oracle-back:hover { border-color: rgba(255,255,255,0.22); }
 
-.oracle-back-symbol {
-  font-size: 26px;
-  color: rgba(255,255,255,0.22);
-  margin-bottom: 8px;
-  font-style: normal;
+.oracle-card {
+  width: 200px;
+  height: 300px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+  perspective: 800px;
+  filter: drop-shadow(0 12px 32px rgba(100,50,220,0.35));
+}
+.oracle-card--revealed { cursor: default; }
+
+.oracle-face {
+  width: 200px;
+  height: 300px;
+  box-sizing: border-box;
+  border-radius: 18px;
+  border: 1px solid rgba(180,140,255,0.28);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  overflow: hidden;
 }
 
-.oracle-back-name {
+.oracle-face--back {
+  background: linear-gradient(165deg, #1a0840 0%, #0a0f2e 60%, #0d1a3a 100%);
+  justify-content: center;
+  gap: 8px;
+  padding: 20px;
+}
+
+.oracle-face--front {
+  background: linear-gradient(175deg, #250c55 0%, #0f1e50 50%, #1a0c3a 100%);
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 22px 18px 20px;
+}
+
+.oracle-back-star {
+  font-size: 36px;
+  color: rgba(212,175,55,0.65);
+  line-height: 1;
+}
+.oracle-back-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  color: rgba(212,175,55,0.75);
+  text-transform: uppercase;
+}
+.oracle-back-nakshatra {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.6);
+}
+.oracle-back-cta {
+  margin-top: 10px;
   font-size: 9px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.28);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  text-align: center;
+  color: rgba(255,255,255,0.28);
 }
 
-.oracle-front {
-  background: linear-gradient(160deg, rgba(48,16,96,0.97) 0%, rgba(16,36,80,0.97) 100%);
-  transform: rotateY(180deg);
-  border-color: rgba(180,140,255,0.2);
-  gap: 8px;
+.oracle-front-meta {
+  width: 100%;
+  font-size: 9px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.06em;
 }
-
-.oracle-front-icon { font-size: 22px; line-height: 1; }
-.oracle-front-msg {
+.oracle-front-icon {
+  font-size: 44px;
+  line-height: 1;
+  margin: 4px 0;
+}
+.oracle-front-name {
   font-size: 11px;
-  line-height: 1.55;
-  color: rgba(255,255,255,0.82);
-  text-align: center;
+  font-weight: 800;
+  color: rgba(212,175,55,0.85);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.oracle-front-msg {
+  font-size: 13px;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.85);
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* One face in DOM at a time — back leaves, then front enters */
+.oracle-turn-leave-active {
+  transition: transform 0.3s ease-in, opacity 0.3s ease-in;
+}
+.oracle-turn-enter-active {
+  transition: transform 0.35s ease-out, opacity 0.35s ease-out;
+}
+.oracle-turn-leave-to {
+  transform: rotateY(90deg);
+  opacity: 0;
+}
+.oracle-turn-enter-from {
+  transform: rotateY(-90deg);
+  opacity: 0;
 }
 
 .oracle-hint {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
   text-align: center;
   font-size: 10px;
   color: rgba(255,255,255,0.22);
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
 }
-.oracle-hint--done { color: rgba(74,222,128,0.55); }
+.oracle-hint--done {
+  color: rgba(212,175,55,0.6);
+  letter-spacing: 0.08em;
+}
 
 /* ── Block III: Compatibility Pulse ──────────────────────────────────────── */
 .connect-cta {
@@ -3355,5 +3526,195 @@ function saveIntention() {
   font-size: 9px;
   color: rgba(255,255,255,0.25);
   letter-spacing: 0.05em;
+}
+/* ── Streak Modal ──────────────────────────────────────────────────────────── */
+.streak-modal-sheet {
+  padding-bottom: 32px;
+}
+.streak-modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 20px 0;
+  text-align: center;
+}
+.streak-modal-kicker {
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.streak-modal-number {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.streak-modal-fire { font-size: 32px; }
+.streak-modal-count {
+  font-size: 36px;
+  font-weight: 900;
+  color: #ffcc60;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+.streak-modal-label {
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-top: -6px;
+}
+
+.streak-track-wrap {
+  width: 100%;
+  padding: 14px 4px 4px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+}
+.streak-track {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0;
+  overflow-x: auto;
+  padding: 4px 8px 0;
+  scrollbar-width: none;
+}
+.streak-track::-webkit-scrollbar { display: none; }
+
+.streak-ellipsis {
+  font-size: 10px;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.1em;
+  padding: 6px 2px 0;
+  align-self: flex-start;
+}
+
+.streak-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 28px;
+  flex-shrink: 0;
+}
+.streak-day-dot-wrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 16px;
+}
+.streak-day-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  border: 1.5px solid rgba(255,255,255,0.2);
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+.streak-day-line {
+  position: absolute;
+  left: calc(50% + 5px);
+  right: calc(-50% + 5px);
+  top: 50%;
+  height: 2px;
+  background: rgba(255,255,255,0.12);
+  transform: translateY(-50%);
+  z-index: 0;
+}
+.streak-day-line--done {
+  background: rgba(255,180,60,0.45);
+}
+.streak-day-num {
+  font-size: 9px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.02em;
+}
+.streak-day--done .streak-day-dot {
+  background: rgba(255,180,60,0.85);
+  border-color: rgba(255,200,100,0.9);
+  box-shadow: 0 0 8px rgba(255,160,40,0.35);
+}
+.streak-day--done .streak-day-num { color: rgba(255,200,120,0.7); }
+.streak-day--current .streak-day-dot {
+  width: 14px;
+  height: 14px;
+  background: #ffcc60;
+  border-color: #ffe08a;
+  box-shadow: 0 0 14px rgba(255,180,60,0.65);
+}
+.streak-day--current .streak-day-num {
+  color: #ffcc60;
+  font-size: 10px;
+}
+.streak-day--milestone .streak-day-num { color: rgba(180,140,255,0.75); }
+.streak-day--goal .streak-day-dot {
+  border-color: rgba(180,140,255,0.5);
+  background: rgba(180,140,255,0.15);
+}
+
+.streak-track-legend {
+  margin: 10px 0 0;
+  font-size: 10px;
+  color: rgba(255,255,255,0.35);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.streak-track-arrow {
+  margin: 0 4px;
+  color: rgba(255,180,60,0.5);
+}
+
+.streak-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.streak-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff9a2e 0%, #ffcc60 100%);
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+.streak-bar-label {
+  font-size: 10px;
+  color: rgba(255,255,255,0.3);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-top: -4px;
+}
+
+.streak-modal-grace {
+  font-size: 12px;
+  color: rgba(255,200,100,0.7);
+  background: rgba(255,200,100,0.08);
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+.streak-modal-goal {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 12px 16px;
+  line-height: 1.5;
+  width: 100%;
+}
+.streak-modal-goal strong { color: rgba(255,255,255,0.88); }
+.streak-modal-rule {
+  font-size: 11px;
+  color: rgba(255,255,255,0.25);
+  line-height: 1.5;
 }
 </style>

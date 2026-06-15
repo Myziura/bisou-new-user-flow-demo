@@ -12,19 +12,16 @@
    - [Block 2: Today's Energy](#block-2-todays-energy-6-categories)
    - [Block 3: Energy Check-In](#block-3-energy-check-in)
    - [Block 4: Do / Avoid](#block-4-do--avoid)
-   - [Block 5: Daily Cosmic Pull](#block-5-daily-cosmic-pull)
    - [Block 6: Today's Vibe](#block-6-todays-vibe)
    - [Block 7: Your Day (Morning / Afternoon / Evening)](#block-7-your-day-morning--afternoon--evening)
    - [Block 8: Power Windows](#block-8-power-windows)
    - [Block 9: Cosmic Body Map](#block-9-cosmic-body-map)
    - [Block 10: Daily Oracle](#block-10-daily-oracle)
-   - [Block 11: Moon Streak + Progress Ring](#block-11-moon-streak--progress-ring)
+   - [Block 11: Moon Streak (modal)](#block-11-moon-streak--progress-ring)
    - [Block 12: Achievements](#block-12-achievements)
    - [Block 13: Compatibility Pulse](#block-13-compatibility-pulse)
-   - [Block 14: Reflect on Today](#block-14-reflect-on-today)
    - [Block 15: Ask the Stars](#block-15-ask-the-stars)
    - [Block 16: Vedic Dice](#block-16-vedic-dice)
-   - [Block 17: Tomorrow's Preview + Tomorrow's Intention](#block-17-tomorrows-preview--tomorrows-intention)
    - [Block 18: Stories Carousel](#block-18-stories-carousel)
 5. [Achievement System — Full Spec](#5-achievement-system--full-spec)
 6. [Dynamic Background System](#6-dynamic-background-system) _(see Section 3)_
@@ -35,7 +32,7 @@
 
 ## Quick Reference — All Blocks at a Glance
 
-19 blocks total (0–18 + 17i) + dynamic background covering the full page.
+15 blocks total (0–18, excluding removed: 5, 14, 17, 17i) + dynamic background covering the full page.
 
 | Block        | Name                    | How calculated                                                                                     | AI  | Options / Variants                                                                                       |
 | ------------ | ----------------------- | -------------------------------------------------------------------------------------------------- | --- | -------------------------------------------------------------------------------------------------------- |
@@ -64,7 +61,7 @@
 
 **External Vedic API: not used on Today.** All astronomical calculations are local (Swiss Ephemeris).
 **AI calls per user per day: max 7** — 1 vibe text (pre-generated) + up to 6 category explanations (on first tap only, then cached until midnight). Everything else is deterministic: same birth data + same date always returns the same result.
-**Interactive blocks (3, 5, 8–10, 13, 15, 16) are user-initiated** — they require a tap/action and are never auto-shown. Block 13 requires Connect onboarding to be completed; users who haven't done it see a CTA instead. Block 16 allows 1 roll per day. Block 5 allows 3 pulls per day (morning / afternoon / evening), unlocking progressively.
+**Interactive blocks (3, 8–10, 13, 15, 16) are user-initiated** — they require a tap/action and are never auto-shown. Block 13 requires Connect onboarding to be completed; users who haven't done it see a CTA instead. Block 16 allows 1 roll per day. Block 10 (Oracle) allows 1 tap per day.
 
 ---
 
@@ -143,12 +140,9 @@ natal_sun_sign, natal_tithi, natal_vaara
   │  "Digestive energy is sensitive today…"         │
   │                                                 │
   │  ★ BLOCK 10: DAILY ORACLE                       │
-  │  Pushya nakshatra speaks — choose a card        │
-  │  [✦ The Star][✦ The Path][✦ The Mirror]         │
+  │  [✦ face-down card — tap once to reveal]        │
   │                                                 │
-  │  BLOCK 11: MOON STREAK + PROGRESS RING           │
-  │  🌑🌒🌓🌔🌕  14-day streak                     │
-  │  [────────████████░░░─] Day 14 of 29           │
+  │  [🔥 14-day → opens streak modal on tap]         │  ← BLOCK 11 (header pill)
   │                                                 │
   │  BLOCK 12: ACHIEVEMENTS (recent badges)          │
   │  [View all →]                                   │
@@ -156,11 +150,6 @@ natal_sun_sign, natal_tithi, natal_vaara
   │  ★ BLOCK 13: TODAY'S COMPATIBILITY             │
   │  [If not onboarded: Complete Connect →]         │
   │  [If onboarded: Marcus 91% · Liam 68%]          │
-  │                                                 │
-  │  BLOCK 14: REFLECT ON TODAY                      │
-  │  [How did your day actually go?         ]       │
-  │  [                                      ]       │
-  │                                         ↵ Save  │
   │                                                 │
   │  ★ BLOCK 15: ASK THE STARS                       │
   │  [What's on your mind today?            ]       │
@@ -173,14 +162,6 @@ natal_sun_sign, natal_tithi, natal_vaara
   │  ┌───────┐                                      │
   │  │   7   │  COSMIC NUMBER: WISDOM               │
   │  └───────┘  [Roll]  (once per day)              │
-  │                                                 │
-  │  BLOCK 17: TOMORROW'S PREVIEW                    │
-  │  (visible only after 21:00 local time)          │
-  │                                                 │
-  │  BLOCK 17i: TOMORROW'S INTENTION                 │
-  │  ✦ Set an intention for tomorrow                │
-  │  [based on tomorrow's preview headline  ]       │
-  │                                     ↵ Set →    │
   │                                                 │
   │  BLOCK 18: STORIES CAROUSEL                      │
 └─────────────────────────────────────────────────┘
@@ -1157,97 +1138,6 @@ AVOID: tip1 · tip2 · tip3
 
 ---
 
-### Block 5: Daily Cosmic Pull
-
-**AI: NO** — fully deterministic. Card selected from a fixed bank of 54 entries using nakshatra × time-slot index.
-**Placement:** After Block 4 (Do / Avoid), before Block 6 (Today's Vibe).
-**Purpose:** The highest-frequency interactive block on the page. Users can pull 3 cards per day (morning / afternoon / evening), each revealing a different quality and guidance message for that window. **This is the primary daily return driver** — there is always a new card waiting as the day progresses. The pull gesture (swipe up or tap-to-flip) is the most tactile and shareable interaction in the app.
-
-#### What is displayed
-
-A face-down card with a pull prompt. Once pulled:
-
-- A Vedic symbol/icon (distinct per quality)
-- A one-word quality: e.g. "CLARITY", "ACTION", "PATIENCE"
-- A 2–3 sentence guidance message
-- Attribution: `{nakshatra} · {time_slot}`
-
-```
-┌─────────────────────┐     ┌─────────────────────┐
-│                     │     │        ✦            │
-│    [ Pull card ]    │  →  │      CLARITY        │
-│  Morning pull ready │     │  "This morning asks │
-│         ↑           │     │   you to cut through│
-│                     │     │   the noise…"       │
-└─────────────────────┘     │  Pushya · Morning   │
-                            └─────────────────────┘
-```
-
-#### Three-pull-per-day mechanic
-
-| Pull           | Available       | Resets             |
-| -------------- | --------------- | ------------------ |
-| Morning pull   | From midnight   | N/A (first of day) |
-| Afternoon pull | From 12:00 noon | N/A                |
-| Evening pull   | From 18:00      | N/A                |
-
-All three reset at midnight. This means:
-
-- A user who pulls at 9 AM will have 2 more pulls available later
-- A user who opens at 8 PM for the first time can pull all 3 at once (all windows have passed — all are available)
-- In the demo: all three are always available; the current `timeOfDay` slot is pre-selected
-
-#### Card selection algorithm
-
-```
-nakshatra_idx   = canonical nakshatra index (0–26)
-slot_idx        = { morning: 0, afternoon: 1, evening: 2 }
-card_idx        = (nakshatra_idx * 3 + slot_idx) % 54
-card            = PULL_CARD_BANK[card_idx]
-```
-
-Each nakshatra × slot combination always returns the same card. The 54-entry bank covers all 27 nakshatras × 2 "cycles" ensuring variety across consecutive days.
-
-#### Quality categories (9 qualities, 6 cards each = 54-entry bank)
-
-| Quality    | Symbol | Archetype                                           |
-| ---------- | ------ | --------------------------------------------------- |
-| Clarity    | 🔷     | Cut through confusion; see what's true              |
-| Action     | ⚡     | Move now; momentum is available                     |
-| Patience   | 🌿     | Hold steady; this is not the moment to push         |
-| Connection | 💛     | Reach out; relationships are amplified              |
-| Rest       | 🌙     | Restore; doing less achieves more today             |
-| Courage    | 🔥     | Face what you've been avoiding                      |
-| Gratitude  | ✦      | Notice what's working; appreciation compounds       |
-| Boundaries | 🛡️     | Protect your energy; it's okay to say no            |
-| Trust      | 🌊     | Release control; the outcome is unfolding correctly |
-
-Each quality has 6 unique messages — different framing, same essence. The bank is stored as a constant array in the codebase.
-
-#### Flip animation
-
-1. User taps "Pull card" or swipes up on the face-down card
-2. Card flips on its Y-axis (CSS 3D transform, 400ms)
-3. Front (dark, ✦ symbol) rotates away; back (coloured by quality) rotates in
-4. Quality word fades in, then message slides up
-5. After reveal: card stays face-up for the session; pull button becomes "Pulled ✓" for that slot
-
-#### Storage
-
-```
-user_checkins → add column:
-  pull_morning_idx: SMALLINT nullable    (card index used for morning pull, null = not pulled)
-  pull_afternoon_idx: SMALLINT nullable
-  pull_evening_idx: SMALLINT nullable
-  pull_morning_at: TIMESTAMP nullable
-  pull_afternoon_at: TIMESTAMP nullable
-  pull_evening_at: TIMESTAMP nullable
-```
-
-Storing the index (not the text) allows card bank updates without breaking historical data.
-
----
-
 ### Block 6: Today's Vibe
 
 **AI: YES** — generated once per day, cached until midnight.
@@ -1494,43 +1384,40 @@ No storage needed. Computed from `nakshatra` (today's value from panchang). Pre-
 
 ### Block 10: Daily Oracle
 
-**AI: NO** — fully deterministic. Three cards are pre-assigned per nakshatra; card content never changes within a day.
-**Placement:** Between Block 7 (Your Day) and Block 11 (Moon Streak).
-**Purpose:** Adds a tactile, ritual-like interaction; gives the user something to think about; increases session dwell time.
+**AI: NO** — fully deterministic. One card is shown per day, assigned deterministically by nakshatra.
+**Placement:** Between Block 9 (Cosmic Body Map) and Block 11 (Moon Streak).
+**Purpose:** A daily ritual — one meaningful message revealed once. No choice anxiety, no FOMO from unchosen cards. The single-card format makes each message feel more significant.
 
 #### Behaviour
 
-1. Three face-down cards are shown. Each has a name visible on the back: **The Star**, **The Path**, **The Mirror**.
-2. Cards flip with a CSS 3D animation when tapped.
-3. Once one card is flipped, the other two become faded and non-interactive.
-4. User cannot un-pick for the day (the picked state persists until midnight reset).
-5. Below the cards: "Tap a card to reveal today's message" → changes to "✓ Your message for today" after pick.
+1. A single face-down card is shown with "Tap to reveal" and "Your message is waiting".
+2. The card flips with a CSS 3D animation (Y-axis rotation, ~550ms) when tapped.
+3. The revealed face shows: icon, card name, message text, attribution (nakshatra · tithi).
+4. **Once per day only** — after flip, the card cannot be reset until midnight.
+5. Below the card: "Tap the card to receive today's message" → "✓ Your message for today" after reveal.
 
 #### Card assignment (deterministic)
 
 ```
 nakshatra_index = index of nakshatra in canonical 27-nakshatra list (0–26)
-quality_group   = nakshatra_index % 3  →  0=Deva, 1=Manava, 2=Rakshasa
-
-For each quality group, 3 fixed card messages are stored in a lookup table:
-  oracle_messages[nakshatra_name][card_index]  →  message string
+card            = ORACLE_CARDS[nakshatra_index]
 ```
 
-The messages are pre-written for all 27 nakshatras × 3 cards = **81 unique messages**.
-All 81 are stored in a `ORACLE_CARDS` constant on the backend (no DB lookup needed).
-Same nakshatra on the same day always returns the same 3 messages.
+**27 unique cards** — one per nakshatra. Each nakshatra has a single fixed message. Same nakshatra always returns the same card, every day that nakshatra is active.
+
+Cards are stored in a `ORACLE_CARDS` constant (27 entries). No database lookup needed for selection.
 
 #### Storage
 
 ```
 user_checkins table → add column:
-  oracle_card_picked: SMALLINT  nullable  (0, 1, or 2 — index of picked card)
-  oracle_picked_at:   TIMESTAMP nullable
+  oracle_revealed:  BOOLEAN   not null default false
+  oracle_revealed_at: TIMESTAMP nullable
 ```
 
 ---
 
-### Block 11: Moon Streak + Progress Ring
+### Block 11: Moon Streak (modal)
 
 **AI: NO** — fully deterministic.
 
@@ -1542,64 +1429,54 @@ A check-in is recorded automatically when the user opens the Today page. One che
 
 The streak is the number of consecutive calendar days (in the user's local timezone) on which the user opened the app, ending today. If a day is missed, the streak resets to 1 on the next check-in.
 
-#### Progress ring
+#### Where it appears
 
-The ring shows progress within the **current lunar cycle** (29.5 days, from last Amavasya to next Purnima).
+The streak is **not a separate page block**. It lives in two places:
 
-```
-days_in_cycle = 29
-days_elapsed  = today_tithi_number  (1–30)
-progress_pct  = days_elapsed / days_in_cycle
+1. **Header pill** (always visible): `🔥 Day {N}` — tapping this pill opens the streak modal.
+2. **Streak modal** (tap to open): shows **Day N of M** progress toward the next milestone, a day-by-day track (Day 1 → Day N → Day M), progress bar, grace day status, and the simple rule.
 
-Ring fills up:
-  Amavasya (day 1)  → 0%   🌑
-  Day 7             → 24%  🌒
-  Day 8             → 28%  🌓
-  Day 15 (Purnima)  → 52%  🌔→🌕
-  Day 22            → 76%  🌖
-  Day 29            → 99%  🌘
-  Amavasya again    → 0% (ring resets with animation)
-```
-
-#### Moon phase icon strip (last 9 days)
-
-For each of the last 9 check-in days, show the moon phase icon for that date. Icons are real — computed from that day's tithi, not decorative.
-
-```javascript
-function getMoonPhaseIcon(tithi_number) {
-  if (tithi_number === 30) return "🌑";
-  if (tithi_number <= 7) return "🌒";
-  if (tithi_number === 8) return "🌓";
-  if (tithi_number <= 14) return "🌔";
-  if (tithi_number === 15) return "🌕";
-  if (tithi_number <= 22) return "🌖";
-  if (tithi_number === 23) return "🌗";
-  return "🌘";
-}
-```
-
-#### 14-day progress incentive
-
-After 7 days in a streak, a second goal appears below the ring:
+#### Streak modal content
 
 ```
-Day 8–13:  "Keep going — reach 14 days to unlock the Moonwalker badge 🌙"
-Day 14:    "🎉 You made it! Moonwalker badge unlocked."
-Day 15–28: Next goal appears: "Full Lunar Cycle — {n} days to go 🌕"
+You're on
+🔥  Day 14
+of 29 · Full Cycle 🌕
+
+[Day track: 1 ● ● ● … ● ○ ○ … ○ 29]
+Day 1 → Day 14 → Day 29
+
+[████████████░░░░░░]  48% to next milestone
+
+{N} more days to unlock Full Cycle 🌕
+
+Miss a day and your streak resets.
+One grace day allowed per week.
 ```
 
-This gives a **visible next milestone** at every stage, so there is always a reason to come back.
+The day track shows completed days (gold), today (larger gold dot), and upcoming days (empty). For long streaks, the track scrolls and shows `···` between segments. Milestone days (3, 7, 14, 29, 90, 180, 365) are highlighted in purple on the track.
 
-#### Grace Day display in Block 6
+Simple. No progress ring, no moon phase strip. **Day N of M** is the point.
 
-When a grace day was used in the current 7-day rolling period, the Moon Streak block shows:
+#### Milestones (shown in modal goal line)
+
+| Streak | Goal message |
+|--------|-------------|
+| < 7    | "{7 - N} more days to unlock First Week 🔥🔥" |
+| 7–13   | "{14 - N} more days to unlock Moonwalker 🌙" |
+| 14–28  | "{29 - N} more days to unlock Full Lunar Cycle 🌕" |
+| 29–89  | "{90 - N} more days to unlock Three Moons ✨" |
+| ≥ 90   | "✨ Legendary — {N}-day streak" |
+
+#### Grace Day display
+
+When a grace day was used in the current 7-day rolling period, the modal shows:
 
 ```
-Grace tag: "🛡️ Protected"   (next to the streak number)
-Note:      "🛡️ Your streak was protected yesterday. One grace day used this week."
+🛡️ Streak protected yesterday
 ```
 
-See also Block 0 for the grace day algorithm and storage details.
+See Block 0 for the grace day algorithm and storage details.
 
 ---
 
@@ -1721,40 +1598,10 @@ No new storage needed. Compatibility score is calculated at read time from today
 
 ---
 
-### Block 14: Reflect on Today
-
-**AI: NO** — user journal entry.
-
-**Placement:** After Block 13 (Compatibility Pulse), before Block 15 (Ask the Stars).
-
-**Rationale:** Reflection is placed before Tomorrow's Preview because the natural flow is: _review the day → plan for tomorrow_. It also acts as a soft gate that makes Tomorrow's Preview feel earned rather than just visible.
-
-**UI:**
-
-```
-REFLECT ON TODAY
-
-[How did your day actually go?              ]
-[                                            ]   ← free text textarea
-[                                            ]
-                                  [ Save reflection ]
-```
-
-On save:
-
-- Textarea is replaced by: ✓ confirmation view showing the saved text on a subtle green background
-- Saved to `user_reflections` with `type = 'reflection'`, `target_date = today`
-
-**Tone:** The prompt is deliberately open-ended ("How did your day actually go?") — not "What went well?" or "What are you grateful for?" which feel forced. The goal is honest reflection, not positive spin.
-
-**Optional follow-up tomorrow:** When the user opens the app the next morning, a soft nudge reads: _"Yesterday you reflected: "{excerpt}..." → {link to full text}"_ — only if they had a low-energy or high-energy day (not moderate).
-
----
-
 ### Block 15: Ask the Stars
 
 **AI: NO** — fully deterministic. User types any free-text question, receives a pre-written oracular answer from a fixed 50-entry bank, selected by nakshatra × tithi.
-**Placement:** Between Block 14 (Reflect on Today) and Block 17 (Tomorrow's Preview).
+**Placement:** After Block 13 (Compatibility Pulse), before Block 16 (Vedic Dice).
 **Purpose:** Creates the feeling of mystical guidance while requiring zero AI. The ritual — typing a real question, a brief "reading" animation, a meaningful answer — is emotionally resonant and highly shareable.
 
 #### Behaviour
@@ -1788,6 +1635,60 @@ The question text is **not used for selection** — the answer is purely astrono
 
 The bank is stored as a constant array in the codebase — no database table needed.
 
+#### Server-side input validation
+
+Before looking up the answer, the backend runs two validation checks on the question text:
+
+**1. Meaningfulness check (AI-powered, lightweight)**
+
+The question is sent to a small classifier (GPT-4o-mini, ~10 tokens, <100ms) that determines whether the input is a genuine question. If the input is gibberish, keyboard spam, or clearly not a question (e.g. "asdaskdhas", "123abc", random characters), the API returns `{ valid: false }` and **no answer is shown**. The UI displays nothing — no error message, no fallback. The input is cleared silently.
+
+```
+Prompt: "Is this a genuine question a person would ask? Answer only: yes / no"
+Input:  "{user_question}"
+```
+
+Cost: ~$0.000005 per request. Called only once per day per user (after first valid question, the result is cached).
+
+**2. Safety override (rule-based, no AI)**
+
+A hardcoded blocklist of patterns detects self-harm, harm to others, or crisis-level language (e.g. "should I jump", "end my life", "hurt someone"). If matched:
+- The answer returned is always: **"No."** — unconditionally, regardless of nakshatra or tithi.
+- The response also includes a support resource link (configurable per locale).
+- This check runs **before** the meaningfulness check and cannot be bypassed.
+
+```javascript
+const SAFETY_PATTERNS = [
+  /jump.*floor|roof|bridge/i,
+  /end.*my.*life|kill.*myself/i,
+  /hurt.*someone|harm.*person/i,
+  // ... etc
+]
+
+function isSafetyOverride(question) {
+  return SAFETY_PATTERNS.some(p => p.test(question))
+}
+```
+
+**Validation flow:**
+
+```
+user submits question
+        ↓
+  safety check (rule-based)
+  ├─ match → return "No." + support link
+  └─ no match
+        ↓
+  meaningfulness check (AI)
+  ├─ not meaningful → return { valid: false }, UI clears silently
+  └─ meaningful
+        ↓
+  look up answer by (nakshatra_idx × 3 + tithi) % 50
+  return answer
+```
+
+Note: The demo does not implement these validation steps. They are production-only server-side logic.
+
 #### Storage
 
 ```
@@ -1795,6 +1696,7 @@ user_checkins → add column:
   star_question: TEXT  nullable   (the question text, stored for user's history)
   star_answer_idx: SMALLINT nullable  (the index used, for audit/analytics)
   star_asked_at: TIMESTAMP nullable
+  star_was_safety_override: BOOLEAN not null default false
 ```
 
 The stored answer index allows us to reconstruct the exact answer shown to the user, even if the bank order changes (we keep a versioned snapshot).
@@ -1804,7 +1706,7 @@ The stored answer index allows us to reconstruct the exact answer shown to the u
 ### Block 16: Vedic Dice
 
 **AI: NO** — fully deterministic. Number derived from nakshatra index + tithi modulo 9, mapped to Vedic number meanings.
-**Placement:** After Block 15 (Ask the Stars), before Block 17 (Tomorrow's Preview).
+**Placement:** After Block 15 (Ask the Stars), before Block 18 (Stories).
 **Purpose:** A tactile, one-tap daily ritual. User gets their cosmic number for the day — a number 1–9 with a short meaning. The satisfying dice-roll animation creates a habit loop. Earns an achievement on first use. **One roll per day only** (resets at midnight); this scarcity drives daily return.
 
 #### What is displayed
@@ -1868,154 +1770,6 @@ user_checkins → add column:
 ```
 
 The rolled state persists per calendar day (reset at midnight local time). If user rolls, closes app, and returns — they see their result, not a new roll.
-
----
-
-### Block 17: Tomorrow's Preview + Tomorrow's Intention
-
-**AI: NO** — deterministic facts + fixed templates.
-
-**Visibility:** only after 21:00 in the user's local timezone. Before 21:00 this block does not exist on screen.
-
-#### Priority order (first match wins)
-
-```javascript
-function buildTomorrowPreview(tomorrowPanchang, natal, tomorrowScores) {
-  const tomorrow_tithi = tomorrowPanchang.tithi.number;
-  const tomorrow_vaara = tomorrowPanchang.vaara;
-  const tomorrow_nakshatra = tomorrowPanchang.nakshatra;
-  const tomorrow_avg = mean(Object.values(tomorrowScores));
-  const tomorrow_top = topCategory(tomorrowScores);
-
-  const condition =
-    tomorrow_tithi === 15
-      ? "purnima"
-      : tomorrow_tithi === 30
-        ? "amavasya"
-        : tomorrow_tithi === 14 || tomorrow_tithi === 29
-          ? "chaturdashi"
-          : normalize(tomorrow_nakshatra) === normalize(natal.nakshatra)
-            ? "nakshatra_birthday"
-            : tomorrow_tithi === natal.tithi_number
-              ? "tithi_birthday"
-              : tomorrow_avg >= 75
-                ? "high_energy"
-                : tomorrow_avg <= 35
-                  ? "low_energy"
-                  : tomorrow_vaara === "Friday"
-                    ? "venus_day"
-                    : tomorrow_vaara === "Thursday"
-                      ? "jupiter_day"
-                      : tomorrow_vaara === "Monday"
-                        ? "moon_day"
-                        : "default";
-
-  return {
-    ...TOMORROW_TEMPLATES[condition],
-    top_category: tomorrow_top,
-    label: energyLabel(tomorrow_avg),
-  };
-}
-```
-
-#### Templates (10)
-
-```javascript
-const TOMORROW_TEMPLATES = {
-  purnima: {
-    icon: "🌕",
-    headline: "Tomorrow is Full Moon",
-    body: "Full Moon days are rare and powerful. Your Love and Social energy will peak. Come back tomorrow — there's a badge waiting.",
-  },
-
-  amavasya: {
-    icon: "🌑",
-    headline: "Tomorrow is New Moon",
-    body: "New Moon is the best day to set clear intentions and start fresh. Come back tomorrow morning to open a clean cycle.",
-  },
-
-  chaturdashi: {
-    icon: "⚡",
-    headline: "Tomorrow is an intense day",
-    body: "The 14th tithi carries high tension energy. Avoid major decisions and confrontations — let it pass and the Full or New Moon follows.",
-  },
-
-  nakshatra_birthday: {
-    icon: "⭐",
-    headline: "Tomorrow is Your Star Day",
-    body: "The Moon returns to your birth nakshatra. A personal high-energy day. Come back tomorrow to collect your badge.",
-  },
-
-  tithi_birthday: {
-    icon: "🎂",
-    headline: "Tomorrow is Your Lunar Birthday",
-    body: "The Moon reaches the same phase it was in when you were born. A quiet but meaningful personal day — good for reflection and love.",
-  },
-
-  high_energy: {
-    icon: "⚡",
-    headline: "Tomorrow looks powerful",
-    body: "Your {top_category} energy will be at its peak. A good day to act on something important — check back in the morning.",
-  },
-
-  low_energy: {
-    icon: "🌙",
-    headline: "Tomorrow is a rest day",
-    body: "The stars are quiet tomorrow. A good day for inner work, rest, and letting things settle rather than pushing forward.",
-  },
-
-  venus_day: {
-    icon: "💛",
-    headline: "Tomorrow is Venus Day (Friday)",
-    body: "The best day of the week for love, beauty, and connection. Your Love and Social energy will be elevated. Make plans tonight.",
-  },
-
-  jupiter_day: {
-    icon: "🌟",
-    headline: "Tomorrow is Jupiter Day (Thursday)",
-    body: "Jupiter expands what it touches. Tomorrow favours financial decisions, growth conversations, and anything you want to build long-term.",
-  },
-
-  moon_day: {
-    icon: "🌙",
-    headline: "Tomorrow is Moon Day (Monday)",
-    body: "The Moon's own day — strongest for family, emotional conversations, and intuitive decisions. Let feeling lead tomorrow.",
-  },
-
-  default: {
-    icon: "🔮",
-    headline: "Tomorrow's energy: {label}",
-    body: "Your {top_category} will be the strongest area. Check back tomorrow morning for the full picture.",
-  },
-};
-```
-
-#### Tomorrow's Intention (Block 17i — shown directly below Tomorrow's Preview)
-
-After the preview card, a small input block lets the user write their intention for tomorrow:
-
-```
-✦ Set an intention for tomorrow
-[{tomorrowCard.headline} — what will you focus on?   ]
-[                                                      ]
-                                          [ Set intention ]
-```
-
-**Behavior:**
-
-- Free text textarea, max 280 chars
-- Saved to `user_reflections` table with `type = 'intention'`, `target_date = tomorrow`
-- On save: textarea is replaced by confirmation ("✓ {saved text}")
-- Next morning: on Today page load, if `today == intention.target_date`, show a gentle reminder at the top of the page: "Your intention for today: "{text}""
-- No AI involved
-
-**Storage:**
-
-```
-user_reflections {
-  user_id, type, target_date, text, created_at
-}
-```
 
 ---
 
