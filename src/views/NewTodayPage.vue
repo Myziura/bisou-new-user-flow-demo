@@ -1608,248 +1608,6 @@ const BODY_MAP = [
 
 // ── Vedic Dice ───────────────────────────────────────────────────────────────
 
-// ── Daily Cosmic Pull ────────────────────────────────────────────────────────
-
-const PULL_QUALITIES = [
-  { quality: "Clarity", symbol: "🔷", color: "#3b82f6" },
-  { quality: "Action", symbol: "⚡", color: "#f59e0b" },
-  { quality: "Patience", symbol: "🌿", color: "#10b981" },
-  { quality: "Connection", symbol: "💛", color: "#f97316" },
-  { quality: "Rest", symbol: "🌙", color: "#8b5cf6" },
-  { quality: "Courage", symbol: "🔥", color: "#ef4444" },
-  { quality: "Gratitude", symbol: "✦", color: "#d4af37" },
-  { quality: "Boundaries", symbol: "🛡️", color: "#6b7280" },
-  { quality: "Trust", symbol: "🌊", color: "#0ea5e9" },
-];
-
-const PULL_BANK = [
-  // Clarity (0–5)
-  {
-    q: 0,
-    msg: "This morning asks you to cut through the noise. The clearest path forward is the one you already sense — trust that signal before the day adds complexity.",
-  },
-  {
-    q: 0,
-    msg: "What feels murky will sharpen by midday. Don't force decisions yet — wait for the moment when the answer arrives simply.",
-  },
-  {
-    q: 0,
-    msg: "The situation is clearer than it appears. Step back from the details and look at the whole picture. The answer is already visible.",
-  },
-  {
-    q: 0,
-    msg: "Clarity today comes from simplifying, not from gathering more information. Reduce before you decide.",
-  },
-  {
-    q: 0,
-    msg: "A moment of quiet this afternoon will produce more insight than an hour of active thinking. Give your mind space.",
-  },
-  {
-    q: 0,
-    msg: "You already know. The hesitation is not confusion — it's resistance. The answer is clear.",
-  },
-  // Action (6–11)
-  {
-    q: 1,
-    msg: "The window for decisive action is open right now. Move on something you've been considering — momentum is available and waiting.",
-  },
-  {
-    q: 1,
-    msg: "Don't wait for perfect conditions. A good move made today with incomplete information is more valuable than a perfect move made too late.",
-  },
-  {
-    q: 1,
-    msg: "The energy today supports bold first steps. Start the thing. The path will become clearer once you're moving.",
-  },
-  {
-    q: 1,
-    msg: "Act before overthinking sets in. The first impulse you had this morning about the situation — that one. Follow it.",
-  },
-  {
-    q: 1,
-    msg: "Something you've been circling is ready to be decided. The indecision costs more than either choice. Choose and move.",
-  },
-  {
-    q: 1,
-    msg: "This is a making day, not a planning day. Do the work. The results will come.",
-  },
-  // Patience (12–17)
-  {
-    q: 2,
-    msg: "Hold steady today. The right timing hasn't arrived yet — what feels urgent is actually asking for patience, not action.",
-  },
-  {
-    q: 2,
-    msg: "Not yet. The seeds are still below ground. Tending quietly now is exactly what this moment requires.",
-  },
-  {
-    q: 2,
-    msg: "The situation needs time, not intervention. Resist the urge to force movement. What's growing beneath the surface is real.",
-  },
-  {
-    q: 2,
-    msg: "Patience today is an active choice, not a passive one. You're choosing to let things develop rather than rush them.",
-  },
-  {
-    q: 2,
-    msg: "What you're waiting for is coming. The timing is not in your hands right now, and that's exactly as it should be.",
-  },
-  {
-    q: 2,
-    msg: "Slow down in a way that feels almost uncomfortable. That's the pace today is calling for.",
-  },
-  // Connection (18–23)
-  {
-    q: 3,
-    msg: "Reach out to someone you've been meaning to contact. The connection is wanted on both sides — you just need to make the first move.",
-  },
-  {
-    q: 3,
-    msg: "The relationships around you are amplified today. A small gesture of care will land deeper than usual.",
-  },
-  {
-    q: 3,
-    msg: "Someone in your circle needs to be seen right now. Not helped — just acknowledged. You know who.",
-  },
-  {
-    q: 3,
-    msg: "Today favours deep conversation over surface-level interaction. Go beneath the usual topics with someone you trust.",
-  },
-  {
-    q: 3,
-    msg: "The loneliness or disconnection you've been feeling is temporary. Reaching out — even briefly — will shift it.",
-  },
-  {
-    q: 3,
-    msg: "Love and friendship return what you put into them today with interest. Give first.",
-  },
-  // Rest (24–29)
-  {
-    q: 4,
-    msg: "Doing less achieves more today. The most powerful move is to stop pushing and let the situation breathe.",
-  },
-  {
-    q: 4,
-    msg: "Your energy is a resource. What you protect today compounds tomorrow. Rest is not stopping — it's preparing.",
-  },
-  {
-    q: 4,
-    msg: "The body is speaking today. Listen before it has to repeat itself louder.",
-  },
-  {
-    q: 4,
-    msg: "A quieter evening than planned will leave you more equipped for what comes next. Honour the pull toward stillness.",
-  },
-  {
-    q: 4,
-    msg: "Stop performing productivity. The real work today happens in the spaces between doing.",
-  },
-  {
-    q: 4,
-    msg: "Sleep and restoration carry as much weight as action in a life well-lived. Tonight belongs to recovery.",
-  },
-  // Courage (30–35)
-  {
-    q: 5,
-    msg: "There's something you've been avoiding. Today the energy is behind you — face it.",
-  },
-  {
-    q: 5,
-    msg: "The fear is real. Go anyway. Courage is not the absence of fear; it's the decision that something matters more than the fear.",
-  },
-  {
-    q: 5,
-    msg: "Say the thing you've been holding back. The right moment is now, and the words will come when you start.",
-  },
-  {
-    q: 5,
-    msg: "One conversation you've been postponing is overdue. Courage today means starting it, not finishing it perfectly.",
-  },
-  {
-    q: 5,
-    msg: "What looks like a wall is actually a door. You won't see the handle until you walk toward it.",
-  },
-  {
-    q: 5,
-    msg: "Trust yourself enough to try. The outcome matters less than the act of showing up fully.",
-  },
-  // Gratitude (36–41)
-  {
-    q: 6,
-    msg: "Before you focus on what's missing, notice what's here. Appreciation today doesn't mean ignoring the hard parts — it means holding both at once.",
-  },
-  {
-    q: 6,
-    msg: "Something that felt ordinary yesterday is actually remarkable. It's worth looking at again.",
-  },
-  {
-    q: 6,
-    msg: "The good things in your life didn't have to be there. They arrived through many small decisions, none of which were guaranteed.",
-  },
-  {
-    q: 6,
-    msg: "Tell someone today that they matter. Gratitude expressed is twice as powerful as gratitude felt.",
-  },
-  {
-    q: 6,
-    msg: "The hardest chapter you survived is also part of what you're grateful for now, even if you can't say it fully yet.",
-  },
-  {
-    q: 6,
-    msg: "Count three things that worked this week before the day ends. Specifics only.",
-  },
-  // Boundaries (42–47)
-  {
-    q: 7,
-    msg: "Your energy belongs to you first. Protect it today without guilt — the people who matter will understand.",
-  },
-  {
-    q: 7,
-    msg: "Something you agreed to is asking more than you have. It's okay to renegotiate.",
-  },
-  {
-    q: 7,
-    msg: "A clear no, given kindly, does more for a relationship than a reluctant yes.",
-  },
-  {
-    q: 7,
-    msg: "You've been absorbing more than you're releasing. Something needs to be set down today.",
-  },
-  {
-    q: 7,
-    msg: "The boundary you're hesitating to set is being felt whether you say it or not. Stating it cleanly is the kindest option.",
-  },
-  {
-    q: 7,
-    msg: "Protecting your time and attention is not selfishness. It's the foundation everything else stands on.",
-  },
-  // Trust (48–53)
-  {
-    q: 8,
-    msg: "Release the need to control the outcome. The situation is unfolding in a direction you can't fully see yet — trust the process.",
-  },
-  {
-    q: 8,
-    msg: "The thing that doesn't make sense right now will make sense later. You don't need to understand it to move forward.",
-  },
-  {
-    q: 8,
-    msg: "What's being taken away is making space. Not all endings are losses.",
-  },
-  {
-    q: 8,
-    msg: "You've done the work. Now let it work. Stop checking, stop adjusting. Trust what you've set in motion.",
-  },
-  {
-    q: 8,
-    msg: "The path forward is clearer than your anxiety is willing to admit. Trust what you know.",
-  },
-  {
-    q: 8,
-    msg: "Something is being arranged on your behalf right now. You can't see it yet. That's fine.",
-  },
-];
-
 function compColor(score) {
   if (score >= 80) return "#4ade80";
   if (score >= 60) return "#fbbf24";
@@ -3032,7 +2790,6 @@ const oraclePickedIdx = ref(null);
 const matchExpanded = ref(null);
 const expandedWindow = ref(null);
 const showStreakModal = ref(false);
-const pullRevealed = ref({ morning: false, afternoon: false, evening: false });
 const nakshatraExpanded = ref(false);
 const dashaExpanded = ref(false);
 const bodyMapExpanded = ref(false);
@@ -3521,22 +3278,6 @@ function buildBodyMapVedicDetail(sc, entry, n, paksha) {
   );
 }
 
-const pullCardFor = computed(() => slot => {
-  const nakshatraList = Object.keys(NAKSHATRA_DATA);
-  const nIdx = Math.max(0, nakshatraList.indexOf(s.value.nakshatra));
-  const slotIdx = { morning: 0, afternoon: 1, evening: 2 }[slot] || 0;
-  const cardIdx = (nIdx * 3 + slotIdx) % PULL_BANK.length;
-  const card = PULL_BANK[cardIdx];
-  return { ...card, ...PULL_QUALITIES[card.q] };
-});
-
-const availablePullSlots = computed(() => {
-  const t = s.value.timeOfDay;
-  if (t === "morning") return ["morning"];
-  if (t === "afternoon") return ["morning", "afternoon"];
-  return ["morning", "afternoon", "evening"];
-});
-
 const lunarPct = computed(() => Math.min((s.value.tithi / 29) * 100, 100));
 const RING_C = 201.1;
 const ringOffset = computed(() => RING_C * (1 - lunarPct.value / 100));
@@ -3694,15 +3435,10 @@ function resetInteractive() {
   oraclePickedIdx.value = null;
   matchExpanded.value = null;
   expandedWindow.value = null;
-  pullRevealed.value = { morning: false, afternoon: false, evening: false };
   nakshatraExpanded.value = false;
   dashaExpanded.value = false;
   bodyMapExpanded.value = false;
   showStreakModal.value = false;
-}
-
-function revealPull(slot) {
-  pullRevealed.value = { ...pullRevealed.value, [slot]: true };
 }
 
 function step(dir) {
@@ -3822,21 +3558,41 @@ function revealOracle() {
             class="modal-overlay"
             @click.self="showStreakModal = false">
             <div class="modal-sheet streak-modal-sheet">
-              <div class="modal-header">
-                <h2 class="modal-title">Your Streak</h2>
-                <button class="modal-close" @click="showStreakModal = false">
-                  ✕
-                </button>
-              </div>
+              <button
+                class="modal-close streak-modal-close"
+                aria-label="Close"
+                @click="showStreakModal = false">
+                ✕
+              </button>
               <div class="streak-modal-body">
-                <p class="streak-modal-kicker">You're on</p>
-                <div class="streak-modal-number">
-                  <span class="streak-modal-fire">🔥</span>
-                  <span class="streak-modal-count">Day {{ s.streak }}</span>
+                <div class="streak-hero">
+                  <div class="streak-hero-glow" aria-hidden="true" />
+                  <span class="streak-hero-fire">🔥</span>
+                  <p class="streak-hero-count">{{ s.streak }}</p>
+                  <p class="streak-hero-label">
+                    {{ s.streak === 1 ? "day" : "days" }} in a row
+                  </p>
                 </div>
-                <p class="streak-modal-label">
-                  of {{ streakNextGoal }} · {{ streakGoalLabel }}
-                </p>
+
+                <div class="streak-progress-card">
+                  <div class="streak-bar-head">
+                    <span>Day {{ s.streak }}</span>
+                    <span>{{ streakGoalLabel }}</span>
+                    <span>Day {{ streakNextGoal }}</span>
+                  </div>
+                  <div class="streak-bar">
+                    <div
+                      class="streak-bar-fill"
+                      :style="{ width: `${streakProgressPercent}%` }" />
+                  </div>
+                  <p v-if="streakDaysToGoal > 0" class="streak-next-hint">
+                    {{ streakDaysToGoal }} more
+                    {{ streakDaysToGoal === 1 ? "day" : "days" }} to unlock
+                  </p>
+                  <p v-else class="streak-next-hint streak-next-hint--done">
+                    Milestone reached
+                  </p>
+                </div>
 
                 <div class="streak-track-wrap">
                   <div class="streak-track">
@@ -3872,41 +3628,13 @@ function revealOracle() {
                       </div>
                     </template>
                   </div>
-                  <p class="streak-track-legend">
-                    Day 1 <span class="streak-track-arrow">→</span> Day
-                    {{ s.streak }}
-                    <template v-if="streakDaysToGoal > 0">
-                      <span class="streak-track-arrow">→</span> Day
-                      {{ streakNextGoal }}
-                    </template>
-                  </p>
                 </div>
-
-                <div class="streak-bar">
-                  <div
-                    class="streak-bar-fill"
-                    :style="{ width: `${streakProgressPercent}%` }" />
-                </div>
-                <p class="streak-bar-label">
-                  {{ streakProgressPercent }}% to next milestone
-                </p>
 
                 <p v-if="s.graceDay" class="streak-modal-grace">
                   🛡️ Streak protected yesterday
                 </p>
-                <div class="streak-modal-goal">
-                  <template v-if="streakDaysToGoal > 0">
-                    {{ streakDaysToGoal }} more
-                    {{ streakDaysToGoal === 1 ? "day" : "days" }} to unlock
-                    <strong>{{ streakGoalLabel }}</strong>
-                  </template>
-                  <template v-else>
-                    <strong>✨ {{ streakGoalLabel }} unlocked!</strong>
-                  </template>
-                </div>
                 <p class="streak-modal-rule">
-                  Miss a day and your streak resets. Come back every day to keep
-                  it alive.
+                  Miss a day and your streak resets.
                 </p>
               </div>
             </div>
@@ -4100,7 +3828,7 @@ function revealOracle() {
             </div>
           </section>
 
-          <!-- ── Block 7: Power Windows + Rahu Kaal ── -->
+          <!-- ── Block 6: Power Windows + Rahu Kaal ── -->
           <section class="section">
             <p class="sec-label">POWER WINDOWS</p>
             <p class="pw-sub">{{ s.vaara }} · tap any to see why</p>
@@ -4139,7 +3867,7 @@ function revealOracle() {
             </div>
           </section>
 
-          <!-- ── Block VI: Cosmic Body Map ── -->
+          <!-- ── Block 7: Cosmic Body Map ── -->
           <section class="section">
             <p class="sec-label">TODAY'S BODY FOCUS</p>
             <div class="body-map-wrap">
@@ -4168,7 +3896,7 @@ function revealOracle() {
             <p class="tap-hint">Tap for Vedic details</p>
           </section>
 
-          <!-- ── Block 9: Daily Oracle ── -->
+          <!-- ── Block 8: Daily Oracle ── -->
           <section class="section oracle-section">
             <p class="sec-label">TODAY'S ORACLE</p>
 
@@ -4214,7 +3942,7 @@ function revealOracle() {
             </div>
           </section>
 
-          <!-- ── Block 10: Dasha / Antardasha Snapshot ── -->
+          <!-- ── Block 9: Dasha / Antardasha Snapshot ── -->
           <section class="section">
             <p class="sec-label">YOUR PLANETARY CYCLE</p>
             <div
@@ -4279,9 +4007,7 @@ function revealOracle() {
             </div>
           </section>
 
-          <!-- ── Block 11: Moon Streak is in header pill ── -->
-
-          <!-- ── Block 12: Stories ── -->
+          <!-- ── Block 10: Stories ── -->
           <section class="section">
             <p class="sec-label">STORIES</p>
             <div class="stories-row">
@@ -4308,7 +4034,7 @@ function revealOracle() {
             </div>
           </section>
 
-          <!-- ── Block 13: Compatibility Pulse ── -->
+          <!-- ── Block 11: Compatibility Pulse ── -->
           <section class="section">
             <p class="sec-label">TODAY'S COMPATIBILITY</p>
 
@@ -4364,7 +4090,7 @@ function revealOracle() {
             </div>
           </section>
 
-          <!-- ── Block 14: Achievements ── -->
+          <!-- ── Block 12: Achievements ── -->
           <section class="section">
             <div class="section-head-row">
               <p class="sec-label" style="margin-bottom: 0">ACHIEVEMENTS</p>
@@ -6510,180 +6236,111 @@ function revealOracle() {
   color: rgba(255, 255, 255, 0.4);
 }
 
-/* ── Block VIII: Daily Cosmic Pull ───────────────────────────────────────── */
-
-.pull-sub {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.4);
-  text-align: center;
-  margin: -6px 0 14px;
-  letter-spacing: 0.04em;
-}
-.pull-slots {
-  display: flex;
-  gap: 10px;
-}
-.pull-slot {
-  flex: 1;
-  min-height: 160px;
-  border-radius: 16px;
-  overflow: hidden;
-}
-.pull-card-back {
-  height: 100%;
-  min-height: 160px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1.5px dashed rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.pull-card-back:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.35);
-  transform: scale(1.02);
-}
-.pull-back-symbol {
-  font-size: 24px;
-  color: rgba(255, 255, 255, 0.3);
-}
-.pull-back-label {
-  font-size: 11px;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.55);
-  text-transform: capitalize;
-  letter-spacing: 0.05em;
-}
-.pull-back-hint {
-  font-size: 9px;
-  color: rgba(255, 255, 255, 0.25);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-.pull-card-locked {
-  height: 100%;
-  min-height: 160px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1.5px solid rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-}
-.pull-lock-icon {
-  font-size: 20px;
-  opacity: 0.3;
-}
-.pull-lock-label {
-  font-size: 10px;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.2);
-  text-transform: capitalize;
-  letter-spacing: 0.06em;
-}
-.pull-lock-time {
-  font-size: 9px;
-  color: rgba(255, 255, 255, 0.15);
-}
-.pull-card-face {
-  height: 100%;
-  min-height: 160px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 6px;
-  padding: 14px 10px;
-  animation: cardFlip 0.4s ease;
-}
-@keyframes cardFlip {
-  from {
-    transform: rotateY(90deg);
-    opacity: 0;
-  }
-  to {
-    transform: rotateY(0deg);
-    opacity: 1;
-  }
-}
-.pull-quality-symbol {
-  font-size: 22px;
-}
-.pull-quality-name {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-}
-.pull-msg {
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.65);
-  line-height: 1.5;
-  text-align: center;
-  flex: 1;
-}
-.pull-attr {
-  font-size: 9px;
-  color: rgba(255, 255, 255, 0.25);
-  letter-spacing: 0.05em;
-}
 /* ── Streak Modal ──────────────────────────────────────────────────────────── */
 .streak-modal-sheet {
-  padding-bottom: 32px;
+  position: relative;
+  justify-content: center;
+  min-height: 78%;
+  padding: 56px 24px 40px;
+}
+.streak-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 2;
 }
 .streak-modal-body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 20px 20px 0;
+  gap: 24px;
+  width: 100%;
   text-align: center;
 }
-.streak-modal-kicker {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.35);
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-.streak-modal-number {
+
+.streak-hero {
+  position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
+  padding: 8px 0 4px;
 }
-.streak-modal-fire {
-  font-size: 32px;
+.streak-hero-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 220px;
+  height: 220px;
+  transform: translate(-50%, -55%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 150, 40, 0.28) 0%,
+    rgba(255, 120, 20, 0.08) 45%,
+    transparent 70%
+  );
+  pointer-events: none;
 }
-.streak-modal-count {
-  font-size: 36px;
+.streak-hero-fire {
+  font-size: 52px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.streak-hero-count {
+  font-size: 80px;
   font-weight: 900;
   color: #ffcc60;
-  line-height: 1;
-  letter-spacing: -0.5px;
+  line-height: 0.95;
+  letter-spacing: -3px;
+  text-shadow: 0 0 40px rgba(255, 160, 40, 0.35);
 }
-.streak-modal-label {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.45);
+.streak-hero-label {
+  margin: 8px 0 0;
+  font-size: 17px;
   font-weight: 600;
-  letter-spacing: 0.04em;
-  margin-top: -6px;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.02em;
+}
+
+.streak-progress-card {
+  width: 100%;
+  padding: 20px 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+}
+.streak-bar-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.03em;
+}
+.streak-bar-head span:nth-child(2) {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  color: rgba(255, 220, 140, 0.9);
+}
+.streak-next-hint {
+  margin: 14px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.65);
+}
+.streak-next-hint--done {
+  color: rgba(255, 220, 140, 0.9);
 }
 
 .streak-track-wrap {
   width: 100%;
-  padding: 14px 4px 4px;
+  padding: 18px 12px 14px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
+  border-radius: 16px;
 }
 .streak-track {
   display: flex;
@@ -6691,7 +6348,7 @@ function revealOracle() {
   justify-content: center;
   gap: 0;
   overflow-x: auto;
-  padding: 4px 8px 0;
+  padding: 6px 4px 0;
   scrollbar-width: none;
 }
 .streak-track::-webkit-scrollbar {
@@ -6699,10 +6356,10 @@ function revealOracle() {
 }
 
 .streak-ellipsis {
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.2);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.25);
   letter-spacing: 0.1em;
-  padding: 6px 2px 0;
+  padding: 10px 4px 0;
   align-self: flex-start;
 }
 
@@ -6710,8 +6367,8 @@ function revealOracle() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  min-width: 28px;
+  gap: 8px;
+  min-width: 36px;
   flex-shrink: 0;
 }
 .streak-day-dot-wrap {
@@ -6720,79 +6377,67 @@ function revealOracle() {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 16px;
+  height: 20px;
 }
 .streak-day-dot {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.12);
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.22);
   position: relative;
   z-index: 1;
   flex-shrink: 0;
 }
 .streak-day-line {
   position: absolute;
-  left: calc(50% + 5px);
-  right: calc(-50% + 5px);
+  left: calc(50% + 6px);
+  right: calc(-50% + 6px);
   top: 50%;
-  height: 2px;
+  height: 3px;
   background: rgba(255, 255, 255, 0.12);
   transform: translateY(-50%);
   z-index: 0;
 }
 .streak-day-line--done {
-  background: rgba(255, 180, 60, 0.45);
+  background: rgba(255, 180, 60, 0.5);
 }
 .streak-day-num {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.35);
   letter-spacing: 0.02em;
 }
 .streak-day--done .streak-day-dot {
-  background: rgba(255, 180, 60, 0.85);
-  border-color: rgba(255, 200, 100, 0.9);
-  box-shadow: 0 0 8px rgba(255, 160, 40, 0.35);
+  background: rgba(255, 180, 60, 0.9);
+  border-color: rgba(255, 200, 100, 0.95);
+  box-shadow: 0 0 10px rgba(255, 160, 40, 0.4);
 }
 .streak-day--done .streak-day-num {
-  color: rgba(255, 200, 120, 0.7);
+  color: rgba(255, 200, 120, 0.75);
 }
 .streak-day--current .streak-day-dot {
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   background: #ffcc60;
   border-color: #ffe08a;
-  box-shadow: 0 0 14px rgba(255, 180, 60, 0.65);
+  box-shadow: 0 0 18px rgba(255, 180, 60, 0.7);
 }
 .streak-day--current .streak-day-num {
   color: #ffcc60;
-  font-size: 10px;
+  font-size: 13px;
 }
 .streak-day--milestone .streak-day-num {
-  color: rgba(180, 140, 255, 0.75);
+  color: rgba(180, 140, 255, 0.85);
 }
 .streak-day--goal .streak-day-dot {
-  border-color: rgba(180, 140, 255, 0.5);
-  background: rgba(180, 140, 255, 0.15);
-}
-
-.streak-track-legend {
-  margin: 10px 0 0;
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.35);
-  font-weight: 600;
-  letter-spacing: 0.04em;
-}
-.streak-track-arrow {
-  margin: 0 4px;
-  color: rgba(255, 180, 60, 0.5);
+  border-color: rgba(180, 140, 255, 0.6);
+  background: rgba(180, 140, 255, 0.2);
 }
 
 .streak-bar {
   width: 100%;
-  height: 6px;
+  height: 10px;
   background: rgba(255, 255, 255, 0.08);
   border-radius: 99px;
   overflow: hidden;
@@ -6803,33 +6448,19 @@ function revealOracle() {
   border-radius: 99px;
   transition: width 0.4s ease;
 }
-.streak-bar-label {
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.3);
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  margin-top: -4px;
-}
 
 .streak-modal-grace {
-  font-size: 12px;
-  color: rgba(255, 200, 100, 0.7);
-  background: rgba(255, 200, 100, 0.08);
-  padding: 6px 14px;
+  font-size: 13px;
+  color: rgba(255, 200, 100, 0.8);
+  background: rgba(255, 200, 100, 0.1);
+  padding: 8px 16px;
   border-radius: 20px;
 }
-.streak-modal-goal {
+.streak-modal-rule {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.6);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  padding: 12px 16px;
+  color: rgba(255, 255, 255, 0.3);
   line-height: 1.5;
-  width: 100%;
-}
-.streak-modal-goal strong {
-  color: rgba(255, 255, 255, 0.88);
+  margin: -4px 0 0;
 }
 /* ── Block 1: Day Synthesis ──────────────────────────────────── */
 .headline-wrap {
@@ -7291,9 +6922,4 @@ function revealOracle() {
   color: rgba(255, 200, 80, 0.65);
 }
 
-.streak-modal-rule {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.25);
-  line-height: 1.5;
-}
 </style>
