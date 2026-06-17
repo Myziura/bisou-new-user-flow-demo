@@ -2793,6 +2793,7 @@ const showStreakModal = ref(false);
 const nakshatraExpanded = ref(false);
 const dashaExpanded = ref(false);
 const bodyMapExpanded = ref(false);
+const exploreExpanded = ref(false);
 
 const s = computed(() => SCENARIOS[scenarioIdx.value]);
 const bgKey = computed(() => resolveBackground(s.value));
@@ -4034,6 +4035,21 @@ function revealOracle() {
             </div>
           </section>
 
+          <!-- ── Widget nudge ── -->
+          <div class="widget-nudge">
+            <div class="widget-nudge-left">
+              <div class="widget-nudge-preview">
+                <span class="wnp-icon">🌕</span>
+                <span class="wnp-band">HIGH</span>
+                <span class="wnp-star">Pushya</span>
+              </div>
+            </div>
+            <div class="widget-nudge-body">
+              <p class="widget-nudge-title">Add Bisou to your home screen</p>
+              <p class="widget-nudge-desc">See your daily energy without even opening the app</p>
+            </div>
+          </div>
+
           <!-- ── Block 11: Compatibility Pulse ── -->
           <section class="section">
             <p class="sec-label">TODAY'S COMPATIBILITY</p>
@@ -4087,6 +4103,108 @@ function revealOracle() {
                 </transition>
               </div>
               <p class="compat-hint">Tap a match to see today's insight</p>
+            </div>
+          </section>
+
+          <!-- ── Block 13: Explore Yourself ── -->
+          <section class="section explore-section">
+            <p class="sec-label">EXPLORE YOURSELF</p>
+            <p class="explore-sub">Go deeper — reports built from your birth chart</p>
+            <div class="explore-grid">
+              <!-- Always visible: top 5 -->
+              <div class="explore-card explore-card--synastry">
+                <span class="explore-card-icon">💞</span>
+                <div class="explore-card-body">
+                  <p class="explore-card-name">Synastry Report</p>
+                  <p class="explore-card-desc">How two birth charts fit together across love, trust, and growth</p>
+                </div>
+                <span class="explore-card-arrow">›</span>
+              </div>
+              <div class="explore-card explore-card--bestday">
+                <span class="explore-card-icon">📅</span>
+                <div class="explore-card-body">
+                  <p class="explore-card-name">Best Day to Meet</p>
+                  <p class="explore-card-desc">Find the best days this week to connect with someone</p>
+                </div>
+                <span class="explore-card-arrow">›</span>
+              </div>
+              <div class="explore-card explore-card--forecast">
+                <span class="explore-card-icon">🌊</span>
+                <div class="explore-card-body">
+                  <p class="explore-card-name">Relationship Forecast</p>
+                  <p class="explore-card-desc">What the next month looks like for you and a partner</p>
+                </div>
+                <span class="explore-card-arrow">›</span>
+              </div>
+              <div class="explore-card explore-card--group">
+                <span class="explore-card-icon">🪐</span>
+                <div class="explore-card-body">
+                  <p class="explore-card-name">Group Compatibility</p>
+                  <p class="explore-card-desc">Map the energy between everyone in your circle</p>
+                </div>
+                <span class="explore-card-arrow">›</span>
+              </div>
+              <div class="explore-card explore-card--past">
+                <span class="explore-card-icon">🌀</span>
+                <div class="explore-card-body">
+                  <p class="explore-card-name">Past Relationship Reading</p>
+                  <p class="explore-card-desc">Understand a past connection through the lens of your charts</p>
+                </div>
+                <span class="explore-card-arrow">›</span>
+              </div>
+
+              <!-- Expanded: more reports (hidden until Show more) -->
+              <transition name="expand">
+                <div v-if="exploreExpanded" class="explore-more-grid">
+                  <div class="explore-card explore-card--year">
+                    <span class="explore-card-icon">🏆</span>
+                    <div class="explore-card-body">
+                      <p class="explore-card-name">Year Ahead Reading</p>
+                      <p class="explore-card-desc">A month-by-month forecast for the next 12 months</p>
+                    </div>
+                    <span class="explore-card-arrow">›</span>
+                  </div>
+                  <div class="explore-card explore-card--astrotimeline">
+                    <span class="explore-card-icon">📍</span>
+                    <div class="explore-card-body">
+                      <p class="explore-card-name">Astro Timeline</p>
+                      <p class="explore-card-desc">See what the stars said during your most important life moments</p>
+                    </div>
+                    <span class="explore-card-arrow">›</span>
+                  </div>
+                  <div class="explore-card explore-card--career">
+                    <span class="explore-card-icon">💼</span>
+                    <div class="explore-card-body">
+                      <p class="explore-card-name">Career & Purpose Report</p>
+                      <p class="explore-card-desc">Your strengths, blind spots, and ideal work environments</p>
+                    </div>
+                    <span class="explore-card-arrow">›</span>
+                  </div>
+                  <div class="explore-card explore-card--natal">
+                    <span class="explore-card-icon">🌟</span>
+                    <div class="explore-card-body">
+                      <p class="explore-card-name">Natal Chart Deep Dive</p>
+                      <p class="explore-card-desc">A full reading of your birth chart — who you are at the core</p>
+                    </div>
+                    <span class="explore-card-arrow">›</span>
+                  </div>
+                  <div class="explore-card explore-card--lunar">
+                    <span class="explore-card-icon">🌕</span>
+                    <div class="explore-card-body">
+                      <p class="explore-card-name">Lunar Return Report</p>
+                      <p class="explore-card-desc">What each new moon cycle activates in your chart</p>
+                    </div>
+                    <span class="explore-card-arrow">›</span>
+                  </div>
+                </div>
+              </transition>
+
+              <!-- Show more / Show less toggle -->
+              <button
+                class="explore-toggle"
+                @click="exploreExpanded = !exploreExpanded">
+                {{ exploreExpanded ? 'Show less ▴' : 'Show more ▾' }}
+              </button>
             </div>
           </section>
 
@@ -5069,6 +5187,180 @@ function revealOracle() {
   background: rgba(100, 180, 255, 0.08);
   border: 1px solid rgba(100, 180, 255, 0.15);
   border-radius: 10px;
+}
+
+/* ── Widget nudge ────────────────────────────────────────────────────────── */
+.widget-nudge {
+  margin: 0 16px 20px;
+  padding: 14px 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.widget-nudge-left {
+  flex-shrink: 0;
+}
+.widget-nudge-preview {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: rgba(20, 16, 40, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+}
+.wnp-icon { font-size: 18px; line-height: 1; }
+.wnp-band {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #4ade80;
+}
+.wnp-star {
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 500;
+}
+.widget-nudge-body {
+  flex: 1;
+}
+.widget-nudge-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 0 3px;
+}
+.widget-nudge-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.38);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ── Block 13: Explore Yourself ──────────────────────────────────────────── */
+.explore-section {
+  padding-top: 4px;
+}
+.explore-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.38);
+  margin: -8px 0 16px;
+  letter-spacing: 0.01em;
+}
+.explore-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.explore-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.12s;
+}
+.explore-card:active {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(0.985);
+}
+.explore-card-icon {
+  font-size: 26px;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.07);
+}
+.explore-card-body {
+  flex: 1;
+  min-width: 0;
+}
+.explore-card-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 2px;
+}
+.explore-card-desc {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.42);
+  line-height: 1.4;
+}
+.explore-card-arrow {
+  font-size: 22px;
+  color: rgba(255, 255, 255, 0.22);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.explore-card--synastry .explore-card-icon {
+  background: rgba(255, 160, 200, 0.12);
+}
+.explore-card--bestday .explore-card-icon {
+  background: rgba(160, 220, 255, 0.1);
+}
+.explore-card--forecast .explore-card-icon {
+  background: rgba(120, 200, 255, 0.12);
+}
+.explore-card--group .explore-card-icon {
+  background: rgba(200, 170, 255, 0.12);
+}
+.explore-card--past .explore-card-icon {
+  background: rgba(255, 200, 130, 0.1);
+}
+.explore-card--year .explore-card-icon {
+  background: rgba(255, 215, 80, 0.12);
+}
+.explore-card--astrotimeline .explore-card-icon {
+  background: rgba(160, 255, 200, 0.1);
+}
+.explore-card--career .explore-card-icon {
+  background: rgba(255, 180, 100, 0.1);
+}
+.explore-card--natal .explore-card-icon {
+  background: rgba(220, 200, 255, 0.12);
+}
+.explore-card--lunar .explore-card-icon {
+  background: rgba(200, 220, 255, 0.1);
+}
+
+.explore-more-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.explore-toggle {
+  width: 100%;
+  padding: 12px;
+  margin-top: 2px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.explore-toggle:active {
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* ── Block 7: Achievements ────────────────────────────────────────────────── */

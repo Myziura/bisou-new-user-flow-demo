@@ -34,6 +34,7 @@ They can appear as a label, tag, or part of the expanded view — but never as t
    - [Block 10: Stories Carousel](#block-10-stories-carousel)
    - [Block 11: Compatibility Pulse](#block-11-compatibility-pulse)
    - [Block 12: Achievements](#block-12-achievements)
+   - [Block 13: Explore Yourself](#block-13-explore-yourself)
    - [Moon Streak (header feature — not a page block)](#moon-streak-header-feature)
 5. [Achievement System — Full Spec](#5-achievement-system--full-spec)
 6. [Dynamic Background System](#6-dynamic-background-system)
@@ -45,7 +46,7 @@ They can appear as a label, tag, or part of the expanded view — but never as t
 
 ## Quick Reference — All Blocks at a Glance
 
-**13 blocks (0–12) + Dynamic Background + Moon Streak (header feature, outside blocks).**
+**14 blocks (0–13) + Dynamic Background + Moon Streak (header feature, outside blocks).**
 
 | Block | Name                      | How calculated                                     | AI        | Notes                                                                    |
 | ----- | ------------------------- | -------------------------------------------------- | --------- | ------------------------------------------------------------------------ |
@@ -62,7 +63,8 @@ They can appear as a label, tag, or part of the expanded view — but never as t
 | 9     | Dasha Snapshot            | Vimshottari system from natal Moon longitude       | ❌        | 1 sentence + tap; requires birth time; accuracy warning if time unknown  |
 | 10    | Stories Carousel          | Admin scheduled + nakshatra lookup                 | ❌        | Stories personalized by nakshatra / moon sign                            |
 | 11    | Compatibility Pulse       | Energy score delta between matched users           | ❌        | Located near end of page                                                 |
-| 12    | Achievements              | Rules evaluated on each check-in                   | ❌        | Last block                                                               |
+| 12    | Achievements              | Rules evaluated on each check-in                   | ❌        | Second-to-last block                                                     |
+| 13    | Explore Yourself          | Static entry points → Reports section              | ❌        | Last block; 5 report cards; no data computed on Today page               |
 | —     | Moon Streak               | Check-in count; no grace day                       | ❌        | Header pill + modal only — not a numbered page block                     |
 
 **AI calls per user per day: max 3** — up to 3 energy category explanations (on first tap only, then cached until midnight). Everything else is deterministic.
@@ -160,6 +162,13 @@ birth_time_known        (boolean — false if default 12:00 was used) ← NEW
 │                                                 │
 │  BLOCK 12: ACHIEVEMENTS                        │
 │  [recent badges]  [View all →]                 │
+│                                                 │
+│  BLOCK 13: EXPLORE YOURSELF                    │
+│  💞 Synastry Report          ›                 │
+│  📅 Best Day to Meet         ›                 │
+│  🌊 Relationship Forecast    ›                 │
+│  🪐 Group Compatibility      ›                 │
+│  🌀 Past Relationship Reading ›                │
 └─────────────────────────────────────────────────┘
 ```
 
@@ -2036,6 +2045,63 @@ States: **Earned repeatable** (✓ + ×count) · **Earned one-time** (✓) · **
 
 ---
 
+### Block 13: Explore Yourself
+
+**AI: NO** — static entry points only. No data computed on the Today page.
+
+#### Purpose
+
+A permanent last block on the Today page that promotes the **Reports section**. Every card acts as a teaser with a title and one-sentence description. Tapping any card navigates to the corresponding report in the Reports section of the app.
+
+This block does **not** require birth chart computation — it is the same for every user.
+
+#### Layout
+
+```
+┌─────────────────────────────────────────┐
+│  EXPLORE YOURSELF                       │
+│  Go deeper — reports built from your   │
+│  birth chart                            │
+│                                         │
+│  💞  Synastry Report              ›     │
+│      How two birth charts fit           │
+│      together across love, trust,       │
+│      and growth                         │
+│                                         │
+│  📅  Best Day to Meet             ›     │
+│      Find the best days this week       │
+│      to connect with someone            │
+│                                         │
+│  🌊  Relationship Forecast        ›     │
+│      What the next month looks like     │
+│      for you and a partner              │
+│                                         │
+│  🪐  Group Compatibility          ›     │
+│      Map the energy between             │
+│      everyone in your circle            │
+│                                         │
+│  🌀  Past Relationship Reading    ›     │
+│      Understand a past connection       │
+│      through the lens of your charts   │
+└─────────────────────────────────────────┘
+```
+
+#### Reports catalogue (linked destinations)
+
+| Card | Destination | Inputs required |
+| ---- | ----------- | --------------- |
+| Synastry Report | Reports › Synastry | Birth date of one other person (time + place optional) |
+| Best Day to Meet | Reports › Best Day | Birth date of one other person |
+| Relationship Forecast | Reports › Forecast | Birth date of one other person |
+| Group Compatibility | Reports › Group | Birth dates of 2–5 people |
+| Past Relationship Reading | Reports › Past | Birth date of one other person |
+
+#### Storage
+
+None. No server calls on the Today page for this block.
+
+---
+
 ### Moon Streak (header feature — not a page block)
 
 **AI: NO**
@@ -2367,3 +2433,135 @@ This is ensured by:
 - All panchang calculations via Swiss Ephemeris with Lahiri ayanamsa
 - Dasha calculation uses `addYears` with 365.25 days/year (Vimshottari standard)
 - Social proof is real data (not deterministic), cached with 30-min TTL — the only non-deterministic non-AI value on the page
+
+---
+
+## 10. Home Screen Widgets
+
+Bisou offers native home-screen widgets (iOS WidgetKit / Android App Widgets) that give users a glanceable daily snapshot and a one-tap entry into the Today page.
+
+### Design principles
+
+1. **No interaction required** — the widget refreshes automatically; the user just looks.
+2. **Always personalised** — every widget is computed from the user's birth chart and today's panchang.
+3. **One tap → Today page** — tapping any widget deep-links directly to the Today page.
+4. **Dark, premium aesthetic** — matches the Bisou visual language (dark background, gold/purple accents).
+
+---
+
+### Widget catalogue
+
+#### Small widgets (2×2)
+
+**Small 1 — Day Energy**
+
+Shows the user's dominant energy today (High / Moderate / Low) with a single icon and the day's score label.
+
+```
+┌───────────────────┐
+│  ☀️  Thursday     │
+│                   │
+│  Energy           │
+│  ● High           │
+│  bisou            │
+└───────────────────┘
+```
+
+**Small 2 — Nakshatra of the Day**
+
+Today's moon nakshatra with its symbol and a 3-word descriptor.
+
+```
+┌───────────────────┐
+│  🌸 Pushya        │
+│                   │
+│  Nurturing        │
+│  & warmth         │
+│  bisou            │
+└───────────────────┘
+```
+
+**Small 3 — Streak Pill**
+
+Current check-in streak with a fire icon. Motivational. Highest retention driver.
+
+```
+┌───────────────────┐
+│  🔥               │
+│                   │
+│  Day 14           │
+│  Keep going →     │
+│  bisou            │
+└───────────────────┘
+```
+
+---
+
+#### Medium widgets (4×2)
+
+**Medium 1 — Daily Summary**
+
+Left column: date, greeting. Right column: energy level + nakshatra name + one-line synthesis sentence (truncated).
+
+```
+┌─────────────────────────────────────┐
+│  Thu, Jun 11   Good morning, Sofia  │
+│                                     │
+│  ● High energy  ·  Pushya           │
+│  Jupiter's day — reach out and      │
+│  grow.                              │
+│                                 bisou│
+└─────────────────────────────────────┘
+```
+
+**Medium 2 — Power Window Now**
+
+Shows the current hora / power window (or Rahu Kaal warning if active), with the time range and a short action line.
+
+```
+┌─────────────────────────────────────┐
+│  ⚡  NOW · 09:00–10:30              │
+│  Jupiter hora                       │
+│  Strong window for decisions        │
+│  and important conversations.       │
+│                                 bisou│
+└─────────────────────────────────────┘
+```
+
+---
+
+#### Large widget (4×4)
+
+**Large — Full Today Snapshot**
+
+Stacks the key information: date + greeting, energy row (3 categories), nakshatra, and today's first Do / Avoid tip. Acts as a mini Today page on the home screen.
+
+```
+┌─────────────────────────────────────┐
+│  Thursday, June 11                  │
+│  Good morning, Sofia                │
+│                                     │
+│  💪 Health  ●●●●○  High             │
+│  ❤️  Relations ●●●○○ Moderate       │
+│  💼 Career  ●●●●○  High             │
+│                                     │
+│  🌸 Pushya · Nurturing & warmth     │
+│                                     │
+│  ✅ Do: Start important             │
+│  conversations early today.         │
+│                                 bisou│
+└─────────────────────────────────────┘
+```
+
+---
+
+### Technical notes
+
+| Attribute | Detail |
+| --------- | ------ |
+| Refresh cadence | Once per day at midnight (local time) + on-demand when app is opened |
+| Data source | Cached `today_summary_cache` row — no extra API calls from widget |
+| Deep-link target | `bisou://today` → opens Today page directly |
+| Platforms | iOS 16+ (WidgetKit, SwiftUI), Android 12+ (Glance API) |
+| Auth | Widget reads from local cache written by the app; no separate auth |
+| Personalisation | All widgets are per-user; no widget shown until first Today page load |

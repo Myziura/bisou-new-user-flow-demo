@@ -1,169 +1,160 @@
 <template>
   <div class="wg-page">
-    <!-- ── Page header ── -->
-    <div class="wg-page-header">
-      <h1 class="wg-page-title">Widgets</h1>
-      <p class="wg-page-sub">Home screen widgets · 6 designs</p>
+
+    <div class="wg-header">
+      <h1 class="wg-title">Home Screen Widgets</h1>
+      <p class="wg-sub">Tap a widget size to preview</p>
     </div>
 
-    <!-- ── Scenario picker ── -->
-    <div class="scenario-bar">
+    <!-- Size picker -->
+    <div class="size-bar">
       <button
-        v-for="sc in SCENARIOS"
-        :key="sc.id"
-        class="sc-btn"
-        :class="{ 'sc-btn--active': activeId === sc.id }"
-        @click="activeId = sc.id"
-      >{{ sc.label }}</button>
+        v-for="sz in SIZES"
+        :key="sz.id"
+        class="size-btn"
+        :class="{ 'size-btn--active': activeSize === sz.id }"
+        @click="activeSize = sz.id"
+      >{{ sz.label }}</button>
     </div>
 
-    <!-- ── Wallpaper preview frame ── -->
-    <div class="phone-canvas" :class="`phone-canvas--${d.theme}`">
-      <div class="wg-os-bar">
-        <span class="wg-os-time">{{ d.time }}</span>
-        <span class="wg-os-date">{{ d.dateLabel }}</span>
-      </div>
+    <!-- iPhone home screen mockup -->
+    <div class="iphone">
+      <!-- Notch / Dynamic Island -->
+      <div class="iphone-island" />
 
-      <!-- Row 1: 3 small widgets -->
-      <div class="wg-row">
-
-        <!-- S1: Today's Pulse -->
-        <div class="widget widget--sm glass-widget">
-          <div class="ws-bloom" :style="{ background: bloomColor }"></div>
-          <span class="ws-icon">{{ d.icon }}</span>
-          <div class="ws-state-pill" :style="{ color: bandColor(d.avgBand) }">{{ d.avgBand }}</div>
-          <p class="ws-nstar">{{ d.nakshatraName }}</p>
-          <div class="ws-dots">
-            <span class="ws-dot" v-for="e in d.energy3" :key="e.key"
-              :style="{ background: energyColor(e.band) }" />
-          </div>
-        </div>
-
-        <!-- S2: Cosmic Clock -->
-        <div class="widget widget--sm glass-widget">
-          <span class="ws-hora-icon">{{ d.horaIcon }}</span>
-          <p class="ws-hora-label">HORA</p>
-          <p class="ws-hora-planet">{{ d.horaPlanet }}</p>
-          <div class="ws-divider"></div>
-          <p class="ws-next-label">Next: {{ d.nextHora }}</p>
-        </div>
-
-        <!-- S3: My Cycle -->
-        <div class="widget widget--sm glass-widget">
-          <div class="ws-ring-wrap">
-            <svg class="ws-ring-svg" viewBox="0 0 60 60">
-              <circle class="ws-ring-track" cx="30" cy="30" r="23" />
-              <circle
-                class="ws-ring-fill"
-                cx="30" cy="30" r="23"
-                :stroke="d.dashaColor"
-                :stroke-dasharray="`${d.cycleProgress * 1.445} 144.5`"
-              />
-            </svg>
-            <span class="ws-ring-center-icon">{{ d.dashaIcon }}</span>
-          </div>
-          <p class="ws-dasha-name">{{ d.dashaPlanet }}</p>
-          <p class="ws-dasha-pct">{{ d.cycleProgress }}%</p>
+      <!-- Status bar -->
+      <div class="iphone-status">
+        <span class="iphone-time">9:41</span>
+        <div class="iphone-status-right">
+          <span class="iphone-signal">●●●</span>
+          <span class="iphone-wifi">▲</span>
+          <span class="iphone-battery">▌</span>
         </div>
       </div>
 
-      <!-- Row 2: Medium – Day Summary -->
-      <div class="widget widget--md glass-widget">
-        <div class="wm-left">
-          <span class="wm-icon">{{ d.icon }}</span>
-          <p class="wm-sentence">{{ d.shortSentence }}</p>
-          <div class="info-pill-sm">{{ d.pill }}</div>
-        </div>
-        <div class="wm-right">
-          <div v-for="e in d.energy3" :key="e.key" class="wm-energy-row">
-            <span class="wm-e-icon">{{ e.icon }}</span>
-            <span class="wm-e-dot" :style="{ background: energyColor(e.band) }"></span>
-            <span class="wm-e-band" :style="{ color: energyColor(e.band) }">{{ shortBand(e.band) }}</span>
-          </div>
-        </div>
+      <!-- Lock screen date (above widget) -->
+      <div class="iphone-lockdate">
+        <p class="iphone-lock-day">Thursday</p>
+        <p class="iphone-lock-date">June 12</p>
       </div>
 
-      <!-- Row 3: Medium – Panchanga -->
-      <div class="widget widget--md glass-widget">
-        <p class="wm-panchanga-title">PANCHANGA</p>
-        <div class="wm-panchanga-grid">
-          <div v-for="item in d.panchanga" :key="item.label" class="wm-panch-cell">
-            <p class="wm-panch-label">{{ item.label }}</p>
-            <p class="wm-panch-val">{{ item.value }}</p>
-          </div>
-        </div>
-      </div>
+      <!-- THE WIDGET (centred on screen) -->
+      <div class="iphone-widget-area">
 
-      <!-- Row 4: Large – Full Today -->
-      <div class="widget widget--lg glass-widget">
-        <!-- Top: icon + sentence -->
-        <div class="wl-top">
-          <span class="wl-icon">{{ d.icon }}</span>
-          <p class="wl-sentence">{{ d.sentence }}</p>
-        </div>
-        <div class="wl-divider"></div>
-        <!-- Energy rows -->
-        <div class="wl-energy-rows">
-          <div v-for="e in d.energy3" :key="e.key" class="wl-erow">
-            <span class="wl-erow-icon" :class="`wl-erow-icon--${e.key}`">{{ e.icon }}</span>
-            <span class="wl-erow-name">{{ e.name }}</span>
-            <span class="wl-erow-dot" :style="{ background: energyColor(e.band) }"></span>
-            <span class="wl-erow-band" :style="{ color: energyColor(e.band) }">{{ e.band }}</span>
+        <!-- Small widget -->
+        <template v-if="activeSize === 'small'">
+          <div class="widget widget--sm glass-widget">
+            <div class="ws-bloom" />
+            <span class="ws-icon">🌕</span>
+            <p class="ws-band">HIGH</p>
+            <p class="ws-nstar">Pushya</p>
+            <div class="ws-dots">
+              <span class="ws-dot" style="background:#4ade80" />
+              <span class="ws-dot" style="background:#4ade80" />
+              <span class="ws-dot" style="background:#fbbf24" />
+            </div>
+            <p class="ws-brand">bisou</p>
           </div>
-        </div>
-        <div class="wl-divider"></div>
-        <!-- Bottom: nakshatra + dasha -->
-        <div class="wl-footer">
-          <span class="wl-footer-item">{{ d.nakshatraEmoji }} {{ d.nakshatraName }}</span>
-          <span class="wl-footer-sep">·</span>
-          <span class="wl-footer-item">{{ d.dashaIcon }} {{ d.dashaPlanet }} Mahadasha</span>
-        </div>
-      </div>
+        </template>
 
-    </div><!-- /phone-canvas -->
+        <!-- Medium widget -->
+        <template v-if="activeSize === 'medium'">
+          <div class="widget widget--md glass-widget">
+            <div class="wm-left">
+              <span class="wm-icon">🌕</span>
+              <p class="wm-sentence">Full Moon — set an intention before midnight.</p>
+              <div class="wm-pill">Friday · Full Moon</div>
+            </div>
+            <div class="wm-divider" />
+            <div class="wm-right">
+              <div class="wm-erow">
+                <span class="wm-erow-icon">🌿</span>
+                <span class="wm-erow-dot" style="background:#4ade80" />
+                <span class="wm-erow-band" style="color:#4ade80">High</span>
+              </div>
+              <div class="wm-erow">
+                <span class="wm-erow-icon">💛</span>
+                <span class="wm-erow-dot" style="background:#4ade80" />
+                <span class="wm-erow-band" style="color:#4ade80">High</span>
+              </div>
+              <div class="wm-erow">
+                <span class="wm-erow-icon">⚡</span>
+                <span class="wm-erow-dot" style="background:#fbbf24" />
+                <span class="wm-erow-band" style="color:#fbbf24">Mod</span>
+              </div>
+              <p class="wm-brand">bisou</p>
+            </div>
+          </div>
+        </template>
 
-    <!-- ── Widget catalogue labels ── -->
-    <div class="wg-catalogue">
-      <div class="wg-cat-section">
-        <p class="wg-cat-size">Small  2×2</p>
-        <div class="wg-cat-row">
-          <div class="wg-cat-card">
-            <p class="wg-cat-name">Today's Pulse</p>
-            <p class="wg-cat-desc">Overall energy state + nakshatra of the day + per-category dots</p>
+        <!-- Large widget -->
+        <template v-if="activeSize === 'large'">
+          <div class="widget widget--lg glass-widget">
+            <div class="wl-top">
+              <div class="wl-top-left">
+                <span class="wl-icon">🌕</span>
+                <div>
+                  <p class="wl-day">Friday, Jun 13</p>
+                  <p class="wl-nakshatra">🌸 Pushya</p>
+                </div>
+              </div>
+              <p class="wl-brand">bisou</p>
+            </div>
+
+            <p class="wl-sentence">Full Moon day — emotions are amplified and the sky is at its brightest. Set an intention before midnight.</p>
+
+            <div class="wl-sep" />
+
+            <div class="wl-energy">
+              <div class="wl-erow">
+                <span class="wl-erow-icon">🌿</span>
+                <span class="wl-erow-name">Health</span>
+                <div class="wl-erow-bar">
+                  <div class="wl-erow-fill" style="width:82%;background:#4ade80" />
+                </div>
+                <span class="wl-erow-label" style="color:#4ade80">High</span>
+              </div>
+              <div class="wl-erow">
+                <span class="wl-erow-icon">💛</span>
+                <span class="wl-erow-name">Relations</span>
+                <div class="wl-erow-bar">
+                  <div class="wl-erow-fill" style="width:90%;background:#4ade80" />
+                </div>
+                <span class="wl-erow-label" style="color:#4ade80">High</span>
+              </div>
+              <div class="wl-erow">
+                <span class="wl-erow-icon">⚡</span>
+                <span class="wl-erow-name">Career</span>
+                <div class="wl-erow-bar">
+                  <div class="wl-erow-fill" style="width:54%;background:#fbbf24" />
+                </div>
+                <span class="wl-erow-label" style="color:#fbbf24">Mod</span>
+              </div>
+            </div>
+
+            <div class="wl-sep" />
+
+            <div class="wl-footer">
+              <div class="wl-footer-item">
+                <span class="wl-footer-icon">🔥</span>
+                <span class="wl-footer-text">Day 14 streak</span>
+              </div>
+              <div class="wl-footer-item">
+                <span class="wl-footer-icon">♃</span>
+                <span class="wl-footer-text">Jupiter Mahadasha</span>
+              </div>
+            </div>
           </div>
-          <div class="wg-cat-card">
-            <p class="wg-cat-name">Cosmic Clock</p>
-            <p class="wg-cat-desc">Active Hora planet + next Hora transition time</p>
-          </div>
-          <div class="wg-cat-card">
-            <p class="wg-cat-name">My Cycle</p>
-            <p class="wg-cat-desc">Vimshottari Mahadasha progress ring with active planet</p>
-          </div>
-        </div>
-      </div>
-      <div class="wg-cat-section">
-        <p class="wg-cat-size">Medium  4×2</p>
-        <div class="wg-cat-row">
-          <div class="wg-cat-card">
-            <p class="wg-cat-name">Day Summary</p>
-            <p class="wg-cat-desc">Day synthesis sentence + 3 energy states at a glance</p>
-          </div>
-          <div class="wg-cat-card">
-            <p class="wg-cat-name">Panchanga</p>
-            <p class="wg-cat-desc">Tithi · Vara · Nakshatra · Yoga · Karana · Sunrise in a grid</p>
-          </div>
-        </div>
-      </div>
-      <div class="wg-cat-section">
-        <p class="wg-cat-size">Large  4×4</p>
-        <div class="wg-cat-row">
-          <div class="wg-cat-card wg-cat-card--wide">
-            <p class="wg-cat-name">Full Today</p>
-            <p class="wg-cat-desc">Complete daily snapshot — synthesis · 3 energy rows · nakshatra · dasha</p>
-          </div>
-        </div>
-      </div>
-    </div>
+        </template>
+
+      </div><!-- /widget area -->
+
+      <!-- Home indicator -->
+      <div class="iphone-home" />
+    </div><!-- /iphone -->
+
+    <!-- Size caption -->
+    <p class="size-caption">{{ currentSize.caption }}</p>
 
   </div>
 </template>
@@ -171,425 +162,263 @@
 <script setup>
 import { ref, computed } from 'vue'
 
-// ── Scenarios ───────────────────────────────────────────────────────────────
-const SCENARIOS = [
-  { id: 'full_moon',    label: '🌕 Full Moon' },
-  { id: 'mercury_mind', label: '☿ Mercury' },
-  { id: 'rahu_kaal',    label: '🔴 Rahu Kaal' },
+const SIZES = [
+  { id: 'small',  label: 'Small',  caption: 'Small (2×2) — Day Energy at a glance' },
+  { id: 'medium', label: 'Medium', caption: 'Medium (4×2) — Day summary + energy categories' },
+  { id: 'large',  label: 'Large',  caption: 'Large (4×4) — Full Today snapshot' },
 ]
-const activeId = ref('full_moon')
 
-const SCENARIO_DATA = {
-  full_moon: {
-    theme: 'moon',
-    time: '20:14',
-    dateLabel: 'Friday, 13 Jun',
-    icon: '🌕',
-    avgBand: 'HIGH',
-    shortSentence: 'Full Moon — emotions run high. Set an intention before midnight.',
-    sentence: 'Full Moon day — emotions are amplified and the sky is at its brightest. Set an intention before midnight.',
-    pill: 'Friday · Full Moon',
-    nakshatraName: 'Pushya',
-    nakshatraEmoji: '💎',
-    horaIcon: '🌕',
-    horaPlanet: 'Moon',
-    nextHora: 'Saturn 21:01',
-    dashaIcon: '♃',
-    dashaPlanet: 'Jupiter',
-    dashaColor: '#f9a8d4',
-    cycleProgress: 62,
-    energy3: [
-      { key: 'health',    icon: '🌿', name: 'Health',        band: 'HIGH' },
-      { key: 'relations', icon: '💛', name: 'Relationships', band: 'HIGH' },
-      { key: 'affairs',   icon: '⚡', name: 'Career',        band: 'MODERATE' },
-    ],
-    panchanga: [
-      { label: 'Tithi',    value: 'Purnima' },
-      { label: 'Vara',     value: 'Friday' },
-      { label: 'Nakshatra',value: 'Pushya' },
-      { label: 'Yoga',     value: 'Siddha' },
-      { label: 'Sunrise',  value: '06:28' },
-      { label: 'Rahu',     value: '10:30–12:00' },
-    ],
-  },
-  mercury_mind: {
-    theme: 'teal',
-    time: '14:22',
-    dateLabel: 'Wednesday, 15 Jun',
-    icon: '☿',
-    avgBand: 'MODERATE',
-    shortSentence: 'Mercury sharpens your mind. Write, plan, communicate.',
-    sentence: 'Mercury sharpens your mind. Write, plan, communicate — this is your best day for it.',
-    pill: 'Wednesday · Waxing Crescent',
-    nakshatraName: 'Ardra',
-    nakshatraEmoji: '💫',
-    horaIcon: '☿',
-    horaPlanet: 'Mercury',
-    nextHora: 'Moon 15:06',
-    dashaIcon: '♄',
-    dashaPlanet: 'Saturn',
-    dashaColor: '#94a3b8',
-    cycleProgress: 38,
-    energy3: [
-      { key: 'health',    icon: '🌿', name: 'Health',        band: 'MODERATE' },
-      { key: 'relations', icon: '💛', name: 'Relationships', band: 'MODERATE' },
-      { key: 'affairs',   icon: '⚡', name: 'Career',        band: 'HIGH' },
-    ],
-    panchanga: [
-      { label: 'Tithi',    value: 'Dvitiya' },
-      { label: 'Vara',     value: 'Wednesday' },
-      { label: 'Nakshatra',value: 'Ardra' },
-      { label: 'Yoga',     value: 'Shubha' },
-      { label: 'Sunrise',  value: '06:24' },
-      { label: 'Rahu',     value: '12:00–13:30' },
-    ],
-  },
-  rahu_kaal: {
-    theme: 'dark',
-    time: '13:40',
-    dateLabel: 'Sunday, 8 Jun',
-    icon: '🌙',
-    avgBand: 'LOW',
-    shortSentence: 'Rahu Kaal is active. Pause important decisions until 15:00.',
-    sentence: 'Rahu Kaal is active until 15:00. Energy is scattered — ideal for reflection, not action.',
-    pill: 'Sunday · Rahu Kaal',
-    nakshatraName: 'Ashlesha',
-    nakshatraEmoji: '🐍',
-    horaIcon: '♃',
-    horaPlanet: 'Jupiter',
-    nextHora: 'Mars 14:18',
-    dashaIcon: '☉',
-    dashaPlanet: 'Sun',
-    dashaColor: '#fbbf24',
-    cycleProgress: 15,
-    energy3: [
-      { key: 'health',    icon: '🌿', name: 'Health',        band: 'LOW' },
-      { key: 'relations', icon: '💛', name: 'Relationships', band: 'MODERATE' },
-      { key: 'affairs',   icon: '⚡', name: 'Career',        band: 'LOW' },
-    ],
-    panchanga: [
-      { label: 'Tithi',    value: 'Navami' },
-      { label: 'Vara',     value: 'Sunday' },
-      { label: 'Nakshatra',value: 'Ashlesha' },
-      { label: 'Yoga',     value: 'Vyatipata' },
-      { label: 'Sunrise',  value: '06:32' },
-      { label: 'Rahu',     value: '13:30–15:00' },
-    ],
-  },
-}
-
-const d = computed(() => SCENARIO_DATA[activeId.value])
-
-// ── Helpers ─────────────────────────────────────────────────────────────────
-function energyColor(band) {
-  if (band === 'HIGH')     return '#10b981'
-  if (band === 'MODERATE') return '#f59e0b'
-  return '#f87171'
-}
-function bandColor(band) { return energyColor(band) }
-function shortBand(band) {
-  if (band === 'HIGH')     return 'HIGH'
-  if (band === 'MODERATE') return 'MOD'
-  return 'LOW'
-}
-
-const bloomColor = computed(() => {
-  const b = d.value.avgBand
-  if (b === 'HIGH')     return 'radial-gradient(circle, rgba(16,185,129,0.35) 0%, transparent 70%)'
-  if (b === 'MODERATE') return 'radial-gradient(circle, rgba(245,158,11,0.30) 0%, transparent 70%)'
-  return 'radial-gradient(circle, rgba(248,113,113,0.30) 0%, transparent 70%)'
-})
+const activeSize = ref('medium')
+const currentSize = computed(() => SIZES.find(s => s.id === activeSize.value))
 </script>
 
 <style scoped>
 /* ── Page ─────────────────────────────────────────────────────────────────── */
 .wg-page {
   min-height: 100vh;
-  background: #0d0e1a;
+  background: #0b0c17;
   color: #fff;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
-  padding: 48px 20px 64px;
+  padding: 52px 20px 72px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 0;
 }
 
-.wg-page-header {
+.wg-header {
   text-align: center;
   margin-bottom: 28px;
 }
-.wg-page-title {
-  font-size: 28px;
+.wg-title {
+  font-size: 26px;
   font-weight: 800;
   letter-spacing: -0.02em;
   margin: 0 0 6px;
 }
-.wg-page-sub {
+.wg-sub {
   font-size: 13px;
-  color: rgba(255,255,255,0.40);
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  font-weight: 500;
   margin: 0;
 }
 
-/* ── Scenario bar ─────────────────────────────────────────────────────────── */
-.scenario-bar {
+/* ── Size picker ─────────────────────────────────────────────────────────── */
+.size-bar {
   display: flex;
   gap: 8px;
-  margin-bottom: 24px;
+  margin-bottom: 36px;
 }
-.sc-btn {
-  padding: 7px 16px;
+.size-btn {
+  padding: 8px 22px;
   border-radius: 100px;
   border: 1px solid rgba(255,255,255,0.12);
   background: rgba(255,255,255,0.05);
-  color: rgba(255,255,255,0.55);
-  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s;
 }
-.sc-btn--active {
-  background: rgba(255,255,255,0.14);
-  border-color: rgba(255,255,255,0.28);
+.size-btn--active {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.3);
   color: #fff;
 }
 
-/* ── Phone canvas (wallpaper) ─────────────────────────────────────────────── */
-.phone-canvas {
-  width: 340px;
-  border-radius: 44px;
-  padding: 20px 16px 28px;
+/* ── iPhone shell ─────────────────────────────────────────────────────────── */
+.iphone {
+  width: 320px;
+  min-height: 620px;
+  border-radius: 50px;
+  border: 8px solid #1c1c1e;
+  background: linear-gradient(160deg, #0d1226 0%, #160e30 50%, #0e0e1a 100%);
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  position: relative;
+  align-items: center;
   overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.10);
-}
-.phone-canvas--moon {
-  background: linear-gradient(160deg, #0e1628 0%, #1a1040 100%);
-}
-.phone-canvas--teal {
-  background: linear-gradient(160deg, #071820 0%, #0a2a28 100%);
-}
-.phone-canvas--dark {
-  background: linear-gradient(160deg, #0e0e14 0%, #1a1020 100%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.08),
+    0 40px 80px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.06);
 }
 
-/* OS bar */
-.wg-os-bar {
+/* Dynamic Island */
+.iphone-island {
+  width: 100px;
+  height: 30px;
+  background: #0a0a0a;
+  border-radius: 20px;
+  margin-top: 10px;
+  flex-shrink: 0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+/* Status bar */
+.iphone-status {
+  width: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  padding: 0 6px 4px;
+  align-items: center;
+  padding: 6px 22px 0;
+  flex-shrink: 0;
 }
-.wg-os-time {
-  font-size: 36px;
-  font-weight: 300;
-  letter-spacing: -0.02em;
-  color: rgba(255,255,255,0.90);
-  line-height: 1;
+.iphone-time {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.88);
+  letter-spacing: -0.01em;
 }
-.wg-os-date {
-  font-size: 12px;
-  color: rgba(255,255,255,0.50);
-  font-weight: 500;
-  padding-bottom: 4px;
+.iphone-status-right {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  color: rgba(255,255,255,0.7);
+  font-size: 10px;
 }
 
-/* ── Widget base ──────────────────────────────────────────────────────────── */
+/* Lock screen date */
+.iphone-lockdate {
+  margin-top: 22px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.iphone-lock-day {
+  font-size: 17px;
+  color: rgba(255,255,255,0.55);
+  font-weight: 400;
+  margin: 0 0 2px;
+  letter-spacing: 0.01em;
+}
+.iphone-lock-date {
+  font-size: 72px;
+  font-weight: 200;
+  color: rgba(255,255,255,0.92);
+  line-height: 1;
+  margin: 0;
+  letter-spacing: -3px;
+}
+
+/* Widget area */
+.iphone-widget-area {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 18px;
+}
+
+/* Home indicator */
+.iphone-home {
+  width: 120px;
+  height: 5px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 3px;
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+
+/* ── Widget base ─────────────────────────────────────────────────────────── */
 .glass-widget {
-  background: rgba(255,255,255,0.07);
-  backdrop-filter: blur(20px);
+  background: rgba(20, 16, 40, 0.72);
+  backdrop-filter: blur(28px) saturate(1.4);
   border: 1px solid rgba(255,255,255,0.10);
 }
 
+/* ── Small widget ────────────────────────────────────────────────────────── */
 .widget--sm {
-  width: 96px;
-  height: 96px;
-  border-radius: 22px;
-  position: relative;
-  overflow: hidden;
+  width: 148px;
+  height: 148px;
+  border-radius: 26px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  padding: 8px 6px;
-  cursor: pointer;
-  transition: transform 0.12s;
-}
-.widget--sm:active { transform: scale(0.94); }
-
-.widget--md {
-  width: 100%;
-  height: 96px;
-  border-radius: 22px;
-  display: flex;
-  align-items: stretch;
+  gap: 3px;
+  padding: 12px;
+  position: relative;
   overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.12s;
 }
-.widget--md:active { transform: scale(0.98); }
-
-.widget--lg {
-  width: 100%;
-  border-radius: 22px;
-  padding: 16px 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  cursor: pointer;
-  transition: transform 0.12s;
-}
-.widget--lg:active { transform: scale(0.98); }
-
-.wg-row {
-  display: flex;
-  gap: 12px;
-  justify-content: space-between;
-}
-
-/* ── Small widget internals ───────────────────────────────────────────────── */
 .ws-bloom {
   position: absolute;
-  inset: -10px;
-  border-radius: 50%;
+  inset: -20px;
+  background: radial-gradient(circle at 40% 30%, rgba(200,180,255,0.18) 0%, transparent 65%);
   pointer-events: none;
 }
 .ws-icon {
-  font-size: 26px;
+  font-size: 32px;
+  line-height: 1;
   position: relative;
   z-index: 1;
-  line-height: 1;
 }
-.ws-state-pill {
-  font-size: 9px;
+.ws-band {
+  font-size: 11px;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
+  color: #4ade80;
+  margin: 0;
   position: relative;
   z-index: 1;
 }
 .ws-nstar {
-  font-size: 9px;
+  font-size: 11px;
   color: rgba(255,255,255,0.55);
-  font-weight: 600;
+  font-weight: 500;
+  margin: 0;
   position: relative;
   z-index: 1;
-  margin: 0;
 }
 .ws-dots {
   display: flex;
-  gap: 4px;
+  gap: 5px;
   position: relative;
   z-index: 1;
-  margin-top: 2px;
+  margin-top: 3px;
 }
 .ws-dot {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
 }
-
-/* Cosmic Clock small widget */
-.ws-hora-icon {
-  font-size: 28px;
-  line-height: 1;
-}
-.ws-hora-label {
-  font-size: 8px;
-  font-weight: 800;
-  letter-spacing: 0.10em;
-  color: rgba(255,255,255,0.35);
-  margin: 0;
-}
-.ws-hora-planet {
-  font-size: 12px;
+.ws-brand {
+  font-size: 9px;
   font-weight: 700;
-  color: rgba(255,255,255,0.88);
-  margin: 0;
-}
-.ws-divider {
-  width: 40px;
-  height: 1px;
-  background: rgba(255,255,255,0.10);
-  margin: 3px 0;
-}
-.ws-next-label {
-  font-size: 8px;
-  color: rgba(255,255,255,0.45);
-  font-weight: 600;
-  margin: 0;
-  text-align: center;
-}
-
-/* My Cycle small widget */
-.ws-ring-wrap {
-  position: relative;
-  width: 52px;
-  height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.ws-ring-svg {
-  width: 52px;
-  height: 52px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.2);
+  text-transform: uppercase;
   position: absolute;
-  inset: 0;
-}
-.ws-ring-track {
-  fill: none;
-  stroke: rgba(255,255,255,0.08);
-  stroke-width: 4;
-}
-.ws-ring-fill {
-  fill: none;
-  stroke-width: 4;
-  stroke-linecap: round;
-  transform: rotate(-90deg);
-  transform-origin: 50% 50%;
-  transition: stroke-dasharray 1s ease;
-}
-.ws-ring-center-icon {
-  font-size: 20px;
-  line-height: 1;
-  position: relative;
-  z-index: 1;
-}
-.ws-dasha-name {
-  font-size: 9px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.80);
-  margin: 2px 0 0;
-}
-.ws-dasha-pct {
-  font-size: 9px;
-  color: rgba(255,255,255,0.40);
-  font-weight: 600;
+  bottom: 10px;
+  right: 12px;
   margin: 0;
 }
 
-/* ── Medium widget – Day Summary ──────────────────────────────────────────── */
+/* ── Medium widget ───────────────────────────────────────────────────────── */
+.widget--md {
+  width: 100%;
+  height: 148px;
+  border-radius: 26px;
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
 .wm-left {
   flex: 1;
-  padding: 12px 10px 12px 14px;
+  padding: 16px 14px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
   justify-content: center;
 }
 .wm-icon {
-  font-size: 20px;
+  font-size: 24px;
   line-height: 1;
 }
 .wm-sentence {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
-  color: rgba(255,255,255,0.85);
+  color: rgba(255,255,255,0.88);
   line-height: 1.4;
   margin: 0;
   display: -webkit-box;
@@ -597,105 +426,122 @@ const bloomColor = computed(() => {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.info-pill-sm {
+.wm-pill {
   display: inline-block;
   background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 100px;
-  padding: 3px 8px;
-  font-size: 9px;
+  padding: 3px 9px;
+  font-size: 10px;
   font-weight: 600;
-  color: rgba(255,255,255,0.55);
-  letter-spacing: 0.02em;
+  color: rgba(255,255,255,0.45);
   width: fit-content;
   margin-top: 2px;
 }
-.wm-right {
-  width: 88px;
+.wm-divider {
+  width: 1px;
+  background: rgba(255,255,255,0.07);
   flex-shrink: 0;
-  border-left: 1px solid rgba(255,255,255,0.07);
+  margin: 14px 0;
+}
+.wm-right {
+  width: 90px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 8px 10px;
-  gap: 6px;
+  padding: 14px 12px;
+  gap: 7px;
+  position: relative;
 }
-.wm-energy-row {
+.wm-erow {
   display: flex;
   align-items: center;
   gap: 5px;
 }
-.wm-e-icon { font-size: 12px; }
-.wm-e-dot {
+.wm-erow-icon { font-size: 12px; }
+.wm-erow-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
   flex-shrink: 0;
 }
-.wm-e-band {
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 0.05em;
+.wm-erow-band {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
 }
-
-/* ── Medium widget – Panchanga ────────────────────────────────────────────── */
-.wm-panchanga-title {
+.wm-brand {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.18);
+  text-transform: uppercase;
   position: absolute;
-  top: 10px;
-  left: 14px;
-  font-size: 8px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  color: rgba(255,255,255,0.30);
+  bottom: 10px;
+  right: 10px;
   margin: 0;
 }
-.widget--md { position: relative; }
-.wm-panchanga-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0;
+
+/* ── Large widget ────────────────────────────────────────────────────────── */
+.widget--lg {
   width: 100%;
-  height: 100%;
-  padding: 22px 12px 10px;
-  align-content: center;
+  border-radius: 26px;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
-.wm-panch-cell {
-  padding: 3px 4px;
+.wl-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.wm-panch-label {
-  font-size: 8px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: rgba(255,255,255,0.35);
-  text-transform: uppercase;
-  margin: 0 0 1px;
+.wl-top-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.wm-panch-val {
+.wl-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+.wl-day {
   font-size: 11px;
-  font-weight: 700;
+  color: rgba(255,255,255,0.45);
+  font-weight: 500;
+  margin: 0 0 2px;
+}
+.wl-nakshatra {
+  font-size: 13px;
+  font-weight: 600;
   color: rgba(255,255,255,0.85);
   margin: 0;
 }
-
-/* ── Large widget ─────────────────────────────────────────────────────────── */
-.wl-top {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-}
-.wl-icon { font-size: 28px; line-height: 1; flex-shrink: 0; }
-.wl-sentence {
-  font-size: 13px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.88);
-  line-height: 1.45;
+.wl-brand {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.18);
+  text-transform: uppercase;
   margin: 0;
 }
-.wl-divider {
-  height: 1px;
-  background: rgba(255,255,255,0.08);
+.wl-sentence {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.72);
+  line-height: 1.5;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
-.wl-energy-rows {
+.wl-sep {
+  height: 1px;
+  background: rgba(255,255,255,0.07);
+}
+.wl-energy {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -703,87 +549,58 @@ const bloomColor = computed(() => {
 .wl-erow {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
 }
-.wl-erow-icon { font-size: 16px; flex-shrink: 0; }
-.wl-erow-icon--health   { filter: drop-shadow(0 0 4px rgba(16,185,129,0.5)); }
-.wl-erow-icon--relations { filter: drop-shadow(0 0 4px rgba(244,114,182,0.5)); }
-.wl-erow-icon--affairs  { filter: drop-shadow(0 0 4px rgba(129,140,248,0.5)); }
+.wl-erow-icon { font-size: 13px; flex-shrink: 0; }
 .wl-erow-name {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  font-weight: 500;
+  width: 56px;
+  flex-shrink: 0;
+}
+.wl-erow-bar {
   flex: 1;
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.70);
+  height: 4px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 99px;
+  overflow: hidden;
 }
-.wl-erow-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
+.wl-erow-fill {
+  height: 100%;
+  border-radius: 99px;
 }
-.wl-erow-band {
+.wl-erow-label {
   font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  min-width: 64px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  width: 30px;
   text-align: right;
+  flex-shrink: 0;
 }
 .wl-footer {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
 }
 .wl-footer-item {
-  font-size: 11px;
-  color: rgba(255,255,255,0.50);
-  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
-.wl-footer-sep {
-  color: rgba(255,255,255,0.20);
-  font-size: 12px;
+.wl-footer-icon { font-size: 13px; }
+.wl-footer-text {
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  font-weight: 500;
 }
 
-/* ── Catalogue ────────────────────────────────────────────────────────────── */
-.wg-catalogue {
-  width: 100%;
-  max-width: 340px;
-  margin-top: 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-.wg-cat-section {}
-.wg-cat-size {
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+/* ── Caption ─────────────────────────────────────────────────────────────── */
+.size-caption {
+  margin-top: 20px;
+  font-size: 13px;
   color: rgba(255,255,255,0.35);
-  margin: 0 0 10px;
-}
-.wg-cat-row {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.wg-cat-card {
-  flex: 1;
-  min-width: 90px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 12px;
-  padding: 11px 12px;
-}
-.wg-cat-card--wide { flex-basis: 100%; }
-.wg-cat-name {
-  font-size: 12px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.85);
-  margin: 0 0 4px;
-}
-.wg-cat-desc {
-  font-size: 11px;
-  color: rgba(255,255,255,0.40);
-  line-height: 1.4;
-  margin: 0;
+  font-weight: 500;
+  text-align: center;
 }
 </style>
